@@ -25,24 +25,22 @@ static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
 int main(int argc, char** argv)
 {
 
-    // unsigned char data[] = "Hello, World!";
-    // unsigned int dataLength = (unsigned int)strlen((const char *)data);
-
-    ///** Base64 encode */
-    // unsigned char* encodedData = NULL;
-    // encodedData  = base64Encode(data, dataLength);
-    // if (encodedData != NULL) {
-    //     printf("Encoded: %s\n", encodedData);
-
-    //    /** Base64 decode*/
-    //    unsigned int encodedLength = (unsigned int)strlen((char*)encodedData);
-    //    unsigned char* decodedData = base64Decode(encodedData, encodedLength);
-    //    if (decodedData != NULL) {
-    //        printf("Decoded: %s\n", decodedData);
-    //        free(decodedData);
-    //    }
-    //    free(encodedData);
-    //}
+    unsigned char data[] = "Hello, World!";
+    unsigned int dataLength = (unsigned int)strlen((const char*)data);
+    /** Base64 encode */
+    unsigned char* encodedData = NULL;
+    encodedData = base64Encode(data, dataLength);
+    if (encodedData != NULL) {
+        printf("Encoded: %s\n", encodedData);
+        /** Base64 decode*/
+        unsigned int encodedLength = (unsigned int)strlen((char*)encodedData);
+        unsigned char* decodedData = base64Decode(encodedData, encodedLength);
+        if (decodedData != NULL) {
+            printf("Decoded: %s\n", decodedData);
+            free(decodedData);
+        }
+        free(encodedData);
+    }
 
     return 0;
 }
@@ -126,7 +124,7 @@ unsigned char* base64Decode(unsigned char* encodedData, unsigned int encodedLeng
         (decodedLength)--;
     }
 
-    unsigned char* decodedData = (unsigned char*)malloc(decodedLength);
+    unsigned char* decodedData = (unsigned char*)malloc(decodedLength + 1);
     if (decodedData == NULL) {
         return NULL;
     }
@@ -152,6 +150,7 @@ unsigned char* base64Decode(unsigned char* encodedData, unsigned int encodedLeng
         }
     }
 
+    decodedData[decodedLength] = '\0';
     return decodedData;
 }
 
@@ -180,17 +179,40 @@ unsigned int getBase64Index(unsigned char alphabet)
     return returnedValue;
 }
 
+/**
+ * Obtaining the `first` comment from the SQL statements; to use the function, there exist 2 tips which users shall follow.
+ * First of all, users shall pass unsigned char pointers, `userId` and `ip` and those two pointers shall be initialized in NULL values as the arguments.
+ * Second, after using the function, users shall free the memory `userId` and `ip` manually because the dynamic memory allocation affects in this function.
+ *
+ * @param sqlStmt unsigned char* SQL statement
+ * @param sqlStmtLen unsigned int The length of the SQL statement
+ * @param userId unsigned char* The user id information
+ * @param ip unsigned char* The user ip
+ * @param startEndSymbol unsigned char* The starting symbol of the encoded text
+ * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
+ * @return int The error code; 0 means success, and 1 implies failure
+ */
 int parseSqlStmt(
     unsigned char* sqlStmt,
-    int sqlStmtLen,
+    unsigned int sqlStmtLen,
     unsigned char* userId,
     unsigned char* ip,
     unsigned char startEndSymbol,
     unsigned char delimiter)
 {
-    /** `i` implies */
-    for (unsigned int i = 0, j = 0, k = 0; j < sqlStmtLen;) {
-
+    unsigned int start = NULL;
+    unsigned int end = NULL;
+    unsigned short startFlag = 0; /** The 0 value shows the process shall search the starting notation `0x2F0x2A`; otherwise shall searching `0x2A0x2F` */
+    for (; end < sqlStmtLen;) {
+        if (sqlStmt[end] != (unsigned char)'/') {
+            /** Moving to the next character*/
+            start = end = (end + 1);
+            continue;
+        }
+        /** The `3` implies that the location of the encoded text shall be safe for accessing. */
+        if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == startEndSymbol) {
+            start = end = (end + 3);
+        }
     }
     return 0;
 }
