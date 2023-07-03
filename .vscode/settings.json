@@ -42,5 +42,6 @@
     },
     "gtest-adapter.debugConfig": [
         "C/C++: g++ build and debug active file"
-    ]
+    ],
+    "files.eol": "\n"
 }
