@@ -1,4 +1,7 @@
-CMakeFiles/Test.dir/Main.c.obj: C:/Ian/Work/SecuEyesDecoder/Main.c \
+CMakeFiles/Test.dir/Tests/Main.c.obj: \
+ C:/Ian/Work/SecuEyesDecoder/Tests/Main.c \
+ C:/Ian/Work/SecuEyesDecoder/Tests/Headers/Test_Base64.h \
+ C:/Ian/Work/SecuEyesDecoder/Tests/Headers/Base64.h \
  C:/msys64/mingw64/include/stdio.h \
  C:/msys64/mingw64/include/corecrt_stdio_config.h \
  C:/msys64/mingw64/include/corecrt.h C:/msys64/mingw64/include/_mingw.h \
@@ -18,4 +21,11 @@ CMakeFiles/Test.dir/Main.c.obj: C:/Ian/Work/SecuEyesDecoder/Main.c \
  C:/msys64/mingw64/include/malloc.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
  C:/msys64/mingw64/include/errno.h C:/msys64/mingw64/include/string.h \
- C:/msys64/mingw64/include/sec_api/string_s.h
+ C:/msys64/mingw64/include/sec_api/string_s.h \
+ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdarg.h \
+ C:/msys64/mingw64/include/stdarg.h \
+ C:/msys64/mingw64/include/_mingw_stdarg.h \
+ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
+ C:/msys64/mingw64/include/stddef.h C:/msys64/mingw64/include/setjmp.h \
+ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
+ C:/msys64/mingw64/include/stdint.h C:/msys64/mingw64/include/cmocka.h

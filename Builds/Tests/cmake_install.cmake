@@ -1,4 +1,4 @@
-# Install script for directory: /c/Ian/Work/SecuEyesDecoder/Test
+# Install script for directory: /c/Ian/Work/SecuEyesDecoder/Tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

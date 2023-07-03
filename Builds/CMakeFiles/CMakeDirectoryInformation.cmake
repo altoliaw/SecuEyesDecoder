@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 set(CMAKE_RELATIVE_PATH_TOP_SOURCE "/c/Ian/Work/SecuEyesDecoder")
-set(CMAKE_RELATIVE_PATH_TOP_BINARY "/c/Ian/Work/SecuEyesDecoder/Build")
+set(CMAKE_RELATIVE_PATH_TOP_BINARY "/c/Ian/Work/SecuEyesDecoder/Builds")
 
 # Force unix paths in dependencies.
 set(CMAKE_FORCE_UNIX_PATHS 1)

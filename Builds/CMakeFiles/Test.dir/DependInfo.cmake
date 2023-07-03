@@ -9,8 +9,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/c/Ian/Work/SecuEyesDecoder/Main.c" "CMakeFiles/Test.dir/Main.c.obj" "gcc" "CMakeFiles/Test.dir/Main.c.obj.d"
-  "/c/Ian/Work/SecuEyesDecoder/Test/Main.c" "CMakeFiles/Test.dir/Test/Main.c.obj" "gcc" "CMakeFiles/Test.dir/Test/Main.c.obj.d"
-  "/c/Ian/Work/SecuEyesDecoder/Test/Sources/Test_Base64.c" "CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj" "gcc" "CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj.d"
+  "/c/Ian/Work/SecuEyesDecoder/Tests/Main.c" "CMakeFiles/Test.dir/Tests/Main.c.obj" "gcc" "CMakeFiles/Test.dir/Tests/Main.c.obj.d"
+  "/c/Ian/Work/SecuEyesDecoder/Tests/Sources/Test_Base64.c" "CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj" "gcc" "CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

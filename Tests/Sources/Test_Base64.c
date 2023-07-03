@@ -36,28 +36,35 @@ void Test_Base64Encoders_and_Decoders_Single(void** State){
     /** Encoding function  "A" to "QQ=="  */
     char* Source_dataSingleEncoded = base64Encode(dataSingle, dataSingleLength); 
 
-    /** Unit Test  , expect result is   */
+    /** Unit Test  , expect result is  "QQ=="  */
     assert_string_equal(Source_dataSingleEncoded, dataSingleEncoded);
 
+
+    /** Get Encoding data result length */
     unsigned int dataSingleEncodedLength =  (unsigned int)strlen((char *)Source_dataSingleEncoded);
 
+
+    /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataSingleEncodedLength; i++){
        assert_int_equal((int)Source_dataSingleEncoded[i] ,(int)dataSingleEncoded[i]);
     }
 
     
 
-
+    /** Decoding function "QQ==" to "A" */
     unsigned char* Source_dataSingleDecoded = base64Decode(Source_dataSingleEncoded, dataSingleEncodedLength);
 
+    /** Unit Test  ,  , expect result is  "A" */
     assert_string_equal(Source_dataSingleDecoded , dataSingle) ;
 
 
-
+    /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataSingleLength; i++){
         assert_int_equal((int)Source_dataSingleDecoded[i] , (int)dataSingle[i]);
     }
 
+
+    /** Free pointers*/
     free(Source_dataSingleEncoded);
     free(Source_dataSingleDecoded);
 
@@ -83,28 +90,38 @@ void Test_Base64Encoders_and_Decoders_Word(void** State){
      * @description Test word encoder  
      */
 
+
+    /** Encoding function  "Man" to "TWFu"  */
     char* Source_dataWordEncoded = base64Encode(dataWord, dataWordLength);
 
+
+    /** Unit Test  , expect result is  "TWFu"  */
     assert_string_equal(Source_dataWordEncoded, dataWordEncoded);
 
+
+     /** Get Encoding data result length */
     unsigned int dataWordEncodedLength =  (unsigned int)strlen((char *)dataWordEncoded);
 
+
+    /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataWordEncodedLength; i++){
        assert_int_equal((int)Source_dataWordEncoded[i] ,(int) dataWordEncoded[i]);
     }
 
 
+    /** Decoding function "TWFu" to "Man" */
+    char* Source_dataWordDecoded = base64Decode(Source_dataWordEncoded, dataWordEncodedLength);
 
- char* Source_dataWordDecoded = base64Decode(Source_dataWordEncoded, dataWordEncodedLength);
-
+    /** Unit Test  ,  , expect result is  "Man" */
     assert_string_equal(Source_dataWordDecoded , dataWord) ;
 
 
-
+    /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataWordLength; i++){
         assert_int_equal((int)Source_dataWordDecoded[i] , (int)dataWord[i]);
     }
 
+    /** Free pointers*/
     free(Source_dataWordEncoded);
     free(Source_dataWordDecoded);
 
@@ -129,26 +146,36 @@ void Test_Base64Encoders_and_Decoders_String(void** State){
      * @description Test String encoder  
      */
 
-     char* Source_dataStringEncoded = base64Encode(dataString, dataStringLength);
+    /** Encoding function */
+    char* Source_dataStringEncoded = base64Encode(dataString, dataStringLength);
 
+
+     /** Unit Test   */
     assert_string_equal(Source_dataStringEncoded, dataStringEncoded);
 
+
+     /** Get Encoding data result length */
     unsigned int dataStringEncodedLength =  (unsigned int)strlen((char *)dataStringEncoded);
 
+
+     /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataStringEncodedLength; i++){
        assert_int_equal((int)Source_dataStringEncoded[i] ,(int) dataStringEncoded[i]);
     }
 
+    /** Decoding function */
+    char* Source_dataStringDecoded = base64Decode(Source_dataStringEncoded, dataStringEncodedLength);
 
-     char* Source_dataStringDecoded = base64Decode(Source_dataStringEncoded, dataStringEncodedLength);
-
+    /** Unit Test */
     assert_string_equal(Source_dataStringDecoded , dataString) ;
 
 
-
+    /** Unit Test , char to ASCII , to Check each char */
     for(int i = 0; i < dataStringLength; i++){
         assert_int_equal((int)Source_dataStringDecoded[i] , (int)dataString[i]);
     }
+
+    /** Free pointers*/
 
     free(Source_dataStringEncoded);
     free(Source_dataStringDecoded);

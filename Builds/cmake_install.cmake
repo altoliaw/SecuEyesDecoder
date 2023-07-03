@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/c/Ian/Work/SecuEyesDecoder/Build/Test/cmake_install.cmake")
+  include("/c/Ian/Work/SecuEyesDecoder/Builds/Tests/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/c/Ian/Work/SecuEyesDecoder/Build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/c/Ian/Work/SecuEyesDecoder/Builds/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

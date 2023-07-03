@@ -60,7 +60,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /c/Ian/Work/SecuEyesDecoder
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Build
+CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Builds
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles /c/Ian/Work/SecuEyesDecoder/Build/Test//CMakeFiles/progress.marks
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles 0
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles /c/Ian/Work/SecuEyesDecoder/Builds/Tests//CMakeFiles/progress.marks
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Tests/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Test/clean
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Tests/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,17 +103,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Test/preinstall
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Tests/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Test/preinstall
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Tests/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -135,6 +135,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

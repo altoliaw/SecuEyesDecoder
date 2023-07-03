@@ -57,39 +57,39 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /c/Ian/Work/SecuEyesDecoder
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Build
+CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Builds
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
 all: CMakeFiles/Test.dir/all
-all: Test/all
+all: Tests/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall: Test/preinstall
+preinstall: Tests/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Test.dir/clean
-clean: Test/clean
+clean: Tests/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory Test
+# Directory level rules for directory Tests
 
 # Recursive "all" directory target.
-Test/all:
-.PHONY : Test/all
+Tests/all:
+.PHONY : Tests/all
 
 # Recursive "preinstall" directory target.
-Test/preinstall:
-.PHONY : Test/preinstall
+Tests/preinstall:
+.PHONY : Tests/preinstall
 
 # Recursive "clean" directory target.
-Test/clean:
-.PHONY : Test/clean
+Tests/clean:
+.PHONY : Tests/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/Test.dir
@@ -98,14 +98,14 @@ Test/clean:
 CMakeFiles/Test.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles --progress-num=1,2,3,4 "Built target Test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles --progress-num=1,2,3,4 "Built target Test"
 .PHONY : CMakeFiles/Test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles 0
 .PHONY : CMakeFiles/Test.dir/rule
 
 # Convenience name for target.

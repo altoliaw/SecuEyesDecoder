@@ -60,7 +60,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /c/Ian/Work/SecuEyesDecoder
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Build
+CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Builds
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles /c/Ian/Work/SecuEyesDecoder/Build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles /c/Ian/Work/SecuEyesDecoder/Builds//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -153,53 +153,53 @@ Main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Main.c.s
 .PHONY : Main.c.s
 
-Test/Main.obj: Test/Main.c.obj
-.PHONY : Test/Main.obj
+Tests/Main.obj: Tests/Main.c.obj
+.PHONY : Tests/Main.obj
 
 # target to build an object file
-Test/Main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Main.c.obj
-.PHONY : Test/Main.c.obj
+Tests/Main.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Main.c.obj
+.PHONY : Tests/Main.c.obj
 
-Test/Main.i: Test/Main.c.i
-.PHONY : Test/Main.i
+Tests/Main.i: Tests/Main.c.i
+.PHONY : Tests/Main.i
 
 # target to preprocess a source file
-Test/Main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Main.c.i
-.PHONY : Test/Main.c.i
+Tests/Main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Main.c.i
+.PHONY : Tests/Main.c.i
 
-Test/Main.s: Test/Main.c.s
-.PHONY : Test/Main.s
+Tests/Main.s: Tests/Main.c.s
+.PHONY : Tests/Main.s
 
 # target to generate assembly for a file
-Test/Main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Main.c.s
-.PHONY : Test/Main.c.s
+Tests/Main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Main.c.s
+.PHONY : Tests/Main.c.s
 
-Test/Sources/Test_Base64.obj: Test/Sources/Test_Base64.c.obj
-.PHONY : Test/Sources/Test_Base64.obj
+Tests/Sources/Test_Base64.obj: Tests/Sources/Test_Base64.c.obj
+.PHONY : Tests/Sources/Test_Base64.obj
 
 # target to build an object file
-Test/Sources/Test_Base64.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj
-.PHONY : Test/Sources/Test_Base64.c.obj
+Tests/Sources/Test_Base64.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj
+.PHONY : Tests/Sources/Test_Base64.c.obj
 
-Test/Sources/Test_Base64.i: Test/Sources/Test_Base64.c.i
-.PHONY : Test/Sources/Test_Base64.i
+Tests/Sources/Test_Base64.i: Tests/Sources/Test_Base64.c.i
+.PHONY : Tests/Sources/Test_Base64.i
 
 # target to preprocess a source file
-Test/Sources/Test_Base64.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.i
-.PHONY : Test/Sources/Test_Base64.c.i
+Tests/Sources/Test_Base64.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.i
+.PHONY : Tests/Sources/Test_Base64.c.i
 
-Test/Sources/Test_Base64.s: Test/Sources/Test_Base64.c.s
-.PHONY : Test/Sources/Test_Base64.s
+Tests/Sources/Test_Base64.s: Tests/Sources/Test_Base64.c.s
+.PHONY : Tests/Sources/Test_Base64.s
 
 # target to generate assembly for a file
-Test/Sources/Test_Base64.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.s
-.PHONY : Test/Sources/Test_Base64.c.s
+Tests/Sources/Test_Base64.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Test.dir/build.make CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.s
+.PHONY : Tests/Sources/Test_Base64.c.s
 
 # Help Target
 help:
@@ -213,12 +213,12 @@ help:
 	@echo "... Main.obj"
 	@echo "... Main.i"
 	@echo "... Main.s"
-	@echo "... Test/Main.obj"
-	@echo "... Test/Main.i"
-	@echo "... Test/Main.s"
-	@echo "... Test/Sources/Test_Base64.obj"
-	@echo "... Test/Sources/Test_Base64.i"
-	@echo "... Test/Sources/Test_Base64.s"
+	@echo "... Tests/Main.obj"
+	@echo "... Tests/Main.i"
+	@echo "... Tests/Main.s"
+	@echo "... Tests/Sources/Test_Base64.obj"
+	@echo "... Tests/Sources/Test_Base64.i"
+	@echo "... Tests/Sources/Test_Base64.s"
 .PHONY : help
 
 

@@ -12,13 +12,13 @@ set(CMAKE_CXX_STANDARD 99)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_subdirectory(Test)
+add_subdirectory(Tests)
 
 
 add_executable(Test
     ./Main.c
-    ./Test/Main.c
-    ./Test/Sources/Test_Base64.c
+    ./Tests/Main.c
+    ./Tests/Sources/Test_Base64.c
 )
 
 

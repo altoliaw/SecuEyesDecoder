@@ -56,7 +56,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /c/Ian/Work/SecuEyesDecoder
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Build
+CMAKE_BINARY_DIR = /c/Ian/Work/SecuEyesDecoder/Builds
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Test.dir/depend.make
@@ -72,7 +72,7 @@ include CMakeFiles/Test.dir/flags.make
 CMakeFiles/Test.dir/Main.c.obj: CMakeFiles/Test.dir/flags.make
 CMakeFiles/Test.dir/Main.c.obj: /c/Ian/Work/SecuEyesDecoder/Main.c
 CMakeFiles/Test.dir/Main.c.obj: CMakeFiles/Test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Test.dir/Main.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Test.dir/Main.c.obj"
 	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Test.dir/Main.c.obj -MF CMakeFiles/Test.dir/Main.c.obj.d -o CMakeFiles/Test.dir/Main.c.obj -c /c/Ian/Work/SecuEyesDecoder/Main.c
 
 CMakeFiles/Test.dir/Main.c.i: cmake_force
@@ -83,49 +83,49 @@ CMakeFiles/Test.dir/Main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Test.dir/Main.c.s"
 	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /c/Ian/Work/SecuEyesDecoder/Main.c -o CMakeFiles/Test.dir/Main.c.s
 
-CMakeFiles/Test.dir/Test/Main.c.obj: CMakeFiles/Test.dir/flags.make
-CMakeFiles/Test.dir/Test/Main.c.obj: /c/Ian/Work/SecuEyesDecoder/Test/Main.c
-CMakeFiles/Test.dir/Test/Main.c.obj: CMakeFiles/Test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Test.dir/Test/Main.c.obj"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Test.dir/Test/Main.c.obj -MF CMakeFiles/Test.dir/Test/Main.c.obj.d -o CMakeFiles/Test.dir/Test/Main.c.obj -c /c/Ian/Work/SecuEyesDecoder/Test/Main.c
+CMakeFiles/Test.dir/Tests/Main.c.obj: CMakeFiles/Test.dir/flags.make
+CMakeFiles/Test.dir/Tests/Main.c.obj: /c/Ian/Work/SecuEyesDecoder/Tests/Main.c
+CMakeFiles/Test.dir/Tests/Main.c.obj: CMakeFiles/Test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Test.dir/Tests/Main.c.obj"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Test.dir/Tests/Main.c.obj -MF CMakeFiles/Test.dir/Tests/Main.c.obj.d -o CMakeFiles/Test.dir/Tests/Main.c.obj -c /c/Ian/Work/SecuEyesDecoder/Tests/Main.c
 
-CMakeFiles/Test.dir/Test/Main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Test.dir/Test/Main.c.i"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /c/Ian/Work/SecuEyesDecoder/Test/Main.c > CMakeFiles/Test.dir/Test/Main.c.i
+CMakeFiles/Test.dir/Tests/Main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Test.dir/Tests/Main.c.i"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /c/Ian/Work/SecuEyesDecoder/Tests/Main.c > CMakeFiles/Test.dir/Tests/Main.c.i
 
-CMakeFiles/Test.dir/Test/Main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Test.dir/Test/Main.c.s"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /c/Ian/Work/SecuEyesDecoder/Test/Main.c -o CMakeFiles/Test.dir/Test/Main.c.s
+CMakeFiles/Test.dir/Tests/Main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Test.dir/Tests/Main.c.s"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /c/Ian/Work/SecuEyesDecoder/Tests/Main.c -o CMakeFiles/Test.dir/Tests/Main.c.s
 
-CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj: CMakeFiles/Test.dir/flags.make
-CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj: /c/Ian/Work/SecuEyesDecoder/Test/Sources/Test_Base64.c
-CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj: CMakeFiles/Test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj -MF CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj.d -o CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj -c /c/Ian/Work/SecuEyesDecoder/Test/Sources/Test_Base64.c
+CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj: CMakeFiles/Test.dir/flags.make
+CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj: /c/Ian/Work/SecuEyesDecoder/Tests/Sources/Test_Base64.c
+CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj: CMakeFiles/Test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj -MF CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj.d -o CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj -c /c/Ian/Work/SecuEyesDecoder/Tests/Sources/Test_Base64.c
 
-CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.i"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /c/Ian/Work/SecuEyesDecoder/Test/Sources/Test_Base64.c > CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.i
+CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.i"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /c/Ian/Work/SecuEyesDecoder/Tests/Sources/Test_Base64.c > CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.i
 
-CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.s"
-	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /c/Ian/Work/SecuEyesDecoder/Test/Sources/Test_Base64.c -o CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.s
+CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.s"
+	/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /c/Ian/Work/SecuEyesDecoder/Tests/Sources/Test_Base64.c -o CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.s
 
 # Object files for target Test
 Test_OBJECTS = \
 "CMakeFiles/Test.dir/Main.c.obj" \
-"CMakeFiles/Test.dir/Test/Main.c.obj" \
-"CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj"
+"CMakeFiles/Test.dir/Tests/Main.c.obj" \
+"CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj"
 
 # External object files for target Test
 Test_EXTERNAL_OBJECTS =
 
 Test: CMakeFiles/Test.dir/Main.c.obj
-Test: CMakeFiles/Test.dir/Test/Main.c.obj
-Test: CMakeFiles/Test.dir/Test/Sources/Test_Base64.c.obj
+Test: CMakeFiles/Test.dir/Tests/Main.c.obj
+Test: CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj
 Test: CMakeFiles/Test.dir/build.make
 Test: CMakeFiles/Test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable Test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable Test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -137,6 +137,6 @@ CMakeFiles/Test.dir/clean:
 .PHONY : CMakeFiles/Test.dir/clean
 
 CMakeFiles/Test.dir/depend:
-	cd /c/Ian/Work/SecuEyesDecoder/Build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /c/Ian/Work/SecuEyesDecoder /c/Ian/Work/SecuEyesDecoder /c/Ian/Work/SecuEyesDecoder/Build /c/Ian/Work/SecuEyesDecoder/Build /c/Ian/Work/SecuEyesDecoder/Build/CMakeFiles/Test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /c/Ian/Work/SecuEyesDecoder/Builds && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /c/Ian/Work/SecuEyesDecoder /c/Ian/Work/SecuEyesDecoder /c/Ian/Work/SecuEyesDecoder/Builds /c/Ian/Work/SecuEyesDecoder/Builds /c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles/Test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Test.dir/depend
 
