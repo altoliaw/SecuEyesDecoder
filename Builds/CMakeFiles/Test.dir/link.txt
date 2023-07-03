@@ -1,1 +1,0 @@
-/mingw64/bin/cc.exe CMakeFiles/Test.dir/Main.c.obj CMakeFiles/Test.dir/Tests/Main.c.obj CMakeFiles/Test.dir/Tests/Sources/Test_Base64.c.obj -o Test  -lcmocka 

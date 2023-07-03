@@ -1,5 +1,0 @@
-/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles/Test.dir
-/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles/edit_cache.dir
-/c/Ian/Work/SecuEyesDecoder/Builds/CMakeFiles/rebuild_cache.dir
-/c/Ian/Work/SecuEyesDecoder/Builds/Tests/CMakeFiles/edit_cache.dir
-/c/Ian/Work/SecuEyesDecoder/Builds/Tests/CMakeFiles/rebuild_cache.dir
