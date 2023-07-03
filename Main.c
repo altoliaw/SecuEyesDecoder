@@ -24,22 +24,22 @@ static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
  */
 int main(int argc, char** argv)
 {
-    //unsigned char data[] = "Hello, World!";
-    //unsigned int dataLength = (unsigned int)strlen((const char*)data);
+    // unsigned char data[] = "Hello, World!";
+    // unsigned int dataLength = (unsigned int)strlen((const char*)data);
     ///** Base64 encode */
-    //unsigned char* encodedData = NULL;
-    //encodedData = base64Encode(data, dataLength);
-    //if (encodedData != NULL) {
-    //    printf("Encoded: %s\n", encodedData);
-    //    /** Base64 decode*/
-    //    unsigned int encodedLength = (unsigned int)strlen((char*)encodedData);
-    //    unsigned char* decodedData = base64Decode(encodedData, encodedLength);
-    //    if (decodedData != NULL) {
-    //        printf("Decoded: %s\n", decodedData);
-    //        free(decodedData);
-    //    }
-    //    free(encodedData);
-    //}
+    // unsigned char* encodedData = NULL;
+    // encodedData = base64Encode(data, dataLength);
+    // if (encodedData != NULL) {
+    //     printf("Encoded: %s\n", encodedData);
+    //     /** Base64 decode*/
+    //     unsigned int encodedLength = (unsigned int)strlen((char*)encodedData);
+    //     unsigned char* decodedData = base64Decode(encodedData, encodedLength);
+    //     if (decodedData != NULL) {
+    //         printf("Decoded: %s\n", decodedData);
+    //         free(decodedData);
+    //     }
+    //     free(encodedData);
+    // }
 
     return 0;
 }
@@ -201,17 +201,44 @@ int parseSqlStmt(
 {
     unsigned int start = NULL;
     unsigned int end = NULL;
-    unsigned short startFlag = 0; /** The 0 value shows the process shall search the starting notation `0x2F0x2A`; otherwise shall searching `0x2A0x2F` */
+    /** The 0 value shows the process shall search the starting notation `0x2F0x2A`; otherwise shall searching `0x2A0x2F` */
+    unsigned short startFlag = 0;
     for (; end < sqlStmtLen;) {
-        if (sqlStmt[end] != (unsigned char)'/') {
-            /** Moving to the next character*/
-            start = end = (end + 1);
-            continue;
+        /** `if` section implies that users shall find the starting comment symbol `/`;
+         *  `else` section implies that users shall find the end `startEndSymbol` symbol.
+         */
+        if (startFlag == 0) {
+            if (sqlStmt[end] != (unsigned char)'/') {
+                start = end = (end + 1);
+                continue;
+            }
+            /** The `3` implies that the location of the encoded text shall be safe for accessing. */
+            if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == startEndSymbol) {
+
+                start = end = (end + 3);
+                startFlag++;
+            } else {
+                end++;
+            }
+        } else {
+            if (sqlStmt[end] != startEndSymbol) {
+                end++;
+                continue;
+            }
+            if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == '/') {
+                /** Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character*/
+                end = end - 1 ;
+                break;
+            } else {
+                end++;
+            }
         }
-        /** The `3` implies that the location of the encoded text shall be safe for accessing. */
-        if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == startEndSymbol) {
-            start = end = (end + 3);
-        }
+
+        /** Allocating the size */
+        unsigned char* encodedText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 2));
+
+
+        free(encodedText);
     }
     return 0;
 }
