@@ -8,9 +8,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define START_END_SYMBOL "#^"
+#define DELIMITER ","
+
 unsigned char* base64Encode(unsigned char*, unsigned int);
 unsigned char* base64Decode(unsigned char*, unsigned int);
 unsigned int getBase64Index(unsigned char);
+int parseSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char*, unsigned char*);
+
 
 /** Base 64 definition*/
 static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -41,7 +46,38 @@ int main(int argc, char** argv)
     //     free(encodedData);
     // }
 
-//     return 0;
+    //unsigned char data[] = "admin@Cobra.com,127.0.0.1";
+    //unsigned int dataLength = (unsigned int)strlen((const char*)data);
+    /////** Base64 encode */
+    //unsigned char* encodedData = NULL;
+    //encodedData = base64Encode(data, dataLength);
+    //fprintf(stderr, "Encoded: %s\n", encodedData);
+
+    //free(encodedData);
+
+    unsigned char sqlStmtString[] = "/*#^YWRtaW5AQ29icmEuY29tLDEyNy4wLjAuMQ==^#*/ Select * from tb_select;";
+    unsigned int length = (unsigned int) strlen((char*) sqlStmtString);
+    unsigned char* userId = NULL;
+    unsigned char* ip = NULL;
+
+    int result = parseSqlStmt(
+        sqlStmtString,
+        length,
+        &userId,
+        &ip,
+        (unsigned char*)START_END_SYMBOL,
+        (unsigned char*)DELIMITER);
+
+    fprintf(stderr, "The userId is <%s>\n", userId);
+    fprintf(stderr, "The ip is <%s>\n", ip);
+    if(userId != NULL) {
+        free(userId);
+    }
+    if(ip != NULL) {
+        free(ip);
+    }
+    fprintf(stderr, "The result is <%d>", result);
+    return 0;
 }
 
 /**
@@ -134,10 +170,10 @@ unsigned char* base64Decode(unsigned char* encodedData, unsigned int encodedLeng
         unsigned int sextet_c = encodedData[i] == '=' ? 0 & i++ : getBase64Index(encodedData[i++]);
         unsigned int sextet_d = encodedData[i] == '=' ? 0 & i++ : getBase64Index(encodedData[i++]);
 
-        /** Like encoding, four alphabets are treated in each round in base64 encoding*/
+        /** Like encoding, four alphabets are treated in each round in base64 encoding */
         unsigned int triple = (sextet_a << 3 * 6) + (sextet_b << 2 * 6) + (sextet_c << 1 * 6) + (sextet_d << 0 * 6);
 
-        /** Like encoding, obtaining results by using significant bits*/
+        /** Like encoding, obtaining results by using significant bits */
         if (j < decodedLength) {
             decodedData[j++] = (triple >> 2 * 8) & 0xFF;
         }
@@ -185,22 +221,22 @@ unsigned int getBase64Index(unsigned char alphabet)
  *
  * @param sqlStmt unsigned char* SQL statement
  * @param sqlStmtLen unsigned int The length of the SQL statement
- * @param userId unsigned char* The user id information
- * @param ip unsigned char* The user ip
+ * @param userId unsigned char** The user id information; users shall free the memory manually
+ * @param ip unsigned char** The user ip; users shall free the memory manually
  * @param startEndSymbol unsigned char* The starting symbol of the encoded text
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
- * @return int The error code; 0 means success, and 1 implies failure
+ * @return int The error code; 0 means success, and -1 implies failure
  */
 int parseSqlStmt(
     unsigned char* sqlStmt,
     unsigned int sqlStmtLen,
-    unsigned char* userId,
-    unsigned char* ip,
-    unsigned char startEndSymbol,
-    unsigned char delimiter)
+    unsigned char** userId,
+    unsigned char** ip,
+    unsigned char* startEndSymbol,
+    unsigned char* delimiter)
 {
-    unsigned int start = NULL;
-    unsigned int end = NULL;
+    unsigned int start = 0;
+    unsigned int end = 0;
     /** The 0 value shows the process shall search the starting notation `0x2F0x2A`; otherwise shall searching `0x2A0x2F` */
     unsigned short startFlag = 0;
     for (; end < sqlStmtLen;) {
@@ -212,20 +248,25 @@ int parseSqlStmt(
                 start = end = (end + 1);
                 continue;
             }
-            /** The `3` implies that the location of the encoded text shall be safe for accessing. */
-            if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == startEndSymbol) {
-
-                start = end = (end + 3);
+            /** The `4` implies that the location of the encoded text shall be safe for accessing. */
+            if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen &&
+                sqlStmt[end + 1] == (unsigned char)'*' &&
+                sqlStmt[end + 2] == startEndSymbol[0] &&
+                sqlStmt[end + 3] == startEndSymbol[1]) {
+                start = end = (end + 4);
                 startFlag++;
             } else {
                 end++;
             }
         } else {
-            if (sqlStmt[end] != startEndSymbol) {
+            if (sqlStmt[end] != startEndSymbol[1]) {
                 end++;
                 continue;
             }
-            if ((end + 3) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == '/') {
+            if (end + 1 + (int)strlen((char*)startEndSymbol) < sqlStmtLen &&
+                    sqlStmt[end + 1] == startEndSymbol[0] &&
+                    sqlStmt[end + 2] == '*' &&
+                    sqlStmt[end + 3] == '/') {
                 /** Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character*/
                 end = end - 1 ;
                 break;
@@ -233,12 +274,41 @@ int parseSqlStmt(
                 end++;
             }
         }
-
-        /** Allocating the size */
-        unsigned char* encodedText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 2));
-
-
-        free(encodedText);
     }
+
+    /** Allocating the size, the number two consists of two part, one part is for length and the other is for '\0' */
+    unsigned char* encodedText = NULL;
+    encodedText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 2));
+    if (encodedText == NULL) {
+        return -1;
+    }
+
+    memcpy(encodedText, sqlStmt + start, (end - start + 1));
+    encodedText[(end - start + 1)] = '\0';
+    unsigned char* plainText = NULL;
+    plainText = base64Decode (encodedText, (end - start + 1));
+    if(plainText == NULL) {
+        return -1;
+    }
+
+    /** Splitting the string into two tokens */
+    char* token = strtok((char*)plainText, (char*)delimiter);
+    int length = 0;
+    for (int i = 0; token != NULL; i++){
+        length = (int)strlen(token);
+        if( i == 0 ) { /** The first token */
+            *userId = (unsigned char*)malloc(sizeof(unsigned char) * length + sizeof(unsigned char) );
+            memcpy(*userId, token, length);
+            (*userId)[length] = '\0';
+        } else if (i == 1) { /** The second token */
+            *ip = (unsigned char*)malloc(sizeof(unsigned char) * length + sizeof(unsigned char) );
+            memcpy(*ip, token, length);
+            (*ip)[length] = '\0';
+        }
+        token = strtok(NULL, (char*)delimiter);
+    }
+
+    free(encodedText);
+    free(plainText);
     return 0;
 }
