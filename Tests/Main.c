@@ -11,11 +11,19 @@
  */
 
 #include "./Headers/Test_Base64.h"
+#include "./Headers/Test_PraseComment.h"
 
 const struct CMUnitTest tests[] = {
     cmocka_unit_test(Test_Base64Encoders_and_Decoders_Single),
     cmocka_unit_test(Test_Base64Encoders_and_Decoders_Word),
     cmocka_unit_test(Test_Base64Encoders_and_Decoders_String),
+
+    cmocka_unit_test(Test_parseSqlStmt_Normal),
+    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid),
+    cmocka_unit_test(Test_parseSqlStmt_Multi_Target),
+
+    
+
 };
 
 int main(){

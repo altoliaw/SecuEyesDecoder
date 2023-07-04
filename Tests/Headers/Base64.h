@@ -13,3 +13,10 @@ unsigned char* base64Encode(unsigned char*, unsigned int);
 unsigned char* base64Decode(unsigned char*, unsigned int);
 unsigned int getBase64Index(unsigned char);
 
+int parseSqlStmt(
+    unsigned char* sqlStmt,
+    unsigned int sqlStmtLen,
+    unsigned char** userId,
+    unsigned char** ip,
+    unsigned char* startEndSymbol,
+    unsigned char* delimiter);
