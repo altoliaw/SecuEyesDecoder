@@ -27,8 +27,8 @@ static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
  * @param argv char** The value of the arguments
  * @return
  */
-int main(int argc, char** argv)
-{
+//int main(int argc, char** argv)
+//{
     // unsigned char data[] = "Hello, World!";
     // unsigned int dataLength = (unsigned int)strlen((const char*)data);
     ///** Base64 encode */
@@ -55,30 +55,30 @@ int main(int argc, char** argv)
 
     //free(encodedData);
 
-    unsigned char sqlStmtString[] = "/*#^YWRtaW5AQ29icmEuY29tLDEyNy4wLjAuMQ==^#*/ Select * from tb_select;";
-    unsigned int length = (unsigned int) strlen((char*) sqlStmtString);
-    unsigned char* userId = NULL;
-    unsigned char* ip = NULL;
-
-    int result = parseSqlStmt(
-        sqlStmtString,
-        length,
-        &userId,
-        &ip,
-        (unsigned char*)START_END_SYMBOL,
-        (unsigned char*)DELIMITER);
-
-    fprintf(stderr, "The userId is <%s>\n", userId);
-    fprintf(stderr, "The ip is <%s>\n", ip);
-    if(userId != NULL) {
-        free(userId);
-    }
-    if(ip != NULL) {
-        free(ip);
-    }
-    fprintf(stderr, "The result is <%d>", result);
-    return 0;
-}
+    //unsigned char sqlStmtString[] = "/*#^YWRtaW5AQ29icmEuY29tLDEyNy4wLjAuMQ==^#*/ Select * from tb_select;";
+    //unsigned int length = (unsigned int) strlen((char*) sqlStmtString);
+    //unsigned char* userId = NULL;
+    //unsigned char* ip = NULL;
+//
+    //int result = parseSqlStmt(
+    //    sqlStmtString,
+    //    length,
+    //    &userId,
+    //    &ip,
+    //    (unsigned char*)START_END_SYMBOL,
+    //    (unsigned char*)DELIMITER);
+//
+    //fprintf(stderr, "The userId is <%s>\n", userId);
+    //fprintf(stderr, "The ip is <%s>\n", ip);
+    //if(userId != NULL) {
+    //    free(userId);
+    //}
+    //if(ip != NULL) {
+    //    free(ip);
+    //}
+    //fprintf(stderr, "The result is <%d>", result);
+    //return 0;
+//}
 
 /**
  * Base64 encode; users don't feel like knowing the length of encoded data in advance. In return,

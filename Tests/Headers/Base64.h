@@ -1,5 +1,4 @@
 #pragma once
-
 /** @file main.c
  * The SecuEyes decoder with base 64 en(de)coding
  *

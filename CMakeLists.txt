@@ -15,13 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(Tests)
 
 
-add_executable(Test
+# add the files into the library
+add_library(Mains
     ./Main.c
-    ./Tests/Main.c
-    ./Tests/Sources/Test_Base64.c
-)
-
-
-target_link_libraries(Test
-    cmocka
 )
