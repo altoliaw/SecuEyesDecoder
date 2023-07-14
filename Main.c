@@ -292,20 +292,31 @@ int parseSqlStmt(
     }
 
     /** Splitting the string into two tokens */
-    char* token = strtok((char*)plainText, (char*)delimiter);
-    int length = 0;
-    for (int i = 0; token != NULL; i++){
-        length = (int)strlen(token);
-        if( i == 0 ) { /** The first token */
-            *userId = (unsigned char*)malloc(sizeof(unsigned char) * length + sizeof(unsigned char) );
-            memcpy(*userId, token, length);
-            (*userId)[length] = '\0';
-        } else if (i == 1) { /** The second token */
-            *ip = (unsigned char*)malloc(sizeof(unsigned char) * length + sizeof(unsigned char) );
-            memcpy(*ip, token, length);
-            (*ip)[length] = '\0';
+    unsigned int startPivot =0;
+    unsigned int endPivot =0;
+    for(short flag = 0; endPivot < (unsigned int)strlen((char*)plainText);) {
+        if(plainText[endPivot]!= *delimiter && flag == 0) {
+            endPivot++;
+            continue;
         }
-        token = strtok(NULL, (char*)delimiter);
+        if (endPivot < (unsigned int)strlen((char*)plainText) -1 && flag == 1) {
+            endPivot++;
+            continue;
+        }
+
+        if(flag == 0) {
+            *userId = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char) );
+            memcpy(*userId, plainText + startPivot, (endPivot - startPivot));
+            (*userId)[(endPivot - startPivot)] = '\0';
+            startPivot = endPivot + 1;
+            endPivot ++;
+            flag ++;
+        } else {
+            *ip = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot + 1) + sizeof(unsigned char) );
+            memcpy(*ip, plainText + startPivot, (endPivot - startPivot + 1));
+            (*ip)[(endPivot - startPivot + 1)] = '\0';
+            endPivot++;
+        }
     }
 
     free(encodedText);
