@@ -305,16 +305,20 @@ int parseSqlStmt(
         }
 
         if(flag == 0) {
-            *userId = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char) );
-            memcpy(*userId, plainText + startPivot, (endPivot - startPivot));
-            (*userId)[(endPivot - startPivot)] = '\0';
+            if(endPivot - startPivot != 0) {
+                *userId = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char) );
+                memcpy(*userId, plainText + startPivot, (endPivot - startPivot));
+                (*userId)[(endPivot - startPivot)] = '\0';
+            }
             startPivot = endPivot + 1;
             endPivot ++;
             flag ++;
         } else {
-            *ip = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot + 1) + sizeof(unsigned char) );
-            memcpy(*ip, plainText + startPivot, (endPivot - startPivot + 1));
-            (*ip)[(endPivot - startPivot + 1)] = '\0';
+            if(endPivot - startPivot != 0) {
+                *ip = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot + 1) + sizeof(unsigned char) );
+                memcpy(*ip, plainText + startPivot, (endPivot - startPivot + 1));
+                (*ip)[(endPivot - startPivot + 1)] = '\0';
+            }
             endPivot++;
         }
     }
