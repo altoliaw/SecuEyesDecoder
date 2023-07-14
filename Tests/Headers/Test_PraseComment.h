@@ -21,6 +21,11 @@
 void Test_parseSqlStmt_Normal(void **state);
 
 
+void Test_parseSqlStmt_Normal_FirstNULL(void **state);
+void Test_parseSqlStmt_Normal_LastNULL(void **state);
+
+
+
 /**
  * @brief Test Encoded Message in of middle of string
  * 

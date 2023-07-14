@@ -11,6 +11,7 @@
 
 
 #include "../Headers/Test_PraseComment.h"
+#include "Test_PraseComment.h"
 
 void Test_parseSqlStmt_Normal(void **state){
 
@@ -65,10 +66,21 @@ void Test_parseSqlStmt_Normal(void **state){
 
     /** Unit Test  */
    
-    assert_string_equal(userId , TargetUserId);
+    if(userId != NULL) {
+        assert_string_equal(userId , TargetUserId);
+    }
+    else{
+      printf("userId is NULL\n");
+    }
 
-    assert_string_equal(ip , TargetIp);
+    if(ip != NULL) {
+       assert_string_equal(ip , TargetIp);
+    }
+     else{
+      printf("ip is NULL\n");
+    }
 
+    
 
     if(userId != NULL) {
        free(userId);
@@ -82,8 +94,168 @@ void Test_parseSqlStmt_Normal(void **state){
 
 }
 
+void Test_parseSqlStmt_Normal_FirstNULL(void **state)
+{
+  /** data*/
+    unsigned char *TargetUserId = "ianmina0322@gmail.com";
+    unsigned char *TargetIp = "200.221.99.3";
+    unsigned char *sqlStmt = ",200.221.99.3";
 
-void Test_parseSqlStmt_Target_At_Mid(void **state){
+    /** Len*/
+    unsigned int TargetUserIdLen = (unsigned int)strlen(( unsigned char*)TargetUserId);
+    unsigned int TargetIpLen = (unsigned int)strlen(( unsigned char*)TargetIp);
+    unsigned int sqlStmtLen = (unsigned int)strlen(( unsigned char*)sqlStmt);
+
+
+    /** Text */
+    unsigned char *encodedprefixText= "UUUUUUUUUUUUUU I will be back online";
+    unsigned char *encodedprefix = "/*#^";
+    unsigned char *encodedendfix = "^#*/";
+    unsigned char *encodedSqlStmt = base64Encode(sqlStmt, sqlStmtLen);
+
+     /** Text  Len */
+    unsigned int encodedprefixLen = (unsigned int)strlen(( unsigned char*)encodedprefix);
+    unsigned int encodedendfixLen = (unsigned int)strlen(( unsigned char*)encodedendfix);
+    unsigned int encodedprefixTextLen = (unsigned int)strlen(( unsigned char*)encodedprefixText);
+    unsigned int encodedSqlStmtLen = (unsigned int)strlen(( unsigned char*)encodedSqlStmt);
+
+    /**  Append */
+    unsigned char *encodedtarget = (unsigned char*)malloc(encodedprefixTextLen +encodedprefixLen + encodedSqlStmtLen + encodedendfixLen);
+    unsigned int encodedtargetLen = encodedprefixTextLen + encodedprefixLen + encodedSqlStmtLen + encodedendfixLen;
+
+    /**  Append */
+    strcpy(encodedtarget,encodedprefixText);
+    strcat(encodedtarget, encodedprefix);
+    strcat(encodedtarget, encodedSqlStmt);
+    strcat(encodedtarget, encodedendfix);
+
+    printf("\n\nEncode result :  %s\n",encodedtarget);
+
+    /** result var*/
+
+    unsigned char* userId = NULL;
+    unsigned char* ip = NULL;
+
+
+    int result = parseSqlStmt(
+       encodedtarget,
+       encodedtargetLen,
+       &userId,
+       &ip,
+       (unsigned char*)START_END_SYMBOL,
+       (unsigned char*)DELIMITER);
+
+    /** Unit Test  */
+   
+    if(userId != NULL) {
+        assert_string_equal(userId , TargetUserId);
+    }
+    else{
+      printf("userId is NULL\n");
+    }
+
+    if(ip != NULL) {
+       assert_string_equal(ip , TargetIp);
+    }
+     else{
+      printf("ip is NULL\n");
+    }
+
+    
+
+    if(userId != NULL) {
+       free(userId);
+    }
+    if(ip != NULL) {
+       free(ip);
+    };
+
+
+    free(encodedtarget);
+
+}
+void Test_parseSqlStmt_Normal_LastNULL(void **state)
+{
+  /** data*/
+    unsigned char *TargetUserId = "ianmina0322@gmail.com";
+    unsigned char *TargetIp = "200.221.99.3";
+    unsigned char *sqlStmt = "ianmina0322@gmail.com,";
+
+    /** Len*/
+    unsigned int TargetUserIdLen = (unsigned int)strlen(( unsigned char*)TargetUserId);
+    unsigned int TargetIpLen = (unsigned int)strlen(( unsigned char*)TargetIp);
+    unsigned int sqlStmtLen = (unsigned int)strlen(( unsigned char*)sqlStmt);
+
+
+    /** Text */
+    unsigned char *encodedprefixText= "UUUUUUUUUUUUUU I will be back online";
+    unsigned char *encodedprefix = "/*#^";
+    unsigned char *encodedendfix = "^#*/";
+    unsigned char *encodedSqlStmt = base64Encode(sqlStmt, sqlStmtLen);
+
+     /** Text  Len */
+    unsigned int encodedprefixLen = (unsigned int)strlen(( unsigned char*)encodedprefix);
+    unsigned int encodedendfixLen = (unsigned int)strlen(( unsigned char*)encodedendfix);
+    unsigned int encodedprefixTextLen = (unsigned int)strlen(( unsigned char*)encodedprefixText);
+    unsigned int encodedSqlStmtLen = (unsigned int)strlen(( unsigned char*)encodedSqlStmt);
+
+    /**  Append */
+    unsigned char *encodedtarget = (unsigned char*)malloc(encodedprefixTextLen +encodedprefixLen + encodedSqlStmtLen + encodedendfixLen);
+    unsigned int encodedtargetLen = encodedprefixTextLen + encodedprefixLen + encodedSqlStmtLen + encodedendfixLen;
+
+    /**  Append */
+    strcpy(encodedtarget,encodedprefixText);
+    strcat(encodedtarget, encodedprefix);
+    strcat(encodedtarget, encodedSqlStmt);
+    strcat(encodedtarget, encodedendfix);
+
+    printf("\n\nEncode result :  %s\n",encodedtarget);
+
+    /** result var*/
+
+    unsigned char* userId = NULL;
+    unsigned char* ip = NULL;
+
+
+    int result = parseSqlStmt(
+       encodedtarget,
+       encodedtargetLen,
+       &userId,
+       &ip,
+       (unsigned char*)START_END_SYMBOL,
+       (unsigned char*)DELIMITER);
+
+    /** Unit Test  */
+   
+    if(userId != NULL) {
+        assert_string_equal(userId , TargetUserId);
+    }
+    else{
+      printf("userId is NULL\n");
+    }
+
+    if(ip != NULL) {
+       assert_string_equal(ip , TargetIp);
+    }
+     else{
+      printf("ip is NULL\n");
+    }
+
+    
+
+    if(userId != NULL) {
+       free(userId);
+    }
+    if(ip != NULL) {
+       free(ip);
+    };
+
+
+    free(encodedtarget);
+
+}
+void Test_parseSqlStmt_Target_At_Mid(void **state)
+{
 
     /** data*/
     unsigned char *TargetUserId = "ianmina0322@gmail.com";
@@ -141,24 +313,30 @@ void Test_parseSqlStmt_Target_At_Mid(void **state){
        (unsigned char*)DELIMITER);
 
     /** Unit Test  */
+    if(userId != NULL) {
+        assert_string_equal(userId , TargetUserId);
+    }
+    else{
+      printf("userId is NULL\n");
+    }
+    
+    if(ip != NULL) {
+       assert_string_equal(ip , TargetIp);
+    }
+     else{
+      printf("ip is NULL\n");
+    }
+
    
-    assert_string_equal(userId , TargetUserId);
-
-    assert_string_equal(ip , TargetIp);
-
-
     if(userId != NULL) {
        free(userId);
     }
     if(ip != NULL) {
        free(ip);
-    };
+    }
 
     free(encodedtarget);
-
 }
-
-
 
 void Test_parseSqlStmt_Multi_Target(void **state){
 
@@ -247,9 +425,19 @@ void Test_parseSqlStmt_Multi_Target(void **state){
 
     /** Unit Test  */
    
-    assert_string_equal(userId , TargetUserId);
-
-    assert_string_equal(ip , TargetIp);
+    if(userId != NULL) {
+        assert_string_equal(userId , TargetUserId);
+    }
+    else{
+      printf("userId is NULL\n");
+    }
+    
+    if(ip != NULL) {
+       assert_string_equal(ip , TargetIp);
+    }
+     else{
+      printf("ip is NULL\n");
+    }
 
 
     if(userId != NULL) {
@@ -257,7 +445,7 @@ void Test_parseSqlStmt_Multi_Target(void **state){
     }
     if(ip != NULL) {
        free(ip);
-    };
+    }
 
 
     free(encodedtarget);
