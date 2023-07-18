@@ -21,7 +21,12 @@ const struct CMUnitTest tests[] = {
     cmocka_unit_test(Test_parseSqlStmt_Normal),
     cmocka_unit_test(Test_parseSqlStmt_Normal_FirstNULL),
     cmocka_unit_test(Test_parseSqlStmt_Normal_LastNULL),
+    cmocka_unit_test(Test_parseSqlStmt_Normal_MultiDelimiter),
+
+
+    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid_TwoDelimiter),
     cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid),
+
     cmocka_unit_test(Test_parseSqlStmt_Multi_Target),
     
 

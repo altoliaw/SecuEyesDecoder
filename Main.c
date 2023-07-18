@@ -298,10 +298,25 @@ int parseSqlStmt(
         if(plainText[endPivot]!= *delimiter && flag == 0) {
             endPivot++;
             continue;
-        }
-        if (endPivot < (unsigned int)strlen((char*)plainText) -1 && flag == 1) {
-            endPivot++;
-            continue;
+        }                                                                    
+        if (endPivot < (unsigned int)strlen((char*)plainText) -1 && flag == 1 ) {
+            
+            /** resolve multi delimiter */
+            /** Ian revision */
+                if( plainText[endPivot] == *delimiter ){
+                    if(startPivot >= endPivot-1 ){
+                        startPivot++;
+                        endPivot++;
+                    }  
+                }
+                else{
+                    endPivot++;
+                } 
+                continue;
+
+            /** Nick version */
+            // endPivot++;
+            // continue;
         }
 
         if(flag == 0) {
