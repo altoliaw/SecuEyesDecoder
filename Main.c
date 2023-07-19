@@ -219,7 +219,7 @@ unsigned int getBase64Index(unsigned char alphabet)
  * First of all, users shall pass unsigned char pointers, `userId` and `ip` and those two pointers shall be initialized in NULL values as the arguments.
  * Second, after using the function, users shall free the memory `userId` and `ip` manually because the dynamic memory allocation affects in this function.
  *
- * @param sqlStmt unsigned char* SQL statement
+ * @param sqlStmt unsigned char* SQL statement; Will be reassigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
  * @param userId unsigned char** The user id information; users shall free the memory manually
  * @param ip unsigned char** The user ip; users shall free the memory manually
@@ -338,6 +338,67 @@ int parseSqlStmt(
         }
     }
 
+    // Remove sql statement /*#^ && ^#*/  
+    unsigned char* removeTagsText = NULL;
+    unsigned char* sqlStmtSubstr = NULL;  // The Substr for the sql statement after ^#*/
+    unsigned int startTag = 0;
+    unsigned int endTag  = 0;
+
+    /** Moving `startTag` to the tags starting pos */
+    for( ; startTag < sqlStmtLen ;){
+        if(! ( sqlStmt[startTag] == '/' && 
+            sqlStmt[startTag + 1] == '*' &&
+            sqlStmt[startTag + 2] == '#' &&
+            sqlStmt[startTag + 3] == '^'
+            )){
+
+            startTag++;
+            continue;
+            
+        }
+
+        // Move one character offset
+        break;
+    }
+
+    /** Moving `endTag` to the tags ending pos */
+    for( ; endTag < sqlStmtLen ;){
+        if(! ( sqlStmt[endTag] == '/' && 
+            sqlStmt[endTag - 1] == '*' &&
+            sqlStmt[endTag - 2] == '#' &&
+            sqlStmt[endTag - 3] == '^'
+            )){
+            endTag++;
+            continue;
+            
+        }
+
+        // Move one character offset
+        break;
+    }
+    
+    //TODO 應該是索引錯誤，我的數學不好QQ
+    removeTagsText = (unsigned char*)malloc(sizeof(unsigned char) * (sqlStmtLen - (endTag - startTag + 1 )) + sizeof(unsigned char) );
+    sqlStmtSubstr = (unsigned char*)malloc(sizeof(unsigned char) * (sqlStmtLen - endTag + 1) + sizeof(unsigned char)) ;
+    memcpy(removeTagsText, sqlStmt, startTag );
+    removeTagsText[startTag] = '\0';
+    memcpy(sqlStmtSubstr, sqlStmt + endTag + 1 , (sqlStmtLen - endTag + 1 ) );
+    sqlStmtSubstr[sqlStmtLen - endTag + 1 ] = '\0';
+    strcat(removeTagsText, sqlStmtSubstr );
+
+   
+    if( removeTagsText != NULL ){
+        strcpy(sqlStmt , removeTagsText);
+        sqlStmt[sqlStmtLen - (endTag - startTag + 1) ] = '\0';
+        free(removeTagsText);
+    }
+
+    if( sqlStmtSubstr != NULL ){
+        free(sqlStmtSubstr);
+    }
+
+
+    
     free(encodedText);
     free(plainText);
     return 0;

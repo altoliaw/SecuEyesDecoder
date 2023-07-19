@@ -80,6 +80,8 @@ void Test_parseSqlStmt_Normal(void **state){
      else{
       printf("ip is NULL\n");
     }
+   
+    printf("\n Result : %s\n\n", encodedtarget);
 
     
 
@@ -163,7 +165,7 @@ void Test_parseSqlStmt_Normal_FirstNULL(void **state)
       printf("ip is NULL\n");
     }
 
-    
+     printf("\n Result : %s\n\n", encodedtarget);
 
     if(userId != NULL) {
        free(userId);
@@ -243,7 +245,7 @@ void Test_parseSqlStmt_Normal_LastNULL(void **state)
       printf("ip is NULL\n");
     }
 
-    
+     printf("\n Result : %s\n\n", encodedtarget);
 
     if(userId != NULL) {
        free(userId);
@@ -496,7 +498,7 @@ void Test_parseSqlStmt_Target_At_Mid(void **state)
      else{
       printf("ip is NULL\n");
     }
-
+    printf("\n Result : %s\n\n", encodedtarget);
    
     if(userId != NULL) {
        free(userId);
@@ -610,6 +612,7 @@ void Test_parseSqlStmt_Multi_Target(void **state){
       printf("ip is NULL\n");
     }
 
+   printf("Encode result :  %s\n\n",encodedtarget);
 
     if(userId != NULL) {
        free(userId);
