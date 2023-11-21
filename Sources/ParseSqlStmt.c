@@ -134,17 +134,18 @@ unsigned int getBase64Index(unsigned char alphabet) {
 }
 
 /**
- * Obtaining the `first` comment from the SQL statements; to use the function, there exist 2 tips which users shall follow.
- * First of all, users shall pass unsigned char pointers, `userId` and `ip` and those two pointers shall be initialized in NULL values as the arguments.
- * Second, after using the function, users shall free the memory `userId` and `ip` manually because the dynamic memory allocation affects in this function.
+ * Obtaining the "first" comment from the SQL statements; to use the function, there exist 2 tips which users shall follow;
+ * first of all, users shall pass unsigned char pointers, "userId", "ip", "dbUser", and those three pointers shall be initialized in NULL values as the arguments.
+ * Second, after using the function, users shall free the memory `userId` and "ip" manually because the dynamic memory allocation affects in this function.
  *
- * @param sqlStmt unsigned char* SQL statement; `sqlStmt` will be re-assigned by taking out the special marker
+ * @param sqlStmt unsigned char* SQL statement; "sqlStmt" will be re-assigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
  * @param userId unsigned char** The user id information; users shall free the memory manually
  * @param ip unsigned char** The user ip; users shall free the memory manually
+ * @param dbUser unsigned char** The database user name; users shall free the memory manually
  * @param startEndSymbol unsigned char* The starting symbol of the encoded text
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
- * @param isSQLCommentRemoved short Checking if the comments in SQL statement shall be removed; 0: no action, 1: removing the SQL comment
+ * @param isSQLCommentRemoved short Checking if the comments in SQL statement shall be removed; 0: no action, 1: removing comments from the SQL comment
  * @return int The error code; 0 means success, and -1 implies failure
  */
 int parseSqlStmt(
@@ -152,37 +153,53 @@ int parseSqlStmt(
     unsigned int sqlStmtLen,
     unsigned char** userId,
     unsigned char** ip,
+    unsigned char** dbUser,
     unsigned char* startEndSymbol,
     unsigned char* delimiter,
     short isSQLCommentRemoved) {
+
+    // Two positioin indexes are supported
     unsigned int start = 0;
     unsigned int end = 0;
+    // Determining if the comment parsed process has been executed; 0 indicates that the process has not been executed; otherwise, the
+    // process has been executed
     unsigned short isSQLStmtProcess = 0;
-    /** The 0 value shows the process shall search the starting notation `0x2F0x2A`; otherwise shall searching `0x2A0x2F` */
+
+    // The 0 value shows the process shall search the starting notation "0x2F0x2A"; otherwise shall searching "0x2A0x2F"
     unsigned short startFlag = 0;
-    for (; end < sqlStmtLen;) {
-        /** `if` section implies that users shall find the starting comment symbol `/`;
-         *  `else` section implies that users shall find the end `startEndSymbol` symbol.
-         */
-        if (startFlag == 0) {
+    for (; end < sqlStmtLen;) {// Discoving the starting/end indexes of the plain text or encoded text
+        // "if" section implies that users shall find the starting comment symbol "/";
+        // "else" section implies that users shall find the end `startEndSymbol` symbol.
+        if (startFlag == 0) {// The case when meeting the "/*"
             if (sqlStmt[end] != (unsigned char)'/') {
                 start = end = (end + 1);
                 continue;
             }
-            /** The `4` implies that the location of the encoded text shall be safe for accessing. */
-            if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen && sqlStmt[end + 1] == (unsigned char)'*' && sqlStmt[end + 2] == startEndSymbol[0] && sqlStmt[end + 3] == startEndSymbol[1]) {
+            // When the end hits '/', four conditions shall be satisfied. They are (1) there exists one character bewteen two terms, startEndSymbol; (2) the next character shall be '/';
+            // (3) the next character to '*' shall be the first character of the startEndSymbol; (4) the next character to the first character of the startEndSymbol
+            // shall be the second character of the startEndSymbol
+            if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen &&
+                    sqlStmt[end + 1] == (unsigned char)'*' &&
+                    sqlStmt[end + 2] == startEndSymbol[0]
+                    && sqlStmt[end + 3] == startEndSymbol[1]) {
+                // The "4" implies the starting location of the encoded text
                 start = end = (end + 4);
-                startFlag++;
+                startFlag++; // The flag records the information which the process enters to parse the plain text or encoded text
             } else {
                 end++;
             }
         } else {
+            // Searching the position of the second character of the startEndSymbol
             if (sqlStmt[end] != startEndSymbol[1]) {
                 end++;
                 continue;
             }
-            if (end + 1 + (int)strlen((char*)startEndSymbol) < sqlStmtLen && sqlStmt[end + 1] == startEndSymbol[0] && sqlStmt[end + 2] == '*' && sqlStmt[end + 3] == '/') {
-                /** Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character*/
+            // When the end hits the second character of the startEndSymbol, ...
+            if (end + 1 + (int)strlen((char*)startEndSymbol) < sqlStmtLen
+                    && sqlStmt[end + 1] == startEndSymbol[0]
+                    && sqlStmt[end + 2] == '*'
+                    && sqlStmt[end + 3] == '/') {
+                // Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character
                 end = end - 1;
                 isSQLStmtProcess = 1;
                 break;
@@ -192,7 +209,7 @@ int parseSqlStmt(
         }
     }
 
-    /** Allocating the size, the number two consists of two parts, one part is for length and the other is for '\0' */
+    // Allocating the size, the number two consists of two parts, one part is for length and the other is for '\0'
     unsigned char* encodedText = NULL;
     encodedText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 2));
     if (encodedText == NULL) {
@@ -201,6 +218,8 @@ int parseSqlStmt(
 
     memcpy(encodedText, sqlStmt + start, (end - start + 1));
     encodedText[(end - start + 1)] = '\0';
+
+    // TODO A fork to determine if the Base64 shall be executed
     unsigned char* plainText = NULL;
     plainText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 1) + sizeof(unsigned char));
     memcpy(plainText, encodedText, (end - start + 1));
@@ -210,17 +229,19 @@ int parseSqlStmt(
         return -1;
     }
 
-    /** Splitting the string into two tokens */
+    // Splitting the string into three tokens
     unsigned int startPivot = 0;
     unsigned int endPivot = 0;
-    /** The variable, `flag`, is for determining if the process meets the delimiter */
+    // The variable, "flag", indicates the times that the process meets the delimiter
     for (short flag = 0; endPivot < (unsigned int)strlen((char*)plainText);) {
-        if (plainText[endPivot] != *delimiter && flag == 0) {
+        if (plainText[endPivot] != *delimiter && (flag == 0 || flag == 1)) {
             endPivot++;
             continue;
         }
-        if (endPivot < (unsigned int)strlen((char*)plainText) - 1 && flag == 1) {
-            /** Resolving if the string contains multi-delimiters, Ian revised */
+        // When the process hits the delimiter, ...
+        // If the endPivot is not equal to the value of the index of the last element of the plain text, then the process shall be skipped by using "continue"
+        if (endPivot < (unsigned int)strlen((char*)plainText) - 1 && flag >= 2) {
+            // Resolving if the string contains multi-delimiters, Ian revised
             if (plainText[endPivot] == *delimiter) {
                 if (startPivot >= endPivot - 1) {
                     startPivot++;
@@ -231,9 +252,10 @@ int parseSqlStmt(
             }
             continue;
         }
-        /** Obtaining the first token*/
+
+        // Obtaining the first token
         if (flag == 0) {
-            if (endPivot - startPivot != 0) {
+            if (endPivot - startPivot > 0) {
                 *userId = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char));
                 memcpy(*userId, plainText + startPivot, (endPivot - startPivot));
                 (*userId)[(endPivot - startPivot)] = '\0';
@@ -241,7 +263,7 @@ int parseSqlStmt(
             startPivot = endPivot + 1;
             endPivot++;
             flag++;
-        } else { /** Obtaining the second token*/
+        } else { // Obtaining the second token
             if (endPivot - startPivot != 0) {
                 *ip = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot + 1) + sizeof(unsigned char));
                 memcpy(*ip, plainText + startPivot, (endPivot - startPivot + 1));
