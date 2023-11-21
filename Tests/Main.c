@@ -1,33 +1,20 @@
-
 /** @file Main.c
- * Unit test for the libraries
+ * Unit tests for all libraries
  *
- * @author Ian, Chen and Nick Liao
+ * @author Nick Liao and Ian, Chen
  * @date 2023/07/03
+ *
+ * @remark (2023/07/21, edited by Nick) Aggregating some similar types of test codes into a group
  */
+#include "Headers/MainHeader.h"
 
-#include "./Headers/Test_Base64.h"
-#include "./Headers/Test_PraseComment.h"
-
-const struct CMUnitTest tests[] = {
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_Single),
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_Word),
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_String),
-
-    cmocka_unit_test(Test_parseSqlStmt_Normal),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_FirstNULL),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_LastNULL),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_MultiDelimiter),
-
-
-    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid_TwoDelimiter),
-    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid),
-
-    cmocka_unit_test(Test_parseSqlStmt_Multi_Target),
-};
-
+/**
+ * The main function for the unit tests
+ * @return int 0 implies success; 1 implies failure
+ */
 int main(){
-
-    return cmocka_run_group_tests(tests, NULL, NULL);
-
+    int isFault = 0; // default value is 0, and the value implies that there exists no error in the tests
+    isFault |= cmocka_run_group_tests(Test_Base64_Group, NULL, NULL);
+    isFault |= cmocka_run_group_tests(Test_ParseComment_Group, NULL, NULL);
+    return isFault;
 }

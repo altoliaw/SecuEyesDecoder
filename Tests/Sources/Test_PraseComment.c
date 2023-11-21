@@ -1,5 +1,10 @@
 #include "../Headers/Test_PraseComment.h"
 
+/**
+ * @brief Test Encoded Message Normal
+ *
+ * @param state
+ */
 void Test_parseSqlStmt_Normal(void **state){
 
      /** data*/
@@ -245,6 +250,12 @@ void Test_parseSqlStmt_Normal_LastNULL(void **state)
     free(encodedtarget);
 
 }
+
+/**
+ * @brief Testing SQL statement has multi delimiter, e.g. unsigned char *sqlStmt = "112333@gmail.com,,,,200.221.99.3";
+ *
+ * @param state
+ */
 void Test_parseSqlStmt_Normal_MultiDelimiter(void **state)
 {
 
@@ -328,6 +339,12 @@ void Test_parseSqlStmt_Normal_MultiDelimiter(void **state)
 
 
 }
+
+/**
+ * Testing SQL statement has multi delimiter, e.g. unsigned char *sqlStmt = "112333@gmail.com,,200.221.99.3,";
+ *
+ * @param state
+ */
 void Test_parseSqlStmt_Target_At_Mid_TwoDelimiter(void **state)
 {
    /** data*/
@@ -412,6 +429,12 @@ void Test_parseSqlStmt_Target_At_Mid_TwoDelimiter(void **state)
     free(encodedtarget);
 
 }
+
+/**
+ * Test Encoded Message in of middle of string
+ *
+ * @param state
+ */
 void Test_parseSqlStmt_Target_At_Mid(void **state)
 {
 
@@ -497,6 +520,11 @@ void Test_parseSqlStmt_Target_At_Mid(void **state)
     free(encodedtarget);
 }
 
+/**
+ * @brief Test Has Multi Encoded Message
+ *
+ * @param state
+ */
 void Test_parseSqlStmt_Multi_Target(void **state){
 
 
