@@ -22,31 +22,39 @@ PjN:= $(word $(words $(subst /, ,${Prdir})), $(subst /, ,${Prdir}))
 
 .Phony: all
 all: ${Prdir}/${PjN}
-	make run
+	@make run
 
 .Phony: clean
 clean:
-	clear
-	rm -rf ${Sources}/*.o
-	rm -rf ${Sources}/*/*.o
-	rm -rf ${Prdir}/${PjN}
-	rm -rf ${Prdir}/*.o
+	@clear
+	@rm -rf ${Sources}/*.o
+	@rm -rf ${Sources}/*/*.o
+	@rm -rf ${Prdir}/${PjN}
+	@rm -rf ${Prdir}/*.o
 
 .Phony: cmakeClean
 cmakeClean:
-	clear
-	rm -rf ${Prdir}/build/*
-	rm -rf ${Prdir}/build/*/*
+	@clear
+	@rm -rf ${Prdir}/build/*
+	@rm -rf ${Prdir}/build/*/*
 
 .Phony: run
 run:
-	${Prdir}/${PjN}
+	@${Prdir}/${PjN}
 
 ##================================================================
 # Create a module
-${Prdir}/${PjN}: 	${Prdir}/Main.o
-	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} ${Prdir}/Main.o
+${Prdir}/${PjN}: 	${Prdir}/Main.o \
+					${Sources}/ParseSqlStmt.o
+
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
+		${Prdir}/Main.o \
+		${Sources}/ParseSqlStmt.o
 
 # Main
-${Prdir}/Main.o:	${Prdir}/Main.c
+${Prdir}/Main.o:	${Headers}/ParseSqlStmt.h ${Prdir}/Main.c
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/Main.c -c ${Fsg} -o ${Prdir}/Main.o
+
+# ParseSqlStmt
+${Sources}/ParseSqlStmt.o:	${Headers}/ParseSqlStmt.h ${Sources}/ParseSqlStmt.c
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Sources}/ParseSqlStmt.c -c ${Fsg} -o ${Sources}/ParseSqlStmt.o

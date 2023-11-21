@@ -1,13 +1,9 @@
 
-/**
- * @file Main.c
- * @author Ian.Chen
- * @brief Unit test for the library.
- * @version 0.1
- * @date 2023-07-03
+/** @file Main.c
+ * Unit test for the libraries
  *
- * @copyright Copyright (c) 2023
- *
+ * @author Ian, Chen and Nick Liao
+ * @date 2023/07/03
  */
 
 #include "./Headers/Test_Base64.h"
@@ -28,10 +24,6 @@ const struct CMUnitTest tests[] = {
     cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid),
 
     cmocka_unit_test(Test_parseSqlStmt_Multi_Target),
-    
-
-    
-
 };
 
 int main(){

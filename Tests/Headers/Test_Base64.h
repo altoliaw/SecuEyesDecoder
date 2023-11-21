@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <cmocka.h>
 
-#include "Base64.h"
+#include "../../Headers/ParseSqlStmt.h"
 
 void Test_Base64Encoders_and_Decoders_Single(void** State);
 void Test_Base64Encoders_and_Decoders_Word(void** State);

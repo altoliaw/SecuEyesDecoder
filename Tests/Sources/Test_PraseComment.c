@@ -1,17 +1,4 @@
-/**
- * @file Test_PraseComment.c
- * @author your name (you@domain.com)
- * @brief Test_PraseComment
- * @version 0.1
- * @date 2023-07-04
- * 
- * @copyright Copyright (c) 2023
- * 
- */
-
-
 #include "../Headers/Test_PraseComment.h"
-#include "Test_PraseComment.h"
 
 void Test_parseSqlStmt_Normal(void **state){
 
@@ -47,7 +34,7 @@ void Test_parseSqlStmt_Normal(void **state){
     strcat(encodedtarget, encodedprefix);
     strcat(encodedtarget, encodedSqlStmt);
     strcat(encodedtarget, encodedendfix);
-    
+
     printf("\n\nSource: %s%s%s%s\n", encodedprefixText, encodedprefix, sqlStmt, encodedendfix);
     printf("Encode result :  %s\n\n",encodedtarget);
 
@@ -63,10 +50,10 @@ void Test_parseSqlStmt_Normal(void **state){
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
-   
+
     if(userId != NULL) {
         assert_string_equal(userId , TargetUserId);
     }
@@ -80,10 +67,10 @@ void Test_parseSqlStmt_Normal(void **state){
      else{
       printf("ip is NULL\n");
     }
-   
+
     printf("\n Result : %s\n\n", encodedtarget);
 
-    
+
 
     if(userId != NULL) {
        free(userId);
@@ -147,10 +134,10 @@ void Test_parseSqlStmt_Normal_FirstNULL(void **state)
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
-   
+
     if(userId != NULL) {
         assert_string_equal(userId , TargetUserId);
     }
@@ -227,10 +214,10 @@ void Test_parseSqlStmt_Normal_LastNULL(void **state)
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
-   
+
     if(userId != NULL) {
         assert_string_equal(userId , TargetUserId);
     }
@@ -309,10 +296,10 @@ void Test_parseSqlStmt_Normal_MultiDelimiter(void **state)
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
-   
+
     if(userId != NULL) {
         assert_string_equal(userId , TargetUserId);
     }
@@ -327,7 +314,7 @@ void Test_parseSqlStmt_Normal_MultiDelimiter(void **state)
       printf("ip is NULL\n");
     }
 
-    
+
 
     if(userId != NULL) {
        free(userId);
@@ -397,7 +384,7 @@ void Test_parseSqlStmt_Target_At_Mid_TwoDelimiter(void **state)
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
     if(userId != NULL) {
@@ -406,7 +393,7 @@ void Test_parseSqlStmt_Target_At_Mid_TwoDelimiter(void **state)
     else{
       printf("userId is NULL\n");
     }
-    
+
     if(ip != NULL) {
        assert_string_equal(ip , TargetIp);
     }
@@ -414,7 +401,7 @@ void Test_parseSqlStmt_Target_At_Mid_TwoDelimiter(void **state)
       printf("ip is NULL\n");
     }
 
-   
+
     if(userId != NULL) {
        free(userId);
     }
@@ -482,7 +469,7 @@ void Test_parseSqlStmt_Target_At_Mid(void **state)
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
     if(userId != NULL) {
@@ -491,7 +478,7 @@ void Test_parseSqlStmt_Target_At_Mid(void **state)
     else{
       printf("userId is NULL\n");
     }
-    
+
     if(ip != NULL) {
        assert_string_equal(ip , TargetIp);
     }
@@ -499,7 +486,7 @@ void Test_parseSqlStmt_Target_At_Mid(void **state)
       printf("ip is NULL\n");
     }
     printf("\n Result : %s\n\n", encodedtarget);
-   
+
     if(userId != NULL) {
        free(userId);
     }
@@ -523,7 +510,7 @@ void Test_parseSqlStmt_Multi_Target(void **state){
     unsigned int TargetIpLen = (unsigned int)strlen(( unsigned char*)TargetIp);
     unsigned int sqlStmtLen = (unsigned int)strlen(( unsigned char*)sqlStmt);
 
-    
+
 
     /** Text*/
     unsigned char *encodedprefixText= "UUUUUUUUUUUUUU I will be back online";
@@ -594,17 +581,17 @@ void Test_parseSqlStmt_Multi_Target(void **state){
        &userId,
        &ip,
        (unsigned char*)START_END_SYMBOL,
-       (unsigned char*)DELIMITER);
+       (unsigned char*)DELIMITER, 0);
 
     /** Unit Test  */
-   
+
     if(userId != NULL) {
         assert_string_equal(userId , TargetUserId);
     }
     else{
       printf("userId is NULL\n");
     }
-    
+
     if(ip != NULL) {
        assert_string_equal(ip , TargetIp);
     }

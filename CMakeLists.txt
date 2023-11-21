@@ -13,9 +13,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(Tests)
+add_subdirectory(Sources)
 
 
 # add the files into the library
-add_library(Mains
-    ./Main.c
-)
+# add_library(Mains
+#     ./Main.c
+# )
