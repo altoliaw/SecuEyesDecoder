@@ -5,7 +5,8 @@
  * @author Nick, Liao
  * @date 2023/07/03
  *
- * @remarks (2023/11/21, Nick modified): The new file for main and unit tests
+ * @remark (2023/11/21, modified by Nick) The decoded string are modified. In the past, the decoded string contains 2 types of data and 1 delimiter character;
+ * After revision, the decoded string contains 3 types of data and 2 delimiter characters; as a result, the function parseSqlStmt shall be modified
  */
 #include <stdio.h>
 #include <stdlib.h>

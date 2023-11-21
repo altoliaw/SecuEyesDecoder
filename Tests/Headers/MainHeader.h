@@ -7,19 +7,13 @@
  */
 #include "./Test_Base64.h"
 const struct CMUnitTest Test_Base64_Group[] = {
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_Single),
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_Word),
-    cmocka_unit_test(Test_Base64Encoders_and_Decoders_String),
+    cmocka_unit_test(Test_Base64_encodedDecodedProcess),
+    cmocka_unit_test(Test_Base64_encodedDecodedProcess2),
+    cmocka_unit_test(Test_Base64_encodedDecodedProcess3),
 };
 
 
-#include "./Test_PraseComment.h"
+#include "./Test_ParseComment.h"
 const struct CMUnitTest Test_ParseComment_Group[] = {
-    cmocka_unit_test(Test_parseSqlStmt_Normal),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_FirstNULL),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_LastNULL),
-    cmocka_unit_test(Test_parseSqlStmt_Normal_MultiDelimiter),
-    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid_TwoDelimiter),
-    cmocka_unit_test(Test_parseSqlStmt_Target_At_Mid),
-    cmocka_unit_test(Test_parseSqlStmt_Multi_Target),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess),
 };

@@ -13,6 +13,6 @@
 
 #include "../../Headers/ParseSqlStmt.h"
 
-void Test_Base64Encoders_and_Decoders_Single(void**);
-void Test_Base64Encoders_and_Decoders_Word(void**);
-void Test_Base64Encoders_and_Decoders_String(void**);
+void Test_Base64_encodedDecodedProcess(void**);
+void Test_Base64_encodedDecodedProcess2(void**);
+void Test_Base64_encodedDecodedProcess3(void**);
