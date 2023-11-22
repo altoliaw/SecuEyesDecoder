@@ -17,3 +17,4 @@
 #include "../../Headers/ParseSqlStmt.h"
 
 void Test_ParseComment_normalCaseProcess(void**);
+void Test_ParseComment_normalCaseProcess2(void**);

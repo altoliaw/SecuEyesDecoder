@@ -5,75 +5,75 @@
  *
  * @param state void** None
  */
-void Test_ParseComment_normalCaseProcess(void **state) {
-   // Definitions of the testing data
-   char* demoUserId = "ianmina0322@gmail.com";
-   char* demoIp = "200.221.99.3";
-   char* sqlStmt = "ianmina0322@gmail.com,200.221.99.3";
+void Test_ParseComment_normalCaseProcess(void** state) {
+    // #define START_END_SYMBOL "#^" // The synmetric tag for the comment section
+    // #define DELIMITER "," // The delimiter in the comment section
+    // Generation of the testing data
+    char* demoUserId = "ianmina0322@gmail.com";
+    char* demoIp = "200.221.99.3";
+    char* demoDbUser = "localhost";
+    char* sqlStmt = NULL;
 
-   unsigned int TargetUserIdLen = strlen(demoUserId);
-   unsigned int TargetIpLen = strlen(demoIp);
-   unsigned int sqlStmtLen = strlen(sqlStmt);
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+    short isPlainText = 1;
+    short isSQLCommentRemoved = 0;
+    parseSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
+                 &inferredDemoUserId, &inferredDemoIp,
+                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                 (unsigned char*)DELIMITER, isPlainText,
+                 isSQLCommentRemoved);
 
-   /** Text */
-   unsigned char *encodedprefixText = "UUUUUUUUUUUUUU I will be back online";
-   unsigned char *encodedprefix = "/*#^";
-   unsigned char *encodedendfix = "^#*/";
-   unsigned char *encodedSqlStmt = base64Encode(sqlStmt, sqlStmtLen);
+    assert_string_equal(inferredDemoUserId, demoUserId);
+    assert_string_equal(inferredDemoIp, demoIp);
+    assert_string_equal(inferredDbUser, demoDbUser);
 
-   /** Text  Len */
-   unsigned int encodedprefixLen = (unsigned int)strlen((unsigned char *)encodedprefix);
-   unsigned int encodedendfixLen = (unsigned int)strlen((unsigned char *)encodedendfix);
-   unsigned int encodedprefixTextLen = (unsigned int)strlen((unsigned char *)encodedprefixText);
-   unsigned int encodedSqlStmtLen = (unsigned int)strlen((unsigned char *)encodedSqlStmt);
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
 
-   /**  Append */
-   unsigned char *encodedtarget = (unsigned char *)malloc(encodedprefixTextLen + encodedprefixLen + encodedSqlStmtLen + encodedendfixLen);
-   unsigned int encodedtargetLen = encodedprefixTextLen + encodedprefixLen + encodedSqlStmtLen + encodedendfixLen;
+static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescrpition,
+                          char** sqlDataDescrpition) {
+    // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
+    int resultLen = strlen(demoUserId) + strlen(((char*)DELIMITER)) + strlen(demoIp) + strlen(((char*)DELIMITER)) + strlen(demoDbUser);
+    char* sqlStmt = NULL;
+    sqlStmt = malloc(sizeof(char) * resultLen + sizeof(char));
+    memcpy(sqlStmt, demoUserId, strlen(demoUserId));
+    memcpy(sqlStmt + strlen(demoUserId), ((char*)DELIMITER), strlen(((char*)DELIMITER)));
+    memcpy(sqlStmt + strlen(demoUserId) + strlen(((char*)DELIMITER)), demoIp, strlen(demoIp));
+    memcpy(sqlStmt + strlen(demoUserId) + strlen(((char*)DELIMITER)) + strlen(demoIp), ((char*)DELIMITER), strlen(((char*)DELIMITER)));
+    memcpy(sqlStmt + strlen(demoUserId) + strlen(((char*)DELIMITER)) + strlen(demoIp) + strlen(((char*)DELIMITER)), demoDbUser, strlen(demoDbUser));
+    sqlStmt[strlen(demoUserId) + strlen(((char*)DELIMITER)) + strlen(demoIp) + strlen(((char*)DELIMITER)) + strlen(demoDbUser)] = '\0';
 
-   /**  Append */
-   strcpy(encodedtarget, encodedprefixText);
-   strcat(encodedtarget, encodedprefix);
-   strcat(encodedtarget, encodedSqlStmt);
-   strcat(encodedtarget, encodedendfix);
+    // Adding the symmetric START_END_SYMBOL & comment marks "/*"
+    char* commentMark = "/*";
+    int sqlStmtLength = (int)strlen(sqlStmt);
+    int allMarksLength = 2 * ((int)strlen(commentMark) + (int)strlen((char*)START_END_SYMBOL));
+    sqlStmt = realloc(sqlStmt, sqlStmtLength + allMarksLength + 1);  // Resize the memory
+    sqlStmt[sqlStmtLength + allMarksLength] = '\0';
+    memmove(sqlStmt + ((int)strlen(commentMark) + (int)strlen((char*)START_END_SYMBOL)), sqlStmt, sqlStmtLength);  // Moving to the accurate position
+    memcpy(sqlStmt, commentMark, strlen(commentMark));
+    memcpy(sqlStmt + strlen(commentMark), (char*)START_END_SYMBOL, strlen((char*)START_END_SYMBOL));
 
-   printf("\n\nSource: %s%s%s%s\n", encodedprefixText, encodedprefix, sqlStmt, encodedendfix);
-   printf("Encode result :  %s\n\n", encodedtarget);
-
-    /** result var*/
-    unsigned char *userId = NULL;
-    unsigned char *ip = NULL;
-
-    int result = parseSqlStmt(
-        encodedtarget,
-        encodedtargetLen,
-        &userId,
-        &ip,
-        (unsigned char *)START_END_SYMBOL,
-        (unsigned char *)DELIMITER, 0);
-
-    /** Unit Test  */
-
-    if (userId != NULL) {
-        assert_string_equal(userId, demoUserId);
-    } else {
-        printf("userId is NULL\n");
+    // Filling up sqlStmt with START_END_SYMBOL in reversed direction
+    for (int i = 0; i < strlen((char*)START_END_SYMBOL); i++) {
+        sqlStmt[(allMarksLength / 2) + sqlStmtLength + i] = ((char*)START_END_SYMBOL)[strlen((char*)START_END_SYMBOL) - 1 - i];
     }
 
-    if (ip != NULL) {
-        assert_string_equal(ip, demoIp);
-    } else {
-        printf("ip is NULL\n");
+    // Filling up sqlStmt with commentMark in reversed direction
+    for (int i = 0; i < strlen(commentMark); i++) {
+        sqlStmt[(allMarksLength / 2) + sqlStmtLength + strlen((char*)START_END_SYMBOL) + i] =
+            commentMark[strlen(commentMark) - 1 - i];
     }
-
-    printf("\n Result : %s\n\n", encodedtarget);
-
-    if (userId != NULL) {
-        free(userId);
-    }
-    if (ip != NULL) {
-        free(ip);
-    };
-
-    free(encodedtarget);
 }

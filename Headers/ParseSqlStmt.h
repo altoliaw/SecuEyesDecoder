@@ -13,10 +13,10 @@
 #include <string.h>
 #include <stddef.h>
 
-#define START_END_SYMBOL "#^" // The synmetric tag for the comment section
+#define START_END_SYMBOL "#^" // The synmetric tag for the comment section, the size shall be equal to two
 #define DELIMITER "," // The delimiter in the comment section
 
 unsigned char* base64Encode(unsigned char*, unsigned int);
 unsigned char* base64Decode(unsigned char*, unsigned int);
 unsigned int getBase64Index(unsigned char);
-int parseSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short);
+int parseSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
