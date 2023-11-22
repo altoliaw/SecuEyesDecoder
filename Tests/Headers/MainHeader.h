@@ -17,4 +17,11 @@ const struct CMUnitTest Test_Base64_Group[] = {
 const struct CMUnitTest Test_ParseComment_Group[] = {
     cmocka_unit_test(Test_ParseComment_normalCaseProcess),
     cmocka_unit_test(Test_ParseComment_normalCaseProcess2),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess3),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess4),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess5),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess6),
+    cmocka_unit_test(Test_ParseComment_normalCaseProcess7),
+    //================================================================
+    cmocka_unit_test(Test_ParseComment_encodedCaseProcess),
 };
