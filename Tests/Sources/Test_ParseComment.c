@@ -398,6 +398,54 @@ void Test_ParseComment_encodedCaseProcess(void** state) {
 }
 
 /**
+ * Verifying if the comments can be parsed by the delimiter (encoded text); in the comments, a factor is empty strings
+ *
+ * @param state void** None
+ */
+void Test_ParseComment_encodedCaseProcess2(void** state) {
+    // Generation of the factors of the testing data
+    char* demoUserId = "";
+    char* demoIp = "127.0.0.1";
+    char* demoDbUser = "localhost";
+    char* demoSql = "Select * from test";
+    char* sqlStmt = NULL;
+
+    // Data generator
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 1);
+
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+    short isPlainText = 0;
+    short isSQLCommentRemoved = 0;
+    parseSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
+                 &inferredDemoUserId, &inferredDemoIp,
+                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                 (unsigned char*)DELIMITER, isPlainText,
+                 isSQLCommentRemoved);
+
+    assert_null(inferredDemoUserId);
+    assert_string_equal(inferredDemoIp, demoIp);
+    assert_string_equal(inferredDbUser, demoDbUser);
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
+
+/**
  * The data generator; in the function, the testing data will be generated
  *
  * @param demoUserId char* The user identifier string

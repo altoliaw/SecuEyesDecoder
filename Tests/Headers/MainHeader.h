@@ -24,4 +24,5 @@ const struct CMUnitTest Test_ParseComment_Group[] = {
     cmocka_unit_test(Test_ParseComment_normalCaseProcess7),
     //================================================================
     cmocka_unit_test(Test_ParseComment_encodedCaseProcess),
+    cmocka_unit_test(Test_ParseComment_encodedCaseProcess2),
 };

@@ -24,3 +24,4 @@ void Test_ParseComment_normalCaseProcess5(void**);
 void Test_ParseComment_normalCaseProcess6(void**);
 void Test_ParseComment_normalCaseProcess7(void**);
 void Test_ParseComment_encodedCaseProcess(void**);
+void Test_ParseComment_encodedCaseProcess2(void**);
