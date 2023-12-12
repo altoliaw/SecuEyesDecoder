@@ -158,7 +158,7 @@ int parseSqlStmt(unsigned char* sqlStmt,
                  unsigned char* delimiter,
                  short isPlainText,
                  short isSQLCommentRemoved) {
-    // Two positioin indexes are supported
+    // Two position indexes are supported
     unsigned int start = 0;
     unsigned int end = 0;
     // Determining if the comment parsed process has been executed; 0 indicates that the process has not been executed; otherwise, the
@@ -167,7 +167,7 @@ int parseSqlStmt(unsigned char* sqlStmt,
 
     // The 0 value shows the process shall search the starting notation "0x2F0x2A"; otherwise shall searching "0x2A0x2F"
     unsigned short startFlag = 0;
-    for (; end < sqlStmtLen;) {  // Discoving the starting/end indexes of the plain text or encoded text
+    for (; end < sqlStmtLen;) {  // Discovering the starting/end indexes of the plain text or encoded text
         // "if" section implies that users shall find the starting comment symbol "/";
         // "else" section implies that users shall find the end `startEndSymbol` symbol.
         if (startFlag == 0) {  // The case when meeting the "/*"
@@ -175,7 +175,7 @@ int parseSqlStmt(unsigned char* sqlStmt,
                 start = end = (end + 1);
                 continue;
             }
-            // When the end hits '/', four conditions shall be satisfied. They are (1) there exists one character bewteen two terms, startEndSymbol; (2) the next character shall be '/';
+            // When the end hits '/', four conditions shall be satisfied. They are (1) there exists one character between two terms, startEndSymbol; (2) the next character shall be '/';
             // (3) the next character to '*' shall be the first character of the startEndSymbol; (4) the next character to the first character of the startEndSymbol
             // shall be the second character of the startEndSymbol
             if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen &&
@@ -216,7 +216,7 @@ int parseSqlStmt(unsigned char* sqlStmt,
     encodedText[(end - start + 1)] = '\0';
 
     unsigned char* plainText = NULL;
-    // When the input belongs to a plain text, the decoded process is unneccessary. For unnecessary determination of the memory deallocation,
+    // When the input belongs to a plain text, the decoded process is unnecessary. For unnecessary determination of the memory deallocation,
     // here the "plaintext" will be allocated memory manually and copied from the contents from the variable, encodedText.
     if (isPlainText >= 1) {
         plainText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 1) + sizeof(unsigned char));
