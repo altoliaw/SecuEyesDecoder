@@ -145,7 +145,7 @@ unsigned int getBase64Index(unsigned char alphabet) {
  * @param dbUser unsigned char** The database user name; users shall free the memory manually
  * @param startEndSymbol unsigned char* The starting symbol of the encoded text
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
- * @param isPlainText short The flag for determining if the variable, "sqlStmt", belongs to an encoded text (1) or an plain text (0)
+ * @param isPlainText short The flag for determining if the variable, "sqlStmt", belongs to an encoded text (0) or an plain text (1)
  * @param isSQLCommentRemoved short Checking if the comments in SQL statement shall be removed; 0: no action, 1: removing comments from the SQL comment
  * @return int The error code; 0 means success, and -1 implies failure
  */
