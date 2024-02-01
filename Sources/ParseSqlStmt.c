@@ -3,6 +3,96 @@
 static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
+ * Encrypts the given plaintext using a custom XOR-and-shift encryption algorithm.
+ * 
+ * The function divides the plaintext into 32-bit blocks, and each block is encrypted separately.
+ * The encryption process involves XORing the block with an encryption key, then performing a bitwise rotation.
+ * The rotation amount is determined by the encryption key.
+ * 
+ * @param plainText The plaintext to be encrypted. Must be a null-terminated string.
+ * @param plainTextLength The length of the plaintext, in bytes.
+ * @return A pointer to the encrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
+ */
+unsigned char* APUDataEncrypt(unsigned char* plainText, unsigned int plainTextLength) {
+
+    // Cast the plaintext to a 32-bit unsigned integer pointer for easier manipulation
+    __uint32_t* u32Data = plainText;
+
+    // Calculate the length of the data in 32-bit blocks, rounding up
+    __uint32_t u32DataLen = plainTextLength >> 2 + 1;
+
+    // Allocate memory for the encrypted data
+    __uint32_t* encryptedu32Data = NULL;
+
+    // Check if memory allocation was successful
+    if (encryptedu32Data = (__uint32_t*)calloc(u32DataLen + 1, sizeof(__uint32_t)) == NULL) {
+        // If memory allocation failed, return NULL
+        return NULL;
+    }
+
+    // Calculate the shift amount for the bitwise rotation
+    __uint8_t shiftamt = (ENCRYPTION_KEY + 17) & 0b11111;
+
+    // Loop over each 32-bit block of the plaintext
+    for (__uint32_t i = 0 ; i < u32DataLen; i++) {
+        // XOR the block with the encryption key
+        encryptedu32Data[i] = u32Data[i] ^ ENCRYPTION_KEY;
+
+        // Perform a bitwise rotation on the block
+        encryptedu32Data[i] = (encryptedu32Data[i] << shiftamt) | (encryptedu32Data[i] >> (32 - shiftamt));
+    }
+
+    // Return the encrypted data as a char pointer
+    return (unsigned char*)encryptedu32Data;
+}
+
+/**
+ * Decrypts the given ciphertext using a custom XOR-and-shift decryption algorithm.
+ * 
+ * The function divides the ciphertext into 32-bit blocks, and each block is decrypted separately.
+ * The decryption process involves performing a bitwise rotation in the opposite direction of the encryption process, then XORing the block with the encryption key.
+ * The rotation amount is determined by the encryption key.
+ * 
+ * @param cipherText The ciphertext to be decrypted. Must be a null-terminated string.
+ * @param cipherTextLength The length of the ciphertext, in bytes.
+ * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
+ */
+unsigned char* APUDataDecrypt(unsigned char* cipherText, unsigned int cipherTextLength){
+    // Cast the ciphertext to a 32-bit unsigned integer pointer for easier manipulation
+    __uint32_t* u32Data = cipherText;
+
+    // Calculate the length of the data in 32-bit blocks, rounding up
+    __uint32_t u32DataLen = cipherTextLength >> 2 + 1;
+
+    // Allocate memory for the decrypted data
+    __uint32_t* decryptedu32Data = NULL;
+
+    // Check if memory allocation was successful
+    if (decryptedu32Data = (__uint32_t*)calloc(u32DataLen + 1, sizeof(__uint32_t)) == NULL) {
+        // If memory allocation failed, return NULL
+        return NULL;
+    }
+
+    // Calculate the shift amount for the bitwise rotation
+    __uint8_t shiftamt = (ENCRYPTION_KEY + 17) & 0b11111;
+
+    // Loop over each 32-bit block of the ciphertext
+    for (__uint32_t i = 0 ; i < u32DataLen; i++) {
+        // Store the block in a temporary variable
+        __uint32_t tmp = u32Data[i];
+
+        // Perform a bitwise rotation on the block in the opposite direction of the encryption process
+        decryptedu32Data[i] = (tmp >> shiftamt) | (tmp << (32 - shiftamt));
+
+        // XOR the block with the encryption key
+        decryptedu32Data[i] = decryptedu32Data[i] ^ ENCRYPTION_KEY;
+    }
+
+    // Return the decrypted data as a char pointer
+    return (unsigned char*)decryptedu32Data;
+}
+
+/**
  * Base64 encode; users don't feel like knowing the length of encoded data in advance. In return,
  * users shall free encoded data memory manually. If the return value is NULL, please don't free the returned memory.
  *
