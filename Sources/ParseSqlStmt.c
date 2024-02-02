@@ -3,17 +3,18 @@
 static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
- * Encrypting the given plaintext with the custom XOR-and-shift mechanism; 
+ * Encrypting the given plaintext with the custom XOR-and-shift encryption algorithm; 
  * the function divides the plaintext into 32-bit blocks, and each block is encrypted separately;
- * the encryption process involves XOR in the block with an encryption key, and then performs a bitwise rotation;
+ * the encryption process is involved in performing XOR process in the block, and then performs a bitwise rotation;
  * the rotation amount is determined by the encryption key
  * 
  * @param plainText The plaintext for encryption; the value contains a redundant string.
- * @param plainTextLength The length of the plaintext
+ * @param plainTextLength The length of the plaintext.
  * @return A pointer to the encrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory.
  */
 unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plainTextLength) {
     // Calculating the length of the plaintext in 32-bit blocks, rounding up
+    // equivalent to (plainTextLength / 4) + 1
     uint32_t plainTextLengthInUInt32 = plainTextLength >> 2 + 1;
 
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
@@ -25,9 +26,10 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
     if (cipherText == NULL) { return NULL; }
 
     // Calculating the shift amount for the bitwise rotation; 
-    // 17 is a user defined prime number to avoid if the last 5 bits are zero; if the last 5 bits are zero,
-    // the amount of the rotations will be meaningless
-    uint8_t shiftAmount = (ENCRYPTION_KEY + 17) & 0b11111;
+    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero; 
+    // if the last 5 bits are zero, the amount of the rotations will be meaningless
+    // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
+    uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
 
     // Implementing each 32-bit block of the plaintext
     for (uint32_t i = 0 ; i < plainTextLengthInUInt32; i++) {
@@ -47,18 +49,19 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 /**
  * Decrypting the given ciphertext using a custom XOR-and-shift decryption algorithm;
  * the function divides the ciphertext into 32-bit blocks, and each block is decrypted separately;
- * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the cipher text and the encryption key;
+ * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the block;
  * the rotation amount is determined by the encryption key
  * 
- * @param cipherText The ciphertext to be decrypted. Must be a null-terminated string.
- * @param cipherTextLength The length of the ciphertext, in bytes.
+ * @param cipherText The ciphertext to be decrypted; the value contains a redundant string.
+ * @param cipherTextLength The length of the ciphertext.
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength){
     // Calculating the length of the ciphertext in 32-bit blocks, rounding up
+    // equivalent to (cipherTextLength / 4) + 1
     uint32_t cipherTextLengthInUInt32 = cipherTextLength >> 2 + 1;
 
-    // Allocating memory for the ciphertext and cast it to a 32-bit unsigned integer pointer for manipulation
+    // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
     strncpy((char *)cipherTextAsUInt32, cipherText, cipherTextLength);
 
@@ -66,16 +69,19 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
     uint32_t* plainText = (uint32_t*)malloc(cipherTextLengthInUInt32 * sizeof(uint32_t));
     if (plainText == NULL) { return NULL; }
 
-    // Calculating the shift amount for the bitwise rotation
-    uint8_t shiftAmount = (ENCRYPTION_KEY + 17) & 0b11111;
+    // Calculating the shift amount for the bitwise rotation; 
+    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero; 
+    // if the last 5 bits are zero, the amount of the rotations will be meaningless
+    // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
+    uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
 
-    // Considering each 32-bit block of the ciphertext
+    // Implementing each 32-bit block of the ciphertext
     for (uint32_t i = 0 ; i < cipherTextLengthInUInt32; i++) {
-        // Performing a bitwise rotation on the cipher text in the reversed direction of the encryption process as a temporary result
+        // Performing a bitwise rotation to the ciphertext
         plainText[i] = (cipherTextAsUInt32[i] >> shiftAmount) | (cipherTextAsUInt32[i] << (32 - shiftAmount));
 
-        // Obtaining the final result by using the encryption key and the temporary result with XOR
-        plainText[i] = plainText[i] ^ ENCRYPTION_KEY;
+        // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
+        plainText[i] = cipherTextAsUInt32[i] ^ ENCRYPTION_KEY;
     }
 
     // Releasing the memory allocated for the ciphertext
