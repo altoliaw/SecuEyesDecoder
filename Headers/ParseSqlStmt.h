@@ -16,7 +16,7 @@
 
 #define START_END_SYMBOL "#^" // The symmetric tag for the comment section, the size shall be equal to two
 #define DELIMITER "," // The delimiter in the comment section
-#define ENCRYPTION_KEY 0x5F6A // The encryption key (32bit)
+#define ENCRYPTION_KEY 0x87655F6A // The encryption key (32 bits) which the user defines
 
 unsigned char* APUDataEncrypt(const unsigned char*, unsigned int);
 unsigned char* APUDataDecrypt(const unsigned char*, unsigned int);

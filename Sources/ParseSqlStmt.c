@@ -3,86 +3,84 @@
 static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
- * Encrypts the given plaintext using a custom XOR-and-shift encryption algorithm.
+ * Encrypting the given plaintext with the custom XOR-and-shift mechanism; 
+ * the function divides the plaintext into 32-bit blocks, and each block is encrypted separately;
+ * the encryption process involves XOR in the block with an encryption key, and then performs a bitwise rotation;
+ * the rotation amount is determined by the encryption key
  * 
- * The function divides the plaintext into 32-bit blocks, and each block is encrypted separately.
- * The encryption process involves XORing the block with an encryption key, then performing a bitwise rotation.
- * The rotation amount is determined by the encryption key.
- * 
- * @param plainText The plaintext to be encrypted. Must be a null-terminated string.
- * @param plainTextLength The length of the plaintext, in bytes.
- * @return A pointer to the encrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
+ * @param plainText The plaintext for encryption; the value contains a redundant string.
+ * @param plainTextLength The length of the plaintext
+ * @return A pointer to the encrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory.
  */
 unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plainTextLength) {
-    // Calculate the length of the plaintext in 32-bit blocks, rounding up
+    // Calculating the length of the plaintext in 32-bit blocks, rounding up
     uint32_t plainTextLengthInUInt32 = plainTextLength >> 2 + 1;
 
-    // Allocate memory for the plaintext and cast it to a 32-bit unsigned integer pointer for easier manipulation
+    // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
     strncpy((char *)plainTextAsUInt32, plainText, plainTextLength);
 
-    // Allocate memory for the encrypted data, if memory allocation fails, return NULL
+    // Allocating memory for the encrypted data, if memory allocation fails, return NULL
     uint32_t* cipherText = (uint32_t*)malloc(plainTextLengthInUInt32 * sizeof(uint32_t));
     if (cipherText == NULL) { return NULL; }
 
-    // Calculate the shift amount for the bitwise rotation
+    // Calculating the shift amount for the bitwise rotation; 
+    // 17 is a user defined prime number to avoid if the last 5 bits are zero; if the last 5 bits are zero,
+    // the amount of the rotations will be meaningless
     uint8_t shiftAmount = (ENCRYPTION_KEY + 17) & 0b11111;
 
-    // Loop over each 32-bit block of the plaintext
+    // Implementing each 32-bit block of the plaintext
     for (uint32_t i = 0 ; i < plainTextLengthInUInt32; i++) {
-        // XOR the block with the encryption key
+        // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
         cipherText[i] = plainTextAsUInt32[i] ^ ENCRYPTION_KEY;
 
-        // Perform a bitwise rotation on the block
+        // Performing a bitwise rotation to the ciphertext
         cipherText[i] = (cipherText[i] << shiftAmount) | (cipherText[i] >> (32 - shiftAmount));
     }
 
-    // Free the memory allocated for the plaintext
+    // Releasing the memory allocated for the plaintext
     free(plainTextAsUInt32);
 
-    // Return the encrypted data as a char pointer
     return (unsigned char*)cipherText;
 }
 
 /**
- * Decrypts the given ciphertext using a custom XOR-and-shift decryption algorithm.
- * 
- * The function divides the ciphertext into 32-bit blocks, and each block is decrypted separately.
- * The decryption process involves performing a bitwise rotation in the opposite direction of the encryption process, then XORing the block with the encryption key.
- * The rotation amount is determined by the encryption key.
+ * Decrypting the given ciphertext using a custom XOR-and-shift decryption algorithm;
+ * the function divides the ciphertext into 32-bit blocks, and each block is decrypted separately;
+ * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the cipher text and the encryption key;
+ * the rotation amount is determined by the encryption key
  * 
  * @param cipherText The ciphertext to be decrypted. Must be a null-terminated string.
  * @param cipherTextLength The length of the ciphertext, in bytes.
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength){
-    // Calculate the length of the ciphertext in 32-bit blocks, rounding up
+    // Calculating the length of the ciphertext in 32-bit blocks, rounding up
     uint32_t cipherTextLengthInUInt32 = cipherTextLength >> 2 + 1;
 
-    // Allocate memory for the ciphertext and cast it to a 32-bit unsigned integer pointer for easier manipulation
+    // Allocating memory for the ciphertext and cast it to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
     strncpy((char *)cipherTextAsUInt32, cipherText, cipherTextLength);
 
-    // Allocate memory for the decrypted data, if memory allocation fails, return NULL
+    // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)malloc(cipherTextLengthInUInt32 * sizeof(uint32_t));
     if (plainText == NULL) { return NULL; }
 
-    // Calculate the shift amount for the bitwise rotation
+    // Calculating the shift amount for the bitwise rotation
     uint8_t shiftAmount = (ENCRYPTION_KEY + 17) & 0b11111;
 
-    // Loop over each 32-bit block of the ciphertext
+    // Considering each 32-bit block of the ciphertext
     for (uint32_t i = 0 ; i < cipherTextLengthInUInt32; i++) {
-        // Perform a bitwise rotation on the block in the opposite direction of the encryption process
+        // Performing a bitwise rotation on the cipher text in the reversed direction of the encryption process as a temporary result
         plainText[i] = (cipherTextAsUInt32[i] >> shiftAmount) | (cipherTextAsUInt32[i] << (32 - shiftAmount));
 
-        // XOR the block with the encryption key
+        // Obtaining the final result by using the encryption key and the temporary result with XOR
         plainText[i] = plainText[i] ^ ENCRYPTION_KEY;
     }
 
-    // Free the memory allocated for the ciphertext
+    // Releasing the memory allocated for the ciphertext
     free(cipherTextAsUInt32);
 
-    // Return the decrypted data as a char pointer
     return (unsigned char*)plainText;
 }
 
