@@ -15,14 +15,14 @@ static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
 unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plainTextLength) {
     // Calculating the length of the plaintext in 32-bit blocks, rounding up
     // equivalent to (plainTextLength / 4) + 1
-    uint32_t plainTextLengthInUInt32 = plainTextLength >> 2 + 1;
+    uint32_t plainTextLengthInUInt32 = (plainTextLength >> 2) + 1;
 
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
     strncpy((char *)plainTextAsUInt32, plainText, plainTextLength);
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
-    uint32_t* cipherText = (uint32_t*)malloc(plainTextLengthInUInt32 * sizeof(uint32_t));
+    uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));;
     if (cipherText == NULL) { return NULL; }
 
     // Calculating the shift amount for the bitwise rotation; 
@@ -59,14 +59,14 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength){
     // Calculating the length of the ciphertext in 32-bit blocks, rounding up
     // equivalent to (cipherTextLength / 4) + 1
-    uint32_t cipherTextLengthInUInt32 = cipherTextLength >> 2 + 1;
+    uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2) + 1;
 
     // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
     strncpy((char *)cipherTextAsUInt32, cipherText, cipherTextLength);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
-    uint32_t* plainText = (uint32_t*)malloc(cipherTextLengthInUInt32 * sizeof(uint32_t));
+    uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
     if (plainText == NULL) { return NULL; }
 
     // Calculating the shift amount for the bitwise rotation; 
@@ -81,7 +81,7 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
         plainText[i] = (cipherTextAsUInt32[i] >> shiftAmount) | (cipherTextAsUInt32[i] << (32 - shiftAmount));
 
         // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
-        plainText[i] = cipherTextAsUInt32[i] ^ ENCRYPTION_KEY;
+        plainText[i] = plainText[i] ^ ENCRYPTION_KEY;
     }
 
     // Releasing the memory allocated for the ciphertext
@@ -487,7 +487,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
         memcpy(plainText, encodedText, (end - start + 1));
         plainText[(end - start + 1)] = '\0';
     } else {  // When the contents belong to the encoded text, the allocated memory will be returned.
-        plainText = base64Decode(encodedText, (end - start + 1));
+        plainText = APUDataDecrypt(encodedText, (end - start + 1));
     }
     if (plainText == NULL) {
         free(encodedText);

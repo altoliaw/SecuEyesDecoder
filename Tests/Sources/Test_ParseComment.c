@@ -1,6 +1,6 @@
 #include "../Headers/Test_ParseComment.h"
 
-static void dataGenerator(char*, char*, char*, char*, char**, short);
+static void dataGenerator(char*, char*, char*, char*, char**, short, short);
 
 /**
  * Verifying if the comments can be parsed by the delimiter (plain text)
@@ -16,7 +16,7 @@ void Test_ParseComment_normalCaseProcess(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -64,7 +64,7 @@ void Test_ParseComment_normalCaseProcess2(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -113,7 +113,7 @@ void Test_ParseComment_normalCaseProcess3(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -163,7 +163,7 @@ void Test_ParseComment_normalCaseProcess4(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -213,7 +213,7 @@ void Test_ParseComment_normalCaseProcess5(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -263,7 +263,7 @@ void Test_ParseComment_normalCaseProcess6(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -313,7 +313,7 @@ void Test_ParseComment_normalCaseProcess7(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -567,7 +567,7 @@ void Test_ParseComment_encodedCaseProcess(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 1);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 1, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -615,7 +615,7 @@ void Test_ParseComment_encodedCaseProcess2(void** state) {
     char* sqlStmt = NULL;
 
     // Data generator
-    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 1);
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 1, 0);
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -658,9 +658,10 @@ void Test_ParseComment_encodedCaseProcess2(void** state) {
  * @param sqlDescrpition char* The SQL statements which users feel like concatenating to the comments
  * @param sqlDataDescrpition char** The contents which cancatenate to the variables above with comment notations,  START_END_SYMBOL and DELIMITER
  * @param isEncoded short A flag for determining whether the data shall be encoded by using the Base64 encoding; 0: plaintext; 1: encoded
+ * @param isEncrypted short A flag for determining whether the data shall be encoded by using the Base64 encoding; 0: plaintext; 1: encoded
  */
 static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescrpition,
-                          char** sqlDataDescrpition, short isEncoded) {
+                          char** sqlDataDescrpition, short isEncoded, short isEncrypted) {
     // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
     int resultLen = strlen(demoUserId) + strlen(((char*)DELIMITER)) + strlen(demoIp) + strlen(((char*)DELIMITER)) + strlen(demoDbUser);
     (*sqlDataDescrpition) = malloc(sizeof(char) * resultLen + sizeof(char));
@@ -679,6 +680,13 @@ static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char
         free((*sqlDataDescrpition));  // Removing the past data
         (*sqlDataDescrpition) = NULL;
         (*sqlDataDescrpition) = inferredEncodedDataString;
+    }else if(isEncrypted == 1){
+        // Encryption process
+        int sqlStmtLength = (int)strlen((*sqlDataDescrpition));
+        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescrpition), sqlStmtLength);
+        free((*sqlDataDescrpition));  // Removing the past data
+        (*sqlDataDescrpition) = NULL;
+        (*sqlDataDescrpition) = inferredEncryptedDataString;
     }
 
     // Adding the symmetric START_END_SYMBOL & comment marks "/*"

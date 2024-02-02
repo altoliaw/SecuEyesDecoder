@@ -6,7 +6,7 @@ add_executable(Test
 target_include_directories(Test PUBLIC ./Headers ../Headers)
 
 target_link_libraries(Test
-    Test_Base64
+    Test_Lib
     ParseSqlStmt
     # Mains
     cmocka

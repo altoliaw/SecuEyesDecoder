@@ -12,6 +12,12 @@ const struct CMUnitTest Test_Base64_Group[] = {
     cmocka_unit_test(Test_Base64_encodedDecodedProcess3),
 };
 
+#include "./Test_Encrypt.h"
+const struct CMUnitTest Test_Encrypt_Group[] = {
+    cmocka_unit_test(Test_Encrypt_DecryptProcess1),
+    cmocka_unit_test(Test_Encrypt_DecryptProcess2),
+};
+
 
 #include "./Test_ParseComment.h"
 const struct CMUnitTest Test_ParseComment_Group[] = {

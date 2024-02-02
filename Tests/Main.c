@@ -15,6 +15,7 @@
 int main(){
     int isFault = 0; // default value is 0, and the value implies that there exists no error in the tests
     isFault |= cmocka_run_group_tests(Test_Base64_Group, NULL, NULL);
+    isFault |= cmocka_run_group_tests(Test_Encrypt_Group, NULL, NULL);
     isFault |= cmocka_run_group_tests(Test_ParseComment_Group, NULL, NULL);
     return isFault;
 }
