@@ -36,3 +36,21 @@ const struct CMUnitTest Test_ParseComment_Group[] = {
     cmocka_unit_test(Test_ParseComment_encodedCaseProcess),
     cmocka_unit_test(Test_ParseComment_encodedCaseProcess2),
 };
+
+#include "./Test_ParseJsonComment.h"
+const struct CMUnitTest Test_ParseJsonComment_Group[] = {
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess1),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess2),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess3),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess4),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess5),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess6),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess7),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess8),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess9),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess10),
+    cmocka_unit_test(Test_ParseJsonComment_normalCaseProcess11),
+    //=========================Json=======================================
+    cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess1),
+    cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess2),
+};

@@ -17,5 +17,6 @@ int main(){
     isFault |= cmocka_run_group_tests(Test_Base64_Group, NULL, NULL);
     isFault |= cmocka_run_group_tests(Test_Encrypt_Group, NULL, NULL);
     isFault |= cmocka_run_group_tests(Test_ParseComment_Group, NULL, NULL);
+    isFault |= cmocka_run_group_tests(Test_ParseJsonComment_Group, NULL, NULL);
     return isFault;
 }
