@@ -418,6 +418,16 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
                  unsigned char* delimiter,
                  short isPlainText,
                  short isSQLCommentRemoved) {
+
+    if (sqlStmt == NULL || *sqlStmt == '\0'){
+        return -1;
+    }
+
+    if (sqlStmtLen == 0){
+        return -1;
+    }
+
+    
     // Two position indexes are supported
     unsigned int start = 0;
     unsigned int end = 0;
@@ -494,59 +504,92 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
         return -1;
     }
 
-    // Splitting the string into three tokens
-    unsigned int startPivot = 0;
-    unsigned int endPivot = 0;
-    // The variable, "flag", indicates the times that the process meets the delimiter
-    for (short flag = 0; endPivot < (unsigned int)strlen((char*)plainText);) {
-        if (plainText[endPivot] != *delimiter && (flag == 0 || flag == 1)) {
-            endPivot++;
-            continue;
-        }
-        // When the process hits the delimiter, ...
-        // If the endPivot is not equal to the value of the index of the last element of the plain text,
-        // then the process shall be skipped by using "continue"
-        if (endPivot < (unsigned int)strlen((char*)plainText) - 1 && flag >= 2) {
-            // Resolving if the string contains multi-delimiters, Ian revised
-            if (plainText[endPivot] == *delimiter) {
-                if (startPivot >= endPivot - 1) {
-                    startPivot++;
-                    endPivot++;
-                }
-            } else {
-                endPivot++;
-            }
-            continue;
-        }
 
-        // Obtaining the first token
-        if (flag == 0) {
-            if (endPivot - startPivot > 0) {
-                *userId = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char));
-                memcpy(*userId, plainText + startPivot, (endPivot - startPivot));
-                (*userId)[(endPivot - startPivot)] = '\0';
-            }
-            startPivot = endPivot + 1;
-            endPivot++;
-            flag++;
-        } else if (flag == 1) {  // Obtaining the second token
-            if (endPivot - startPivot > 0) {
-                *ip = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot) + sizeof(unsigned char));
-                memcpy(*ip, plainText + startPivot, (endPivot - startPivot));
-                (*ip)[(endPivot - startPivot)] = '\0';
-            }
-            startPivot = endPivot + 1;
-            endPivot++;
-            flag++;
-        } else {  // Obtaining the third token
-            if (endPivot - startPivot != 0) {
-                *dbUser = (unsigned char*)malloc(sizeof(unsigned char) * (endPivot - startPivot + 1) + sizeof(unsigned char));
-                memcpy(*dbUser, plainText + startPivot, (endPivot - startPivot + 1));
-                (*dbUser)[(endPivot - startPivot + 1)] = '\0';
-            }
-            endPivot++;
+    // Parseing json string by manually tracking the state of the parsing process;
+    // using bitwise operations to manage a flag that tracks the current state.
+    // Initialize a pointer to the start of the plainText string
+    char const* pivot = plainText;
+    // Define a pointer to track the start of the quoted text
+    char const* openQuotePivot = NULL;
+    /**
+     * Defineing a flag to track the state of the JSON parsing;
+     * the first and second bits track if the last pattern was a key or value;
+     * the third and fourth bits track if the last symbol was an open or close quote;
+     * the sixth bit is for the userId;
+     * the seventh bit is for the ip;
+     * the eighth bit is for the dbUser.
+     */
+    uint8_t jsonFlag = 0b01010000;
+    
+    // Start a loop that continues until the end of the string is reached
+    do {
+        // Find the next quote in the string
+        pivot = strchr(pivot+1, '"');
+        if (pivot == NULL) { break; } // If no more quotes are found, break the loop
+
+        // If the last quote was a close quote
+        if (jsonFlag  & 0b00010000){
+            // Clear the close quote flag and set the open quote flag
+            jsonFlag ^= 0b00110000;
+            // Set the start of the quoted text to the character after the quote
+            openQuotePivot = pivot + 1;
         }
-    }
+        // If the last quote was an open quote
+        else if (jsonFlag  & 0b00100000){
+            // If the last pattern was a value, check the key
+            if (jsonFlag & 0b01000000){
+                // If the key is "userId", "ip", or "dbUser", set the corresponding bit in the flag
+                // If the key is not recognized, exit the program with an error
+                if (strncmp(openQuotePivot, "userId", 6) == 0){
+                    jsonFlag |= 0b00000100;
+                }else if(strncmp(openQuotePivot, "ip", 2) == 0){
+                    jsonFlag |= 0b00000010;
+                }else if(strncmp(openQuotePivot, "dbUser", 6) == 0){
+                    jsonFlag |= 0b00000001;
+                }else{
+                    fprintf(stderr, "Error: unrecognized key\n");
+                    free(encodedText);
+                    free(plainText);
+                    return -1;
+                }
+            }
+            // If the last pattern was a key, store the value in the corresponding variable
+            else if(jsonFlag & 0b10000000) {
+                // Allocate memory for the value and copy the value into the allocated memory
+                // If the key was "userId", "ip", or "dbUser", store the value in the corresponding variable
+                if (jsonFlag & 0b00000100){
+                    if(pivot - openQuotePivot == 0) { 
+                        userId = NULL; 
+                    }else {
+                        (*userId) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
+                        strncpy((*userId), openQuotePivot, pivot - openQuotePivot);
+                        (*userId)[pivot - openQuotePivot] = '\0';
+                    } 
+                }else if (jsonFlag & 0b00000010){
+                    if(pivot - openQuotePivot == 0) { 
+                        ip = NULL; 
+                    }else {
+                        (*ip) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
+                        strncpy((*ip), openQuotePivot, pivot - openQuotePivot);
+                        (*ip)[pivot - openQuotePivot] = '\0';
+                    }
+                }else if (jsonFlag & 0b00000001){
+                    if(pivot - openQuotePivot == 0) { 
+                        dbUser = NULL; 
+                    }else {
+                        (*dbUser) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
+                        strncpy((*dbUser), openQuotePivot, pivot - openQuotePivot);
+                        (*dbUser)[pivot - openQuotePivot] = '\0';
+                    }
+                }
+                // Reset the last three flags
+                jsonFlag &= ~0b00000111;
+            }
+            // Clear the open quote flag, set the close quote flag, and swap the key and value flag
+            jsonFlag ^= 0b11110000;
+        }
+    } while(pivot != NULL); // Continue the loop until the end of the string is reached
+
 
     /** Removing the first SQL comment*/
     if (isSQLStmtProcess == 1 && isSQLCommentRemoved == 1) {
