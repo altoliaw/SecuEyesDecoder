@@ -71,7 +71,7 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
 
     // Calculating the shift amount for the bitwise rotation; 
     // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero; 
-    // if the last 5 bits are zero, the amount of the rotations will be meaningless
+    // if the last 5 bits are zero, the amount of the rotations will be meaningless and be
     // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
     uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
 
@@ -223,8 +223,8 @@ unsigned int getBase64Index(unsigned char alphabet) {
 
 /**
  * Obtaining the "first" comment from the SQL statements; to use the function, there exist 2 tips which users shall follow;
- * first of all, users shall pass unsigned char pointers, "userId", "ip", "dbUser", and those three pointers shall be initialized in NULL values as the arguments.
- * Second, after using the function, users shall free the memory `userId` and "ip" manually because the dynamic memory allocation affects in this function.
+ * first of all, users shall pass unsigned char pointers, "userId", "ip", and "dbUser", and those three pointers shall be initialized in NULL values as the arguments'
+ * second, after using the function, users shall free the memory "userId", "ip" , and "dbUser" manually because the dynamic memory allocations affect in this function
  *
  * @param sqlStmt unsigned char* SQL statement; "sqlStmt" will be re-assigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
@@ -375,7 +375,7 @@ int parseSqlStmt(unsigned char* sqlStmt,
         }
     }
 
-    /** Removing the first SQL comment*/
+    // Removing the first SQL comment
     if (isSQLStmtProcess == 1 && isSQLCommentRemoved == 1) {
         int removedFirstCommentStart = (int)start - (2 + (int)strlen((char*)startEndSymbol)) - 1;           // To the previous char
         unsigned int removedFirstCommentEnd = end + (2 + (unsigned int)strlen((char*)startEndSymbol)) + 1;  // To the next char
@@ -395,8 +395,8 @@ int parseSqlStmt(unsigned char* sqlStmt,
 
 /**
  * Obtaining the "first" comment from the SQL statements; to use the function, there exist 2 tips which users shall follow;
- * first of all, users shall pass unsigned char pointers, "userId", "ip", "dbUser", and those three pointers shall be initialized in NULL values as the arguments.
- * Second, after using the function, users shall free the memory `userId` and "ip" manually because the dynamic memory allocation affects in this function.
+ * first of all, users shall pass unsigned char pointers, "userId", "ip" and "dbUser", and those three pointers shall be initialized in NULL values as the arguments;
+ * second, after using the function, users shall free the memory "userId", "ip" and "dbUser" manually because the dynamic memory allocation affects in this function.
  *
  * @param sqlStmt unsigned char* SQL statement; "sqlStmt" will be re-assigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
@@ -427,7 +427,6 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
         return -1;
     }
 
-    
     // Two position indexes are supported
     unsigned int start = 0;
     unsigned int end = 0;
@@ -504,15 +503,14 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
         return -1;
     }
 
-
-    // Parseing json string by manually tracking the state of the parsing process;
+    // Parsing json string by manually tracking the state of the parsing process;
     // using bitwise operations to manage a flag that tracks the current state.
     // Initialize a pointer to the start of the plainText string
     char const* pivot = plainText;
     // Define a pointer to track the start of the quoted text
     char const* openQuotePivot = NULL;
     /**
-     * Defineing a flag to track the state of the JSON parsing;
+     * Defining a flag to track the state of the JSON parsing;
      * the first and second bits track if the last pattern was a key or value;
      * the third and fourth bits track if the last symbol was an open or close quote;
      * the sixth bit is for the userId;

@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "test_base64.h": "c",
+        "base64.h": "c",
+        "parsesqlstmt.h": "c",
+        "test_prasecomment.h": "c",
+        "mainheader.h": "c",
+        "test_parsecomment.h": "c",
+        "test_parsejsoncomment.h": "c"
+    }
+}

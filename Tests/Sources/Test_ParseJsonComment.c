@@ -300,7 +300,7 @@ void Test_ParseJsonComment_normalCaseProcess6(void** state) {
 }
 
 /**
- * Verifying if the comments can be parsed by the delimiter (plain text); in the comments, one factor is formed by some commases
+ * Verifying if the comments can be parsed by the delimiter (plain text); in the comments, one factor is formed by some commas
  *
  * @param state void** None
  */
@@ -655,59 +655,59 @@ void Test_ParseJsonComment_encryptCaseProcess2(void** state) {
  * @param demoUserId char* The user identifier string
  * @param demoIp char* The ip string
  * @param demoDbUser char* The database user string
- * @param sqlDescrpition char* The SQL statements which users feel like concatenating to the comments
- * @param sqlDataDescrpition char** The contents which cancatenate to the variables above with comment notations,  START_END_SYMBOL and DELIMITER
+ * @param sqlDescription char* The SQL statements which users feel like concatenating to the comments
+ * @param sqlDataDescription char** The contents which concatenate to the variables above with comment notations,  START_END_SYMBOL and DELIMITER
  * @param isEncoded short A flag for determining whether the data shall be encoded by using the Base64 encoding; 0: plaintext; 1: encoded
  * @param isEncrypted short A flag for determining whether the data shall be encoded by using the Base64 encoding; 0: plaintext; 1: encoded
  */
-static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescrpition,
-                          char** sqlDataDescrpition, short isEncoded, short isEncrypted) {
+static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescription,
+                          char** sqlDataDescription, short isEncoded, short isEncrypted) {
     // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
     int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 10; // 33 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
-    (*sqlDataDescrpition) = (char*)calloc(resultLen + 1 , sizeof(char));
-    resultLen = snprintf((*sqlDataDescrpition), resultLen, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}\0", demoUserId, demoIp, demoDbUser);
-    (*sqlDataDescrpition)[resultLen + 1] = '\0';
+    (*sqlDataDescription) = (char*)calloc(resultLen + 1 , sizeof(char));
+    resultLen = snprintf((*sqlDataDescription), resultLen, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}\0", demoUserId, demoIp, demoDbUser);
+    (*sqlDataDescription)[resultLen + 1] = '\0';
     
 
     // If encoded is necessary, ...
     if (isEncoded == 1) {
         // Encoding process
-        int sqlStmtLength = (int)strlen((*sqlDataDescrpition));
-        char* inferredEncodedDataString = (char*)base64Encode((*sqlDataDescrpition), sqlStmtLength);
-        free((*sqlDataDescrpition));  // Removing the past data
-        (*sqlDataDescrpition) = NULL;
-        (*sqlDataDescrpition) = inferredEncodedDataString;
+        int sqlStmtLength = (int)strlen((*sqlDataDescription));
+        char* inferredEncodedDataString = (char*)base64Encode((*sqlDataDescription), sqlStmtLength);
+        free((*sqlDataDescription));  // Removing the past data
+        (*sqlDataDescription) = NULL;
+        (*sqlDataDescription) = inferredEncodedDataString;
     }else if(isEncrypted == 1){
         // Encryption process
-        int sqlStmtLength = (int)strlen((*sqlDataDescrpition));
-        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescrpition), sqlStmtLength);
-        free((*sqlDataDescrpition));  // Removing the past data
-        (*sqlDataDescrpition) = NULL;
-        (*sqlDataDescrpition) = inferredEncryptedDataString;
+        int sqlStmtLength = (int)strlen((*sqlDataDescription));
+        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescription), sqlStmtLength);
+        free((*sqlDataDescription));  // Removing the past data
+        (*sqlDataDescription) = NULL;
+        (*sqlDataDescription) = inferredEncryptedDataString;
     }
 
     // Adding the symmetric START_END_SYMBOL & comment marks "/*"
     char* commentMark = "/*";
-    int remaindedSqlLength = (int)strlen(sqlDescrpition);
-    int sqlStmtLength = (int)strlen((*sqlDataDescrpition));
+    int remaindedSqlLength = (int)strlen(sqlDescription);
+    int sqlStmtLength = (int)strlen((*sqlDataDescription));
     int allMarksLength = 2 * ((int)strlen(commentMark) + (int)strlen((char*)START_END_SYMBOL));
     // Reallocating the memory
-    (*sqlDataDescrpition) = realloc((*sqlDataDescrpition), sqlStmtLength + allMarksLength + remaindedSqlLength + 1);  // Resize the memory
-    (*sqlDataDescrpition)[sqlStmtLength + allMarksLength + remaindedSqlLength] = '\0';
+    (*sqlDataDescription) = realloc((*sqlDataDescription), sqlStmtLength + allMarksLength + remaindedSqlLength + 1);  // Resize the memory
+    (*sqlDataDescription)[sqlStmtLength + allMarksLength + remaindedSqlLength] = '\0';
 
-    memmove((*sqlDataDescrpition) + ((int)strlen(commentMark) + (int)strlen((char*)START_END_SYMBOL)), (*sqlDataDescrpition), sqlStmtLength);  // Moving to the accurate position
-    memcpy((*sqlDataDescrpition), commentMark, strlen(commentMark));
-    memcpy((*sqlDataDescrpition) + strlen(commentMark), (char*)START_END_SYMBOL, strlen((char*)START_END_SYMBOL));
+    memmove((*sqlDataDescription) + ((int)strlen(commentMark) + (int)strlen((char*)START_END_SYMBOL)), (*sqlDataDescription), sqlStmtLength);  // Moving to the accurate position
+    memcpy((*sqlDataDescription), commentMark, strlen(commentMark));
+    memcpy((*sqlDataDescription) + strlen(commentMark), (char*)START_END_SYMBOL, strlen((char*)START_END_SYMBOL));
 
-    // Filling up (*sqlDataDescrpition) with START_END_SYMBOL in reversed direction
+    // Filling up (*sqlDataDescription) with START_END_SYMBOL in reversed direction
     for (int i = 0; i < strlen((char*)START_END_SYMBOL); i++) {
-        (*sqlDataDescrpition)[(allMarksLength / 2) + sqlStmtLength + i] = ((char*)START_END_SYMBOL)[strlen((char*)START_END_SYMBOL) - 1 - i];
+        (*sqlDataDescription)[(allMarksLength / 2) + sqlStmtLength + i] = ((char*)START_END_SYMBOL)[strlen((char*)START_END_SYMBOL) - 1 - i];
     }
 
-    // Filling up (*sqlDataDescrpition) with commentMark in reversed direction
+    // Filling up (*sqlDataDescription) with commentMark in reversed direction
     for (int i = 0; i < strlen(commentMark); i++) {
-        (*sqlDataDescrpition)[(allMarksLength / 2) + sqlStmtLength + strlen((char*)START_END_SYMBOL) + i] =
+        (*sqlDataDescription)[(allMarksLength / 2) + sqlStmtLength + strlen((char*)START_END_SYMBOL) + i] =
             commentMark[strlen(commentMark) - 1 - i];
     }
-    memcpy((*sqlDataDescrpition) + allMarksLength + sqlStmtLength, sqlDescrpition, remaindedSqlLength);
+    memcpy((*sqlDataDescription) + allMarksLength + sqlStmtLength, sqlDescription, remaindedSqlLength);
 }
