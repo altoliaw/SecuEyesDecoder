@@ -258,38 +258,63 @@ int parseSqlStmt(unsigned char* sqlStmt,
     for (; end < sqlStmtLen;) {  // Discovering the starting/end indexes of the plain text or encoded text
         // "if" section implies that users shall find the starting comment symbol "/";
         // "else" section implies that users shall find the end `startEndSymbol` symbol.
-        if (startFlag == 0) {  // The case when meeting the "/*"
+        if (startFlag == 0) {  // The case before meeting the "/*"
             if (sqlStmt[end] != (unsigned char)'/') {
                 start = end = (end + 1);
                 continue;
             }
-            // When the end hits '/', four conditions shall be satisfied. They are (1) there exists one character between two terms, startEndSymbol; (2) the next character shall be '/';
+            // When the end hits '/', four conditions shall be satisfied. They are (1) there exists one character between two terms from startEndSymbol; (2) the next character shall be '/';
             // (3) the next character to '*' shall be the first character of the startEndSymbol; (4) the next character to the first character of the startEndSymbol
             // shall be the second character of the startEndSymbol
             if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen &&
-                sqlStmt[end + 1] == (unsigned char)'*' &&
-                sqlStmt[end + 2] == startEndSymbol[0] &&
-                sqlStmt[end + 3] == startEndSymbol[1]) {
-                // The "4" implies the starting location of the encoded text
-                start = end = (end + 4);
-                startFlag++;  // The flag records the information which the process enters to parse the plain text or encoded text
+                sqlStmt[end + 1] == (unsigned char)'*') {
+
+                // To ensure that the following characters shall be equal to the startEndSymbol
+                unsigned short isEqualToStartEndSymbol = 1;
+                for (int i= 0; i< (int)strlen((char*)startEndSymbol); i++) {
+                    if(sqlStmt[end + 1 + i + 1] != startEndSymbol[i]) {
+                        isEqualToStartEndSymbol = 0;
+                        break;
+                    }
+                }
+                // If all characters are equal to the "/*" and startEndSymbol, ...
+                if(isEqualToStartEndSymbol == 1) {
+                    // The "2 + (int)strlen((char*)startEndSymbol)" implies the starting location of the encoded text
+                    start = end = (end + 2 + (int)strlen((char*)startEndSymbol));
+                    startFlag++;  // The flag records the information which the process enters to parse the plain text or encoded text
+                } else {
+                    end++;    
+                }
             } else {
                 end++;
             }
-        } else {
-            // Searching the position of the second character of the startEndSymbol
-            if (sqlStmt[end] != startEndSymbol[1]) {
+        } else { // The case after meeting the "/*"
+            // Searching the position of the last character of the startEndSymbol
+            if (sqlStmt[end] != startEndSymbol[((int)strlen((char*)startEndSymbol) - 1)]) {
                 end++;
                 continue;
             }
-            // When the end hits the second character of the startEndSymbol, ...
+            // When the end hits the last character of the startEndSymbol, ...
             if (end + 1 + (int)strlen((char*)startEndSymbol) < sqlStmtLen &&
-                sqlStmt[end + 1] == startEndSymbol[0] &&
-                sqlStmt[end + 2] == '*' && sqlStmt[end + 3] == '/') {
-                // Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character
-                end = end - 1;
-                isSQLStmtProcess = 1;
-                break;
+                sqlStmt[end + (int)strlen((char*)startEndSymbol)] == '*' && sqlStmt[end + (int)strlen((char*)startEndSymbol) + 1] == '/') {
+
+                // To ensure that the following characters shall be equal to the startEndSymbol
+                unsigned short isEqualToStartEndSymbol = 1;
+                for (int i= 0; i< (int)strlen((char*)startEndSymbol) - 1 ; i++) {
+                    if(sqlStmt[end + i + 1] != startEndSymbol[((int)strlen((char*)startEndSymbol) - 1) - 1 - i]) {
+                        isEqualToStartEndSymbol = 0;
+                        break;
+                    }
+                }
+                // If all characters are equal to the "*/" and reversed startEndSymbol, ...
+                if(isEqualToStartEndSymbol == 1) {
+                    // Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character
+                    end = end - 1;
+                    isSQLStmtProcess = 1;
+                    break;
+                } else {
+                    end++;
+                }
             } else {
                 end++;
             }
