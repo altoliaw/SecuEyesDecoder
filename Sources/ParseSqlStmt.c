@@ -589,7 +589,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
     } while(pivot != NULL); // Continue the loop until the end of the string is reached
 
 
-    /** Removing the first SQL comment*/
+    // Removing the first SQL comment
     if (isSQLStmtProcess == 1 && isSQLCommentRemoved == 1) {
         int removedFirstCommentStart = (int)start - (2 + (int)strlen((char*)startEndSymbol)) - 1;           // To the previous char
         unsigned int removedFirstCommentEnd = end + (2 + (unsigned int)strlen((char*)startEndSymbol)) + 1;  // To the next char
