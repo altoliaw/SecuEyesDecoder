@@ -554,6 +554,157 @@ void Test_ParseComment_normalCaseProcess11(void** state) {
 }
 
 /**
+ * Verifying if the comments can be parsed by the delimiter (plain text); in the comments, the factors are empty strings
+ *
+ * @param state void** None
+ */
+void Test_ParseComment_normalCaseProcess12(void** state) {
+    // Generation of the factors of the testing data
+    char* demoUserId = "alto";
+    char* demoIp = "";
+    char* demoDbUser = "localhost";
+    char* demoSql = "Select * from test";
+    char* sqlStmt = NULL;
+
+    // Data generator
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
+
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+    short isPlainText = 1;
+    short isSQLCommentRemoved = 0;
+    parseSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
+                 &inferredDemoUserId, &inferredDemoIp,
+                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                 (unsigned char*)DELIMITER, isPlainText,
+                 isSQLCommentRemoved);
+
+    // Here users shall check whether inferredDemoUserId is NULL because in the function "parseSqlStmt",
+    // the inferredDemoUserId will be equal to NULL when the mapping column has no data
+    assert_string_equal(inferredDemoUserId, demoUserId);
+    assert_null(inferredDemoIp);
+    assert_string_equal(inferredDbUser, demoDbUser);
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
+
+/**
+ * Verifying if the comments can be parsed by the delimiter (plain text); in the comments, the factors are empty strings
+ *
+ * @param state void** None
+ */
+void Test_ParseComment_normalCaseProcess13(void** state) {
+    // Generation of the factors of the testing data
+    char* demoUserId = "alto";
+    char* demoIp = "192.168.121.12";
+    char* demoDbUser = "";
+    char* demoSql = "Select * from test";
+    char* sqlStmt = NULL;
+
+    // Data generator
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
+
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+    short isPlainText = 1;
+    short isSQLCommentRemoved = 0;
+    parseSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
+                 &inferredDemoUserId, &inferredDemoIp,
+                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                 (unsigned char*)DELIMITER, isPlainText,
+                 isSQLCommentRemoved);
+
+    // Here users shall check whether inferredDemoUserId is NULL because in the function "parseSqlStmt",
+    // the inferredDemoUserId will be equal to NULL when the mapping column has no data
+    assert_string_equal(inferredDemoUserId, demoUserId);
+    assert_string_equal(inferredDemoIp, demoIp);
+    assert_null(inferredDbUser);
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
+
+/**
+ * Verifying if the comments can be parsed by the delimiter (plain text); in the comments, there exists no any comments and encoded contents
+ * (i.e., the dataGenerator(.) function is unnecessary); in addition, the sqlStmt will not remove any comments
+ *
+ * @param state void** None
+ */
+void Test_ParseComment_normalCaseProcess14(void** state) {
+    // Generation of the factors of the testing data
+    char* demoSql = "/*#^,,,,^#*/Select * from test";
+    char* sqlStmt = NULL;
+
+    // Data generator
+    sqlStmt = malloc(sizeof(char) * (int)strlen(demoSql) + sizeof(char));
+    memcpy(sqlStmt, demoSql, (int)strlen(demoSql));
+    sqlStmt[(int)strlen(demoSql)] = '\0';
+
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+    short isPlainText = 1;
+    short isSQLCommentRemoved = 0;
+    parseSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
+                 &inferredDemoUserId, &inferredDemoIp,
+                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                 (unsigned char*)DELIMITER, isPlainText,
+                 isSQLCommentRemoved);
+
+    // Here users shall check whether inferredDemoUserId is NULL because in the function "parseSqlStmt",
+    // the inferredDemoUserId will be equal to NULL when the mapping column has no data
+    assert_null(inferredDemoUserId);
+    assert_null(inferredDemoIp);
+    assert_null(inferredDbUser);
+    assert_string_equal(sqlStmt, demoSql);
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
+
+/**
  * Verifying if the comments can be parsed by the delimiter (encoded text); in the comments, the factors are not empty strings
  *
  * @param state void** None
