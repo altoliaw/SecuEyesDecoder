@@ -10,23 +10,23 @@
 
 #include "./Headers/ParseSqlStmt.h"
 
-unsigned int ___encryptSEDecoder(unsigned char*, unsigned int, unsigned char*);
-unsigned int ___decryptSEDecoder(unsigned char*, unsigned int, unsigned char*);
-void ___RemoveSEMemory(unsigned char*);
+unsigned int ___encryptSEDecoder(unsigned char*, unsigned int, unsigned char**);
+unsigned int ___decryptSEDecoder(unsigned char*, unsigned int, unsigned char**);
+void ___removeSEMemory(unsigned char*);
 
 // Libraries exported in different types of platforms
 #if defined(_WIN32) || defined(_WIN64)
 #define EXPORT __declspec(dllexport)
 
-EXPORT unsigned int ___encryptSEDecoder(unsigned char*, unsigned int, unsigned char*);
-EXPORT unsigned int ___decryptSEDecoder(unsigned char*, unsigned int, unsigned char*);
-EXPORT void ___RemoveSEMemory(unsigned char*);
+EXPORT unsigned int ___encryptSEDecoder(unsigned char*, unsigned int, unsigned char**);
+EXPORT unsigned int ___decryptSEDecoder(unsigned char*, unsigned int, unsigned char**);
+EXPORT void ___removeSEMemory(unsigned char*);
 
 #else
 
-__attribute__((visibility("default"))) unsigned int ___encryptSEDecoder(const unsigned char*, unsigned int, unsigned char*);
-__attribute__((visibility("default"))) unsigned int ___decryptSEDecoder(const unsigned char*, unsigned int, unsigned char*);
-__attribute__((visibility("default"))) void ___RemoveSEMemory(unsigned char*);
+__attribute__((visibility("default"))) unsigned int ___encryptSEDecoder(const unsigned char*, unsigned int, unsigned char**);
+__attribute__((visibility("default"))) unsigned int ___decryptSEDecoder(const unsigned char*, unsigned int, unsigned char**);
+__attribute__((visibility("default"))) void ___removeSEMemory(unsigned char*);
 
 #endif
 
@@ -37,14 +37,16 @@ int main() {
 	unsigned char plainText[2000];
 
     int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
+    printf("%s\n", plainText);
+
     unsigned char* cipherText = NULL;
     
-    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int) length, cipherText);
+    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int) length, &cipherText);
     printf("%s \t %d\n", cipherText, (int)cipherTextLen);
 
 
     if(cipherText != NULL) {
-        free(plainText);
+        free(cipherText);
     }
 
 	return 0;
@@ -56,15 +58,16 @@ int main() {
  *
  * @param plainText [const unsigned char*] The plaintext input string
  * @param plainTextLength [unsigned int] The length of the plaintext input string
- * @param cipherText [unsigned char*] The ciphertext result string
+ * @param cipherText [unsigned char**] The ciphertext result string
  * @return [int] The length of the ciphertext result string
  */
-unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTextLength, unsigned char* cipherText) {
-    cipherText = APUDataEncrypt(plainText, plainTextLength);
+unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTextLength, unsigned char** cipherText) {
+    *cipherText = APUDataEncrypt(plainText, plainTextLength);
+    printf("%s\n", *cipherText);
     int cipherLength = 0;
     // Returning the length of the ciphertext
-    if (cipherText != NULL) {
-        cipherLength = strlen((const char*)cipherText);
+    if (*cipherText != NULL) {
+        cipherLength = strlen((const char*)*cipherText);
     }
     return cipherLength;
 }
@@ -74,15 +77,15 @@ unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTex
  *
  * @param cipherText [unsigned char]
  * @param cipherTextLength [unsigned int]
- * @param plainText [unsigned char]
+ * @param plainText [unsigned char**]
  * @return [unsigned int]
  */
-unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherTextLength, unsigned char* plainText) {
-    plainText = APUDataDecrypt(cipherText, cipherTextLength);
+unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherTextLength, unsigned char** plainText) {
+    *plainText = APUDataDecrypt(cipherText, cipherTextLength);
 
     int plainTextLength = 0;
-    if (plainText != NULL) {
-        plainTextLength = strlen((const char*)plainText);
+    if (*plainText != NULL) {
+        plainTextLength = strlen((const char*)*plainText);
     }
     return plainTextLength;
 }
@@ -92,6 +95,6 @@ unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherT
  *
  * @param startingAddress [unsigned char*]
  */
-void ___RemoveSEMemory(unsigned char* startingAddress) {
+void ___removeSEMemory(unsigned char* startingAddress) {
     free(startingAddress);
 }

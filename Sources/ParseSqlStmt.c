@@ -3,11 +3,11 @@
 static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
- * Encrypting the given plaintext with the custom XOR-and-shift encryption algorithm; 
+ * Encrypting the given plaintext with the custom XOR-and-shift encryption algorithm;
  * the function divides the plaintext into 32-bit blocks, and each block is encrypted separately;
  * the encryption process is involved in performing XOR process in the block, and then performs a bitwise rotation;
  * the rotation amount is determined by the encryption key
- * 
+ *
  * @param plainText The plaintext for encryption; the value contains a redundant string.
  * @param plainTextLength The length of the plaintext.
  * @return A pointer to the encrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory.
@@ -19,20 +19,23 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char *)plainTextAsUInt32, (const char*)plainText, plainTextLength);
+    strncpy((char*)plainTextAsUInt32, (const char*)plainText, plainTextLength);
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
-    uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));;
-    if (cipherText == NULL) { return NULL; }
+    uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
+    ;
+    if (cipherText == NULL) {
+        return NULL;
+    }
 
-    // Calculating the shift amount for the bitwise rotation; 
-    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero; 
+    // Calculating the shift amount for the bitwise rotation;
+    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero;
     // if the last 5 bits are zero, the amount of the rotations will be meaningless
     // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
     uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
 
     // Implementing each 32-bit block of the plaintext
-    for (uint32_t i = 0 ; i < plainTextLengthInUInt32; i++) {
+    for (uint32_t i = 0; i < plainTextLengthInUInt32; i++) {
         // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
         cipherText[i] = plainTextAsUInt32[i] ^ ENCRYPTION_KEY;
 
@@ -51,32 +54,34 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
  * the function divides the ciphertext into 32-bit blocks, and each block is decrypted separately;
  * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the block;
  * the rotation amount is determined by the encryption key
- * 
+ *
  * @param cipherText The ciphertext to be decrypted; the value contains a redundant string.
  * @param cipherTextLength The length of the ciphertext.
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
-unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength){
+unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength) {
     // Calculating the length of the ciphertext in 32-bit blocks, rounding up
     // equivalent to (cipherTextLength / 4) + 1
     uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2) + 1;
 
     // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char *)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
+    strncpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
-    if (plainText == NULL) { return NULL; }
+    if (plainText == NULL) {
+        return NULL;
+    }
 
-    // Calculating the shift amount for the bitwise rotation; 
-    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero; 
+    // Calculating the shift amount for the bitwise rotation;
+    // 0b00101 is a user defined prime number to avoid if the last 5 bits are zero;
     // if the last 5 bits are zero, the amount of the rotations will be meaningless and be
     // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
     uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
 
     // Implementing each 32-bit block of the ciphertext
-    for (uint32_t i = 0 ; i < cipherTextLengthInUInt32; i++) {
+    for (uint32_t i = 0; i < cipherTextLengthInUInt32; i++) {
         // Performing a bitwise rotation to the ciphertext
         plainText[i] = (cipherTextAsUInt32[i] >> shiftAmount) | (cipherTextAsUInt32[i] << (32 - shiftAmount));
 
@@ -268,27 +273,26 @@ int parseSqlStmt(unsigned char* sqlStmt,
             // shall be the second character of the startEndSymbol
             if ((end + 1 + (int)strlen((char*)startEndSymbol) + 1) < sqlStmtLen &&
                 sqlStmt[end + 1] == (unsigned char)'*') {
-
                 // To ensure that the following characters shall be equal to the startEndSymbol
                 unsigned short isEqualToStartEndSymbol = 1;
-                for (int i= 0; i< (int)strlen((char*)startEndSymbol); i++) {
-                    if(sqlStmt[end + 1 + i + 1] != startEndSymbol[i]) {
+                for (int i = 0; i < (int)strlen((char*)startEndSymbol); i++) {
+                    if (sqlStmt[end + 1 + i + 1] != startEndSymbol[i]) {
                         isEqualToStartEndSymbol = 0;
                         break;
                     }
                 }
                 // If all characters are equal to the "/*" and startEndSymbol, ...
-                if(isEqualToStartEndSymbol == 1) {
+                if (isEqualToStartEndSymbol == 1) {
                     // The "2 + (int)strlen((char*)startEndSymbol)" implies the starting location of the encoded text
                     start = end = (end + 2 + (int)strlen((char*)startEndSymbol));
                     startFlag++;  // The flag records the information which the process enters to parse the plain text or encoded text
                 } else {
-                    end++;    
+                    end++;
                 }
             } else {
                 end++;
             }
-        } else { // The case after meeting the "/*"
+        } else {  // The case after meeting the "/*"
             // Searching the position of the last character of the startEndSymbol
             if (sqlStmt[end] != startEndSymbol[((int)strlen((char*)startEndSymbol) - 1)]) {
                 end++;
@@ -297,17 +301,16 @@ int parseSqlStmt(unsigned char* sqlStmt,
             // When the end hits the last character of the startEndSymbol, ...
             if (end + 1 + (int)strlen((char*)startEndSymbol) < sqlStmtLen &&
                 sqlStmt[end + (int)strlen((char*)startEndSymbol)] == '*' && sqlStmt[end + (int)strlen((char*)startEndSymbol) + 1] == '/') {
-
                 // To ensure that the following characters shall be equal to the startEndSymbol
                 unsigned short isEqualToStartEndSymbol = 1;
-                for (int i= 0; i< (int)strlen((char*)startEndSymbol) - 1 ; i++) {
-                    if(sqlStmt[end + i + 1] != startEndSymbol[((int)strlen((char*)startEndSymbol) - 1) - 1 - i]) {
+                for (int i = 0; i < (int)strlen((char*)startEndSymbol) - 1; i++) {
+                    if (sqlStmt[end + i + 1] != startEndSymbol[((int)strlen((char*)startEndSymbol) - 1) - 1 - i]) {
                         isEqualToStartEndSymbol = 0;
                         break;
                     }
                 }
                 // If all characters are equal to the "*/" and reversed startEndSymbol, ...
-                if(isEqualToStartEndSymbol == 1) {
+                if (isEqualToStartEndSymbol == 1) {
                     // Hitting the end of the startEndSymbol; therefore, the end position is back to the previous character
                     end = end - 1;
                     isSQLStmtProcess = 1;
@@ -435,20 +438,19 @@ int parseSqlStmt(unsigned char* sqlStmt,
  * @return int The error code; 0 means success, and -1 implies failure
  */
 int parseEncryptedSqlStmt(unsigned char* sqlStmt,
-                 unsigned int sqlStmtLen,
-                 unsigned char** userId,
-                 unsigned char** ip,
-                 unsigned char** dbUser,
-                 unsigned char* startEndSymbol,
-                 unsigned char* delimiter,
-                 short isPlainText,
-                 short isSQLCommentRemoved) {
-
-    if (sqlStmt == NULL || *sqlStmt == '\0'){
+                          unsigned int sqlStmtLen,
+                          unsigned char** userId,
+                          unsigned char** ip,
+                          unsigned char** dbUser,
+                          unsigned char* startEndSymbol,
+                          unsigned char* delimiter,
+                          short isPlainText,
+                          short isSQLCommentRemoved) {
+    if (sqlStmt == NULL || *sqlStmt == '\0') {
         return -1;
     }
 
-    if (sqlStmtLen == 0){
+    if (sqlStmtLen == 0) {
         return -1;
     }
 
@@ -543,33 +545,35 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
      * the eighth bit is for the dbUser.
      */
     uint8_t jsonFlag = 0b01010000;
-    
+
     // Start a loop that continues until the end of the string is reached
     do {
         // Find the next quote in the string
-        pivot = (unsigned char*)strchr((const char*)pivot+1, '"');
-        if (pivot == NULL) { break; } // If no more quotes are found, break the loop
+        pivot = (unsigned char*)strchr((const char*)pivot + 1, '"');
+        if (pivot == NULL) {
+            break;
+        }  // If no more quotes are found, break the loop
 
         // If the last quote was a close quote
-        if (jsonFlag  & 0b00010000){
+        if (jsonFlag & 0b00010000) {
             // Clear the close quote flag and set the open quote flag
             jsonFlag ^= 0b00110000;
             // Set the start of the quoted text to the character after the quote
             openQuotePivot = (const char*)pivot + 1;
         }
         // If the last quote was an open quote
-        else if (jsonFlag  & 0b00100000){
+        else if (jsonFlag & 0b00100000) {
             // If the last pattern was a value, check the key
-            if (jsonFlag & 0b01000000){
+            if (jsonFlag & 0b01000000) {
                 // If the key is "userId", "ip", or "dbUser", set the corresponding bit in the flag
                 // If the key is not recognized, exit the program with an error
-                if (strncmp(openQuotePivot, "userId", 6) == 0){
+                if (strncmp(openQuotePivot, "userId", 6) == 0) {
                     jsonFlag |= 0b00000100;
-                }else if(strncmp(openQuotePivot, "ip", 2) == 0){
+                } else if (strncmp(openQuotePivot, "ip", 2) == 0) {
                     jsonFlag |= 0b00000010;
-                }else if(strncmp(openQuotePivot, "dbUser", 6) == 0){
+                } else if (strncmp(openQuotePivot, "dbUser", 6) == 0) {
                     jsonFlag |= 0b00000001;
-                }else{
+                } else {
                     fprintf(stderr, "Error: unrecognized key\n");
                     free(encodedText);
                     free(plainText);
@@ -577,29 +581,29 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
                 }
             }
             // If the last pattern was a key, store the value in the corresponding variable
-            else if(jsonFlag & 0b10000000) {
+            else if (jsonFlag & 0b10000000) {
                 // Allocate memory for the value and copy the value into the allocated memory
                 // If the key was "userId", "ip", or "dbUser", store the value in the corresponding variable
-                if (jsonFlag & 0b00000100){
-                    if((const char*)pivot - openQuotePivot == 0) { 
-                        userId = NULL; 
-                    }else {
+                if (jsonFlag & 0b00000100) {
+                    if ((const char*)pivot - openQuotePivot == 0) {
+                        userId = NULL;
+                    } else {
                         (*userId) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
                         strncpy((char*)(*userId), openQuotePivot, (const char*)pivot - openQuotePivot);
                         (*userId)[(const char*)pivot - openQuotePivot] = '\0';
-                    } 
-                }else if (jsonFlag & 0b00000010){
-                    if((const char*)pivot - openQuotePivot == 0) { 
-                        ip = NULL; 
-                    }else {
+                    }
+                } else if (jsonFlag & 0b00000010) {
+                    if ((const char*)pivot - openQuotePivot == 0) {
+                        ip = NULL;
+                    } else {
                         (*ip) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
                         strncpy((char*)(*ip), openQuotePivot, (const char*)pivot - openQuotePivot);
                         (*ip)[(const char*)pivot - openQuotePivot] = '\0';
                     }
-                }else if (jsonFlag & 0b00000001){
-                    if((const char*)pivot - openQuotePivot == 0) { 
-                        dbUser = NULL; 
-                    }else {
+                } else if (jsonFlag & 0b00000001) {
+                    if ((const char*)pivot - openQuotePivot == 0) {
+                        dbUser = NULL;
+                    } else {
                         (*dbUser) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
                         strncpy((char*)(*dbUser), openQuotePivot, (const char*)pivot - openQuotePivot);
                         (*dbUser)[(const char*)pivot - openQuotePivot] = '\0';
@@ -611,8 +615,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
             // Clear the open quote flag, set the close quote flag, and swap the key and value flag
             jsonFlag ^= 0b11110000;
         }
-    } while(pivot != NULL); // Continue the loop until the end of the string is reached
-
+    } while (pivot != NULL);  // Continue the loop until the end of the string is reached
 
     // Removing the first SQL comment
     if (isSQLStmtProcess == 1 && isSQLCommentRemoved == 1) {

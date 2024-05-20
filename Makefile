@@ -49,7 +49,9 @@ run:
 archiveDLL: ${Prdir}/${PjN}BuildDLL
 	@${Prdir}/${PjN}BuildDLL
 	
-	gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
+	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ..
+
+	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
 	./BuildDLL.o \
 	./Sources/ParseSqlStmt.o \
 	-L./
