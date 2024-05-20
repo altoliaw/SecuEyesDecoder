@@ -3,7 +3,10 @@
 	  {
 		"name": "Win32",
 		"intelliSenseMode": "windows-msvc-x64",
-		"includePath": ["C:/msys64/mingw64/include"]
+		"includePath": ["C:/msys64/mingw64/include"],
+		"defines":[
+			"_WIN32"
+		]
 	  }
 	],
 	"version": 4,
