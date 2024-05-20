@@ -47,23 +47,18 @@ run:
 # Ceating the DLL for the window platform
 .Phony: archiveDLL
 archiveDLL: ${Prdir}/${PjN}BuildDLL
-	@${Prdir}/${PjN}BuildDLL
 	
 	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ..
 
 	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
-	./BuildDLL.o \
-	./Sources/ParseSqlStmt.o \
+	${Prdir}/BuildDLL.o \
+	${Sources}/ParseSqlStmt.o \
 	-L./
 
 ##================================================================
 # Creating a output objects for DLL
 ${Prdir}/${PjN}BuildDLL: 	${Prdir}/BuildDLL.o \
 							${Sources}/ParseSqlStmt.o
-
-	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN}BuildDLL \
-		${Prdir}/BuildDLL.o \
-		${Sources}/ParseSqlStmt.o
 
 # BuildDLL
 ${Prdir}/BuildDLL.o:	${Headers}/ParseSqlStmt.h ${Prdir}/BuildDLL.c
