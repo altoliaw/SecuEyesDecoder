@@ -30,6 +30,7 @@ clean:
 	@rm -rf ${Sources}/*.o
 	@rm -rf ${Sources}/*/*.o
 	@rm -rf ${Prdir}/${PjN}
+	@rm -rf ${Prdir}/${PjN}BuildDLL
 	@rm -rf ${Prdir}/*.o
 
 .Phony: cmakeClean
@@ -42,8 +43,31 @@ cmakeClean:
 run:
 	@${Prdir}/${PjN}
 
+# Ceating the DLL for the window platform
+.Phony: archivesDLL
+archiveDLL: ${Prdir}/${PjN}BuildDLL
+	@${Prdir}/${PjN}BuildDLL
+	
+	gcc -shared -o ./Outputs/DLL/decoder.dll \
+	./BuildDLL.o \
+	./Sources/ParseSqlStmt.o \
+	-L./
+
 ##================================================================
-# Create a module
+# Creating a output objects for DLL
+${Prdir}/${PjN}BuildDLL: 	${Prdir}/BuildDLL.o \
+							${Sources}/ParseSqlStmt.o
+
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN}BuildDLL \
+		${Prdir}/BuildDLL.o \
+		${Sources}/ParseSqlStmt.o
+
+# BuildDLL
+${Prdir}/BuildDLL.o:	${Headers}/ParseSqlStmt.h ${Prdir}/BuildDLL.c
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/BuildDLL.c -c ${Fsg} -o ${Prdir}/BuildDLL.o
+
+##================================================================
+# Creating a output objects for the C framework
 ${Prdir}/${PjN}: 	${Prdir}/Main.o \
 					${Sources}/ParseSqlStmt.o
 

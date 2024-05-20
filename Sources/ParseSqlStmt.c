@@ -19,7 +19,7 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char *)plainTextAsUInt32, plainText, plainTextLength);
+    strncpy((char *)plainTextAsUInt32, (const char*)plainText, plainTextLength);
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
     uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));;
@@ -63,7 +63,7 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
 
     // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char *)cipherTextAsUInt32, cipherText, cipherTextLength);
+    strncpy((char *)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
@@ -531,7 +531,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
     // Parsing json string by manually tracking the state of the parsing process;
     // using bitwise operations to manage a flag that tracks the current state.
     // Initialize a pointer to the start of the plainText string
-    char const* pivot = plainText;
+    unsigned char const* pivot = plainText;
     // Define a pointer to track the start of the quoted text
     char const* openQuotePivot = NULL;
     /**
@@ -547,7 +547,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
     // Start a loop that continues until the end of the string is reached
     do {
         // Find the next quote in the string
-        pivot = strchr(pivot+1, '"');
+        pivot = (unsigned char*)strchr((const char*)pivot+1, '"');
         if (pivot == NULL) { break; } // If no more quotes are found, break the loop
 
         // If the last quote was a close quote
@@ -555,7 +555,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
             // Clear the close quote flag and set the open quote flag
             jsonFlag ^= 0b00110000;
             // Set the start of the quoted text to the character after the quote
-            openQuotePivot = pivot + 1;
+            openQuotePivot = (const char*)pivot + 1;
         }
         // If the last quote was an open quote
         else if (jsonFlag  & 0b00100000){
@@ -581,28 +581,28 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
                 // Allocate memory for the value and copy the value into the allocated memory
                 // If the key was "userId", "ip", or "dbUser", store the value in the corresponding variable
                 if (jsonFlag & 0b00000100){
-                    if(pivot - openQuotePivot == 0) { 
+                    if((const char*)pivot - openQuotePivot == 0) { 
                         userId = NULL; 
                     }else {
-                        (*userId) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
-                        strncpy((*userId), openQuotePivot, pivot - openQuotePivot);
-                        (*userId)[pivot - openQuotePivot] = '\0';
+                        (*userId) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
+                        strncpy((char*)(*userId), openQuotePivot, (const char*)pivot - openQuotePivot);
+                        (*userId)[(const char*)pivot - openQuotePivot] = '\0';
                     } 
                 }else if (jsonFlag & 0b00000010){
-                    if(pivot - openQuotePivot == 0) { 
+                    if((const char*)pivot - openQuotePivot == 0) { 
                         ip = NULL; 
                     }else {
-                        (*ip) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
-                        strncpy((*ip), openQuotePivot, pivot - openQuotePivot);
-                        (*ip)[pivot - openQuotePivot] = '\0';
+                        (*ip) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
+                        strncpy((char*)(*ip), openQuotePivot, (const char*)pivot - openQuotePivot);
+                        (*ip)[(const char*)pivot - openQuotePivot] = '\0';
                     }
                 }else if (jsonFlag & 0b00000001){
-                    if(pivot - openQuotePivot == 0) { 
+                    if((const char*)pivot - openQuotePivot == 0) { 
                         dbUser = NULL; 
                     }else {
-                        (*dbUser) = malloc(sizeof(char) * (pivot - openQuotePivot) + 1);
-                        strncpy((*dbUser), openQuotePivot, pivot - openQuotePivot);
-                        (*dbUser)[pivot - openQuotePivot] = '\0';
+                        (*dbUser) = malloc(sizeof(char) * ((const char*)pivot - openQuotePivot) + 1);
+                        strncpy((char*)(*dbUser), openQuotePivot, (const char*)pivot - openQuotePivot);
+                        (*dbUser)[(const char*)pivot - openQuotePivot] = '\0';
                     }
                 }
                 // Reset the last three flags
