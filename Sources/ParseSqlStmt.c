@@ -23,7 +23,7 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
     uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
-    ;
+    
     if (cipherText == NULL) {
         return NULL;
     }

@@ -45,7 +45,7 @@ run:
 	@${Prdir}/${PjN}
 
 # Ceating the DLL for the window platform
-.Phony: archivesDLL
+.Phony: archiveDLL
 archiveDLL: ${Prdir}/${PjN}BuildDLL
 	@${Prdir}/${PjN}BuildDLL
 	

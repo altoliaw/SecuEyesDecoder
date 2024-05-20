@@ -27,26 +27,27 @@ __attribute__((visibility("default"))) unsigned int ___decryptSEDecoder(unsigned
 
 #endif
 
-int main() {
-    char* demoUserId = "f12345@yaoo.com.tw";
-    char* demoIp = "127.0.0.1";
-    char* demoDbUser = "localhost";
-    unsigned char plainText[2000];
+// int main() {
+//     // Encrypting the string
+//     char* demoUserId = "f12345@yaoo.com.tw";
+//     char* demoIp = "127.0.0.1";
+//     char* demoDbUser = "localhost";
+//     unsigned char plainText[2000];
 
-    int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
-    printf("%s\n", plainText);
+//     int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
+//     fprintf(stderr, "%s \t %d\n", plainText, (int)strlen((char*)plainText));
 
-    unsigned char* cipherText = NULL;
+//     unsigned char cipherText[2000];
+//     unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
+//     fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
 
-    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, &cipherText);
-    printf("%s \t %d\n", cipherText, (int)cipherTextLen);
+//     // Decrypting the string
+//     unsigned char plainTextPrediction[2000];
+//     unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction);
+//     fprintf(stderr, "%s \t %d\n", plainTextPrediction, plainTextLen);
 
-    if (cipherText != NULL) {
-        free(cipherText);
-    }
-
-    return 0;
-}
+//     return 0;
+// }
 
 /**
  * Encrypted function for the DLL
@@ -59,9 +60,10 @@ int main() {
 unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTextLength, unsigned char* cipherText) {
     // Obtaining the cipher text with dynamic memory allocation
     unsigned char* returnedCipherText = APUDataEncrypt(plainText, plainTextLength);
+
     int cipherLength = 0;
     if (returnedCipherText != NULL) {
-        cipherLength = (int)strlen((const char*)cipherText);
+        cipherLength = (int)strlen((const char*)returnedCipherText);
         // Returning the length of the ciphertext
         if (cipherLength > 0) {
             memcpy(cipherText, returnedCipherText, cipherLength);
@@ -70,7 +72,6 @@ unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTex
         free(returnedCipherText);
     }
 
-    printf("%s\n", cipherText);
     return cipherLength;
 }
 
@@ -92,7 +93,7 @@ unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherT
             memcpy(plainText, returnedPlainText, plainTextLength);
         }
         plainText[plainTextLength] = '\0';
-        free (returnedPlainText);
+        free(returnedPlainText);
     }
 
     return plainTextLength;
