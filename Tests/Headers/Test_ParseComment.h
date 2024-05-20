@@ -30,5 +30,7 @@ void Test_ParseComment_normalCaseProcess11(void**);
 void Test_ParseComment_normalCaseProcess12(void**);
 void Test_ParseComment_normalCaseProcess13(void**);
 void Test_ParseComment_normalCaseProcess14(void**);
+void Test_ParseComment_userCaseProcess1(void**);
+void Test_ParseComment_userCaseProcess2(void**);
 void Test_ParseComment_encodedCaseProcess(void**);
 void Test_ParseComment_encodedCaseProcess2(void**);

@@ -328,10 +328,10 @@ void Test_ParseJsonComment_normalCaseProcess7(void** state) {
                  &inferredDbUser, (unsigned char*)START_END_SYMBOL,
                  (unsigned char*)DELIMITER, isPlainText,
                  isSQLCommentRemoved);
-
+    
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
-    assert_null(inferredDemoUserId);
+    assert_string_equal(inferredDemoUserId, demoUserId);
     assert_null(inferredDemoIp);
     assert_null(inferredDbUser);
 
