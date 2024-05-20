@@ -32,6 +32,7 @@ clean:
 	@rm -rf ${Prdir}/${PjN}
 	@rm -rf ${Prdir}/${PjN}BuildDLL
 	@rm -rf ${Prdir}/*.o
+	@rm -rf ${Prdir}/Outputs/DLL/*.dll
 
 .Phony: cmakeClean
 cmakeClean:
@@ -48,7 +49,7 @@ run:
 archiveDLL: ${Prdir}/${PjN}BuildDLL
 	@${Prdir}/${PjN}BuildDLL
 	
-	gcc -shared -o ./Outputs/DLL/decoder.dll \
+	gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
 	./BuildDLL.o \
 	./Sources/ParseSqlStmt.o \
 	-L./
