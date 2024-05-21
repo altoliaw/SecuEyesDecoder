@@ -27,27 +27,27 @@ __attribute__((visibility("default"))) unsigned int ___decryptSEDecoder(unsigned
 
 #endif
 
-// int main() {
-//     // Encrypting the string
-//     char* demoUserId = "f12345@yaoo.com.tw";
-//     char* demoIp = "127.0.0.1";
-//     char* demoDbUser = "localhost";
-//     unsigned char plainText[2000];
+int main() {
+    // Encrypting the string
+    char* demoUserId = "f12345@yaoo.com.tw";
+    char* demoIp = "127.0.0.1";
+    char* demoDbUser = "localhost";
+    unsigned char plainText[2000];
 
-//     int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
-//     fprintf(stderr, "%s \t %d\n", plainText, (int)strlen((char*)plainText));
+    int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
+    fprintf(stderr, "%s \t %d\n", plainText, (int)strlen((char*)plainText));
 
-//     unsigned char cipherText[2000];
-//     unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
-//     fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
+    unsigned char cipherText[2000];
+    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
+    fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
 
-//     // Decrypting the string
-//     unsigned char plainTextPrediction[2000];
-//     unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction);
-//     fprintf(stderr, "%s \t %d\n", plainTextPrediction, plainTextLen);
+    // Decrypting the string
+    unsigned char plainTextPrediction[2000];
+    unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction);
+    fprintf(stderr, "%s \t %d\n", plainTextPrediction, plainTextLen);
 
-//     return 0;
-// }
+    return 0;
+}
 
 /**
  * Encrypted function for the DLL

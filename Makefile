@@ -27,6 +27,7 @@ all: ${Prdir}/${PjN}
 .Phony: clean
 clean:
 	@clear
+	@make -f gitVersionByMk.mk clean
 	@rm -rf ${Sources}/*.o
 	@rm -rf ${Sources}/*/*.o
 	@rm -rf ${Prdir}/${PjN}
@@ -46,19 +47,28 @@ run:
 
 # Ceating the DLL for the window platform
 .Phony: archiveDLL
-archiveDLL: ${Prdir}/${PjN}BuildDLL
-	
+archiveDLL: PreRquest ${Prdir}/${PjN}BuildDLL
+	@make -f gitVersionByMk.mk
 	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ..
 
-	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
-	${Prdir}/BuildDLL.o \
-	${Sources}/ParseSqlStmt.o \
-	-L./
+# @gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
+# ${Prdir}/BuildDLL.o \
+# ${Sources}/ParseSqlStmt.o \
+# -L./
+
+PreRquest:
+	@make -f gitVersionByMk.mk
 
 ##================================================================
 # Creating a output objects for DLL
 ${Prdir}/${PjN}BuildDLL: 	${Prdir}/BuildDLL.o \
 							${Sources}/ParseSqlStmt.o
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
+		${Prdir}/BuildDLL.o \
+		${Sources}/ParseSqlStmt.o \
+		${Prdir}/license.o \
+		-T ${Prdir}/license.ld
+
 
 # BuildDLL
 ${Prdir}/BuildDLL.o:	${Headers}/ParseSqlStmt.h ${Prdir}/BuildDLL.c
