@@ -22,13 +22,13 @@ endif
 .Phony: all
 all:
 	@$(shell echo "Version information: ${GIT_HASH} | Copyright (c) $({Copy_RIGHT_DATE}) CobraSonic/Dataisec Software" \
-	> version.txt)
-	ld -r -b binary -o version.o version.txt
+	> git_version.txt)
+	ld -r -b binary -o git_version.o git_version.txt
 
 
 .Phony: clean
 clean:
-	@rm -rf version.*
+	@rm -rf git_version.*
 
 # version.ld:
 # 	@echo "$$HEREDOC" > version.ld

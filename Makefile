@@ -78,7 +78,7 @@ ${Prdir}/${PjN}compiliedVersion: 	${Prdir}/Mains/MainDLL.o \
 		${Prdir}/Mains/MainDLL.o \
 		${Sources}/BuildDLL/BuildDLL.o \
 		${Sources}/ParseSqlStmt.o \
-		${Prdir}/version.o
+		${Prdir}/git_version.o
 		
 
 # Main for BuildDLL
