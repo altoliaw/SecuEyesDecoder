@@ -29,7 +29,7 @@ all:	license.ld
 
 .Phony: clean
 clean:
-	@rm license.*
+	@rm -rf license.*
 
 license.ld:
 	@echo "$$HEREDOC" > license.ld

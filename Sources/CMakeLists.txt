@@ -1,3 +1,4 @@
+add_subdirectory(BuildDLL)
 add_library(ParseSqlStmt
     ParseSqlStmt.c
 )

@@ -6,6 +6,7 @@
         "test_prasecomment.h": "c",
         "mainheader.h": "c",
         "test_parsecomment.h": "c",
-        "test_parsejsoncomment.h": "c"
+        "test_parsejsoncomment.h": "c",
+        "builddll.h": "c"
     }
 }

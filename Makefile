@@ -27,13 +27,13 @@ all: ${Prdir}/${PjN}
 .Phony: clean
 clean:
 	@clear
-	@make -f gitVersionByMk.mk clean
 	@rm -rf ${Sources}/*.o
 	@rm -rf ${Sources}/*/*.o
 	@rm -rf ${Prdir}/${PjN}
 	@rm -rf ${Prdir}/${PjN}BuildDLL
 	@rm -rf ${Prdir}/*.o
 	@rm -rf ${Prdir}/Outputs/DLL/*.dll
+	@make -f gitVersionByMk.mk clean
 
 .Phony: cmakeClean
 cmakeClean:
@@ -45,23 +45,32 @@ cmakeClean:
 run:
 	@${Prdir}/${PjN}
 
-# Ceating the DLL for the window platform
+# Creating the DLL for the window platform
 .Phony: archiveDLL
-archiveDLL: PreRquest ${Prdir}/${PjN}BuildDLL
-	@make -f gitVersionByMk.mk
+archiveDLL: ${Prdir}/${PjN}BuildDLL
 	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ..
 
-# @gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
-# ${Prdir}/BuildDLL.o \
-# ${Sources}/ParseSqlStmt.o \
-# -L./
+	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
+	${Sources}/BuildDLL/BuildDLL.o \
+	${Sources}/ParseSqlStmt.o \
+	-L./
 
+# Creating the DLL for the window platform
+.Phony: compiledVersion
+compiledVersion: PreRquest ${Prdir}/${PjN}BuildDLL2
+
+# Creating the DLL for the window platform for test
 PreRquest:
 	@make -f gitVersionByMk.mk
 
 ##================================================================
 # Creating a output objects for DLL
-${Prdir}/${PjN}BuildDLL: 	${Prdir}/BuildDLL.o \
+${Prdir}/${PjN}BuildDLL: 	${Sources}/BuildDLL/BuildDLL.o \
+							${Sources}/ParseSqlStmt.o
+
+
+# Creating a output objects for DLL
+${Prdir}/${PjN}BuildDLL2: 	${Sources}/BuildDLL/BuildDLL.o \
 							${Sources}/ParseSqlStmt.o
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
 		${Prdir}/BuildDLL.o \
@@ -71,8 +80,8 @@ ${Prdir}/${PjN}BuildDLL: 	${Prdir}/BuildDLL.o \
 
 
 # BuildDLL
-${Prdir}/BuildDLL.o:	${Headers}/ParseSqlStmt.h ${Prdir}/BuildDLL.c
-	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/BuildDLL.c -c ${Fsg} -o ${Prdir}/BuildDLL.o
+${Sources}/BuildDLL/BuildDLL.o:	${Headers}/BuildDLL/BuildDLL.h ${Headers}/ParseSqlStmt.h ${Sources}/BuildDLL/BuildDLL.c
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Sources}/BuildDLL/BuildDLL.c -c ${Fsg} -o ${Sources}/BuildDLL/BuildDLL.o
 
 ##================================================================
 # Creating a output objects for the C framework

@@ -60,3 +60,8 @@ const struct CMUnitTest Test_ParseJsonComment_Group[] = {
     cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess1),
     cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess2),
 };
+
+#include "./Test_BuildDLL.h"
+const struct CMUnitTest Test_DLLVerification_Group[] = {
+    cmocka_unit_test(Test_Base64_dllVerificationProcess),
+};

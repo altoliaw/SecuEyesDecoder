@@ -11,9 +11,6 @@
 #include <stdint.h>
 #include <cmocka.h>
 
-#include "../../Headers/BuildDLL/BuildDLL.h"
 #include "../../Headers/ParseSqlStmt.h"
 
-void Test_Base64_encodedDecodedProcess(void**);
-void Test_Base64_encodedDecodedProcess2(void**);
-void Test_Base64_encodedDecodedProcess3(void**);
+void Test_Base64_dllVerificationProcess(void**);
