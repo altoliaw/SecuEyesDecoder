@@ -30,8 +30,9 @@ clean:
 	@rm -rf ${Sources}/*.o
 	@rm -rf ${Sources}/*/*.o
 	@rm -rf ${Prdir}/${PjN}
-	@rm -rf ${Prdir}/${PjN}BuildDLL
+	@rm -rf ${Prdir}/*.exe
 	@rm -rf ${Prdir}/*.o
+	@rm -rf ${Prdir}/*/*.o
 	@rm -rf ${Prdir}/Outputs/DLL/*.dll
 	@make -f gitVersionByMk.mk clean
 
@@ -55,9 +56,9 @@ archiveDLL: ${Prdir}/${PjN}BuildDLL
 	${Sources}/ParseSqlStmt.o \
 	-L./
 
-# Creating the DLL for the window platform
-.Phony: compiledVersion
-compiledVersion: PreRquest ${Prdir}/${PjN}BuildDLL2
+# Creating the DLL with a specified version
+.Phony: compiliedVersion
+compiliedVersion: PreRquest	${Prdir}/${PjN}compiliedVersion
 
 # Creating the DLL for the window platform for test
 PreRquest:
@@ -69,15 +70,20 @@ ${Prdir}/${PjN}BuildDLL: 	${Sources}/BuildDLL/BuildDLL.o \
 							${Sources}/ParseSqlStmt.o
 
 
-# Creating a output objects for DLL
-${Prdir}/${PjN}BuildDLL2: 	${Sources}/BuildDLL/BuildDLL.o \
-							${Sources}/ParseSqlStmt.o
-	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
-		${Prdir}/BuildDLL.o \
+# Creating a output objects for DLL to verify the version
+${Prdir}/${PjN}compiliedVersion: 	${Prdir}/Mains/MainDLL.o \
+									${Sources}/BuildDLL/BuildDLL.o \
+									${Sources}/ParseSqlStmt.o
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN}_compiliedVersion \
+		${Prdir}/Mains/MainDLL.o \
+		${Sources}/BuildDLL/BuildDLL.o \
 		${Sources}/ParseSqlStmt.o \
-		${Prdir}/license.o \
-		-T ${Prdir}/license.ld
+		${Prdir}/version.o
+		
 
+# Main for BuildDLL
+${Prdir}/Mains/MainDLL.o:
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/Mains/MainDLL.c -c ${Fsg} -o ${Prdir}/Mains/MainDLL.o
 
 # BuildDLL
 ${Sources}/BuildDLL/BuildDLL.o:	${Headers}/BuildDLL/BuildDLL.h ${Headers}/ParseSqlStmt.h ${Sources}/BuildDLL/BuildDLL.c
@@ -85,16 +91,15 @@ ${Sources}/BuildDLL/BuildDLL.o:	${Headers}/BuildDLL/BuildDLL.h ${Headers}/ParseS
 
 ##================================================================
 # Creating a output objects for the C framework
-${Prdir}/${PjN}: 	${Prdir}/Main.o \
+${Prdir}/${PjN}: 	${Prdir}/Mains/Main.o \
 					${Sources}/ParseSqlStmt.o
-
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
-		${Prdir}/Main.o \
+		${Prdir}/Mains/Main.o \
 		${Sources}/ParseSqlStmt.o
 
 # Main
-${Prdir}/Main.o:	${Headers}/ParseSqlStmt.h ${Prdir}/Main.c
-	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/Main.c -c ${Fsg} -o ${Prdir}/Main.o
+${Prdir}/Mains/Main.o:	${Headers}/ParseSqlStmt.h ${Prdir}/Mains/Main.c
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/Mains/Main.c -c ${Fsg} -o ${Prdir}/Mains/Main.o
 
 # ParseSqlStmt
 ${Sources}/ParseSqlStmt.o:	${Headers}/ParseSqlStmt.h ${Sources}/ParseSqlStmt.c

@@ -7,30 +7,28 @@ ifndef GIT_INSTALLED
     GIT_HASH=$(shell git rev-parse --short HEAD)
 endif
 
-define HEREDOC
-SECTIONS
-{
-	. = 0x100000;
-	.license :
-	{
-		*(.license)
-	}
-}
-endef
+# define HEREDOC
+# SECTIONS
+# {
+#     .version :
+#     {
+#         KEEP(*(.version))
+#     }
+# }
+# endef
 
-export HEREDOC
+# export HEREDOC
 
 .Phony: all
-all:	license.ld
-	@$(shell echo "License information: ${GIT_HASH} | Copyright (c) $({Copy_RIGHT_DATE}) CobraSonic Software" \
-	> license.txt)
-	ld -r -b binary -o license.o license.txt
+all:
+	@$(shell echo "Version information: ${GIT_HASH} | Copyright (c) $({Copy_RIGHT_DATE}) CobraSonic/Dataisec Software" \
+	> version.txt)
+	ld -r -b binary -o version.o version.txt
 
 
 .Phony: clean
 clean:
-	@rm -rf license.*
+	@rm -rf version.*
 
-license.ld:
-	@echo "$$HEREDOC" > license.ld
-
+# version.ld:
+# 	@echo "$$HEREDOC" > version.ld

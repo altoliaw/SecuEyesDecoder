@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./Headers/ParseSqlStmt.h"
+#include "../Headers/ParseSqlStmt.h"
 
 /**
  * Main process
