@@ -2,7 +2,7 @@ GIT_INSTALLED:=$(shell command -v git 2> /dev/null)
 GIT_HASH="None"
 Copy_RIGHT_DATE=$(shell date +"%Y")
 
-ifndef GIT_INSTALLED
+ifdef GIT_INSTALLED
     # Obtaining git hash value
     GIT_HASH=$(shell git rev-parse --short HEAD)
 endif
