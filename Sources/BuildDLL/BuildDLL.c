@@ -35,7 +35,7 @@ unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTex
  * @param plainText [unsigned char*] The plain text result string from the address of an array with a fixed size (static size)
  * @return [unsigned int] The length of the plain text result string
  */
-unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherTextLength, unsigned char* plainText) {
+unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherTextLength, unsigned char* plainText, unsigned int* plainSpaceLength) {
     // Obtaining the plain text from the cipher text
     unsigned char* returnedPlainText = APUDataDecrypt(cipherText, cipherTextLength);
     int plainTextLength = 0;
@@ -48,5 +48,6 @@ unsigned int ___decryptSEDecoder(unsigned char* cipherText, unsigned int cipherT
         free(returnedPlainText);
     }
 
+    *plainSpaceLength = plainTextLength; 
     return plainTextLength;
 }

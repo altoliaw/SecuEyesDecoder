@@ -21,7 +21,8 @@ void Test_Base64_dllVerificationProcess(void** State) {
 
     // Decrypting the string
     unsigned char plainTextPrediction[2000];
-    unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction);
+    unsigned int plainSpaceLength = 0;
+    unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction, &plainSpaceLength);
 	// fprintf(stderr, "%s \t %d\n", plainTextPrediction, plainTextLen);
 
 	assert_string_equal(plainText, plainTextPrediction);
