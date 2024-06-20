@@ -34,6 +34,7 @@ clean:
 	@rm -rf ${Prdir}/*.o
 	@rm -rf ${Prdir}/*/*.o
 	@rm -rf ${Prdir}/Outputs/DLL/*.dll
+	@rm -rf ${Prdir}/Outputs/DOT_A/*.a
 	@make -f gitVersionByMk.mk clean
 
 .Phony: cmakeClean
@@ -48,13 +49,24 @@ run:
 
 # Creating the DLL for the window platform
 .Phony: archiveDLL
-archiveDLL: ${Prdir}/${PjN}BuildDLL
-	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ..
-
+archiveDLL: ${Prdir}/${PjN}
+	@make compiliedVersion
+	@mkdir -p Outputs && cd Outputs && mkdir -p DLL && cd ../../
+	
 	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
 	${Sources}/BuildDLL/BuildDLL.o \
 	${Sources}/ParseSqlStmt.o \
+	git_version.o \
 	-L./
+
+	@mkdir -p Outputs && cd Outputs && mkdir -p DOT_A && cd ../../
+
+	@ar rcs ./Outputs/DOT_A/libjsonDecoder.a \
+	${Sources}/BuildDLL/BuildDLL.o \
+	${Sources}/ParseSqlStmt.o \
+	git_version.o 
+
+
 
 # Creating the DLL with a specified version
 .Phony: compiliedVersion
