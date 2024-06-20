@@ -579,7 +579,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
                 } else if (strncmp(openQuotePivot, "dbUser", 6) == 0) {
                     jsonFlag |= 0b00000001;
                 } else {
-                    fprintf(stderr, "Error: unrecognized key\n");
+                    // fprintf(stderr, "Error: unrecognized key\n");
                     free(encodedText);
                     free(plainText);
                     return -1;
