@@ -7,6 +7,9 @@
         "mainheader.h": "c",
         "test_parsecomment.h": "c",
         "test_parsejsoncomment.h": "c",
-        "builddll.h": "c"
+        "builddll.h": "c",
+        "cstdint": "c",
+        "type_traits": "c",
+        "xutility": "c"
     }
 }

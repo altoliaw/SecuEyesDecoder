@@ -935,7 +935,8 @@ static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char
     }else if(isEncrypted == 1){
         // Encryption process
         int sqlStmtLength = (int)strlen((*sqlDataDescription));
-        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescription), sqlStmtLength);
+        unsigned int cipherSpaceLength = 0;
+        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescription), sqlStmtLength, &cipherSpaceLength);
         free((*sqlDataDescription));  // Removing the past data
         (*sqlDataDescription) = NULL;
         (*sqlDataDescription) = inferredEncryptedDataString;

@@ -21,7 +21,8 @@ int main() {
     fprintf(stderr, "%s \t %d\n", plainText, (int)strlen((char*)plainText));
 
     unsigned char cipherText[2000];
-    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
+    unsigned int cipherSpaceLength = 0;
+    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText, &cipherSpaceLength);
     fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
 
     // Decrypting the string

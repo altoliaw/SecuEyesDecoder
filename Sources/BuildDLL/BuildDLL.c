@@ -6,11 +6,12 @@
  * @param plainText [const unsigned char*] The plaintext input string
  * @param plainTextLength [unsigned int] The length of the plaintext input string
  * @param cipherText [unsigned char*] The ciphertext result string from the address of an array with a fixed size (static size)
+ * @param cipherSpaceLength [unsigned int*] The length of the cipher space
  * @return [int] The length of the ciphertext result string
  */
-unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTextLength, unsigned char* cipherText) {
+unsigned int ___encryptSEDecoder(unsigned char* plainText, unsigned int plainTextLength, unsigned char* cipherText, unsigned int* cipherSpaceLength) {
     // Obtaining the cipher text with dynamic memory allocation
-    unsigned char* returnedCipherText = APUDataEncrypt(plainText, plainTextLength);
+    unsigned char* returnedCipherText = APUDataEncrypt(plainText, plainTextLength, cipherSpaceLength);
 
     int cipherLength = 0;
     if (returnedCipherText != NULL) {

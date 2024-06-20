@@ -18,7 +18,7 @@
 #define DELIMITER "," // The delimiter in the comment section
 #define ENCRYPTION_KEY 0x879C5F6A // The encryption key (32 bits) which the user defines
 
-unsigned char* APUDataEncrypt(const unsigned char*, unsigned int);
+unsigned char* APUDataEncrypt(const unsigned char*, unsigned int, unsigned int*);
 unsigned char* APUDataDecrypt(const unsigned char*, unsigned int);
 unsigned char* base64Encode(unsigned char*, unsigned int);
 unsigned char* base64Decode(unsigned char*, unsigned int);

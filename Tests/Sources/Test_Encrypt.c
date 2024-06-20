@@ -6,7 +6,8 @@ void Test_Encrypt_DecryptProcess1(void** State) {
     unsigned int dataStringLength = (unsigned int)strlen((const char*)dataString);
 
     // Encoding process
-    char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength);
+    unsigned int cipherSpaceLength = 0;
+    char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength, &cipherSpaceLength);
 
     // Decoding process
     char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString));
@@ -33,7 +34,8 @@ void Test_Encrypt_DecryptProcess2(void** State) {
     unsigned int dataStringLength = (unsigned int)strlen((const char*)dataString);
 
     // Encoding process
-    char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength);
+    unsigned int cipherSpaceLength = 0;
+    char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength, &cipherSpaceLength);
     
     // Decoding process
     char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString));

@@ -8,18 +8,19 @@ static const unsigned char base64Alphabets[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef
  * the encryption process is involved in performing XOR process in the block, and then performs a bitwise rotation;
  * the rotation amount is determined by the encryption key
  *
- * @param plainText The plaintext for encryption; the value contains a redundant string.
- * @param plainTextLength The length of the plaintext.
- * @return A pointer to the encrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory.
+ * @param plainText [const unsigned char*] The plaintext for encryption; the value contains a redundant string
+ * @param plainTextLength [unsigned int] The length of the plaintext
+ * @param cipherSpaceLength [unsigned int*] The address of the cipher text space length
+ * @return [unsigned char*] A pointer to the encrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory
  */
-unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plainTextLength) {
+unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plainTextLength, unsigned int* cipherSpaceLength) {
     // Calculating the length of the plaintext in 32-bit blocks, rounding up
     // equivalent to (plainTextLength / 4) + 1
     uint32_t plainTextLengthInUInt32 = (plainTextLength >> 2) + 1;
-
+    
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char*)plainTextAsUInt32, (const char*)plainText, plainTextLength);
+    memcpy((char*)plainTextAsUInt32, (const char*)plainText, plainTextLength);
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
     uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
@@ -33,7 +34,7 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
     // if the last 5 bits are zero, the amount of the rotations will be meaningless
     // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
     uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
-
+    
     // Implementing each 32-bit block of the plaintext
     for (uint32_t i = 0; i < plainTextLengthInUInt32; i++) {
         // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
@@ -42,6 +43,10 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
         // Performing a bitwise rotation to the ciphertext
         cipherText[i] = (cipherText[i] << shiftAmount) | (cipherText[i] >> (32 - shiftAmount));
     }
+
+    // If the original length of the plaintext is a multiple of 4, the new length is equal to the original one;
+    // otherwise, the new length is equal to the sum of the original length and 4.
+    *cipherSpaceLength = (plainTextLength % 4 == 0) ? plainTextLength : plainTextLength + 4 ;
 
     // Releasing the memory allocated for the plaintext
     free(plainTextAsUInt32);
@@ -55,18 +60,19 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
  * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the block;
  * the rotation amount is determined by the encryption key
  *
- * @param cipherText The ciphertext to be decrypted; the value contains a redundant string.
- * @param cipherTextLength The length of the ciphertext.
+ * @param cipherText [const unsigned char*] The ciphertext to be decrypted; the value contains a redundant string.
+ * @param cipherTextLength [unsigned int] The length of the ciphertext.
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength) {
-    // Calculating the length of the ciphertext in 32-bit blocks, rounding up
-    // equivalent to (cipherTextLength / 4) + 1
-    uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2) + 1;
+    // Calculating the length of the ciphertext in 32-bit blocks; generally, the
+    // length of the ciphertext is the multiple of 32 bits (4 bytes)
+    uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2);
 
     // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
-    strncpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
+    // strncpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
+    memcpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
@@ -91,7 +97,6 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
 
     // Releasing the memory allocated for the ciphertext
     free(cipherTextAsUInt32);
-
     return (unsigned char*)plainText;
 }
 

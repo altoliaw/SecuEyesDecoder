@@ -15,7 +15,8 @@ void Test_Base64_dllVerificationProcess(void** State) {
     int length = sprintf((char*)plainText, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}", demoUserId, demoIp, demoDbUser);
 	// fprintf(stderr, "%s \t %d\n", plainText, length);
     unsigned char cipherText[2000];
-    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
+    unsigned int cipherSpaceLength = 0;
+    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText, &cipherSpaceLength);
 	// fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
 
     // Decrypting the string

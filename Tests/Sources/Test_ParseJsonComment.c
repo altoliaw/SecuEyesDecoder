@@ -27,10 +27,10 @@ void Test_ParseJsonComment_normalCaseProcess1(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
@@ -75,10 +75,10 @@ void Test_ParseJsonComment_normalCaseProcess2(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
     // Here users shall check whether the inferred column is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
     assert_null(inferredDemoUserId);
@@ -124,10 +124,10 @@ void Test_ParseJsonComment_normalCaseProcess3(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     // Here users shall check whether the inferred column is NULL because in the function "parseEncryptedSqlStmt",
@@ -174,10 +174,10 @@ void Test_ParseJsonComment_normalCaseProcess4(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
@@ -224,10 +224,10 @@ void Test_ParseJsonComment_normalCaseProcess5(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -274,10 +274,10 @@ void Test_ParseJsonComment_normalCaseProcess6(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -324,11 +324,11 @@ void Test_ParseJsonComment_normalCaseProcess7(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
-    
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
+
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
     assert_string_equal(inferredDemoUserId, demoUserId);
@@ -374,10 +374,10 @@ void Test_ParseJsonComment_normalCaseProcess8(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -425,10 +425,10 @@ void Test_ParseJsonComment_normalCaseProcess9(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 1;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -476,10 +476,10 @@ void Test_ParseJsonComment_normalCaseProcess10(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -527,10 +527,10 @@ void Test_ParseJsonComment_normalCaseProcess11(void** state) {
     short isPlainText = 1;
     short isSQLCommentRemoved = 1;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     // Here users shall check whether inferredDemoUserId is NULL because in the function "parseEncryptedSqlStmt",
     // the inferredDemoUserId will be equal to NULL when the mapping column has no data
@@ -550,6 +550,92 @@ void Test_ParseJsonComment_normalCaseProcess11(void** state) {
     }
     if (sqlStmt != NULL) {
         free(sqlStmt);
+    }
+}
+
+/**
+ * A custom plain text for verifying the encryption
+ *
+ * @param state void** None
+ */
+void Test_ParseJsonComment_customCaseProcess1(void** state) {
+    // Generation of the factors of the testing data
+    unsigned char* plaintext = "{\"remote_web_user\":\"[ ｛ ”checkpass”： ”Y”， ”uname”： ”John Doe”， ”ucost”： ”12345” ｝ ]\",\"client_user_ip\":\"0.0.0.1\",\"db_user\":\"sa\",\"app_url\":\"/SqlAction/ExecuteSqlAsync\"}";
+    // fprintf(stderr, "%s\n", (char*)plaintext);
+    unsigned int plaintextLen = strlen(plaintext);
+    unsigned int cipherSpaceLength = 0;
+    unsigned char* inferredEncryptedDataString = APUDataEncrypt((unsigned char*)(plaintext), plaintextLen, &cipherSpaceLength);
+
+    // Converting each character as a pair hex number
+    unsigned char* inferredEncryptedDataStringInHex = malloc((sizeof(unsigned char) * cipherSpaceLength) * 2 + sizeof(unsigned char));
+    for (size_t i = 0, length = 0; i < cipherSpaceLength; i++) {
+        length += (size_t)sprintf(inferredEncryptedDataStringInHex + length, "%02X", inferredEncryptedDataString[i]);
+    }
+    inferredEncryptedDataStringInHex[(1 * cipherSpaceLength) * 2] = '\0';
+
+    // Recovering the encrypted string from the encrypted result modeled in the hex numbers
+    unsigned char* recoveryEncryptedDataString = malloc(cipherSpaceLength + sizeof(unsigned char));
+    // Decrypting data
+    // Recovery to the byte
+    for (int i = 0, highLevel = 0, lowLevel = 0; i < (int)strlen((char*)inferredEncryptedDataStringInHex); i++) {
+        lowLevel = 0;
+        // ASCII 48 (0) to 57 (9); 65 (A) to 70 (F)
+        if (inferredEncryptedDataStringInHex[i] >= '0' && inferredEncryptedDataStringInHex[i] <= '9') {
+            lowLevel = (int)(inferredEncryptedDataStringInHex[i] -'0');
+        } else if(inferredEncryptedDataStringInHex[i] >= 'A' && inferredEncryptedDataStringInHex[i] <= 'F') {
+            lowLevel = (int)(inferredEncryptedDataStringInHex[i] -'A' + 10);
+        }
+
+        if (i % 2 == 1) {
+            highLevel = highLevel | lowLevel; 
+            recoveryEncryptedDataString[i/2] = (unsigned char)highLevel;
+        } else {
+            highLevel = 0;
+            highLevel = lowLevel << 4; 
+        }
+    }
+    recoveryEncryptedDataString[cipherSpaceLength] = '\0';
+ 
+    // Verifying each character by each integer
+    for (size_t i = 0, length = 0; i < cipherSpaceLength; i++) {
+        assert_int_equal(inferredEncryptedDataString[i], recoveryEncryptedDataString[i]);
+    }
+
+    if (inferredEncryptedDataString != NULL) {
+        free(inferredEncryptedDataString);
+    }
+
+    if (inferredEncryptedDataStringInHex != NULL) {
+        free(inferredEncryptedDataStringInHex);
+    }
+
+    if(recoveryEncryptedDataString != NULL) {
+        free(recoveryEncryptedDataString);
+    }
+}
+
+/**
+ * A custom plain text for verifying the encryption
+ *
+ * @param state void** None
+ */
+void Test_ParseJsonComment_customCaseProcess2(void** state) {
+    // Generation of the factors of the testing data
+    unsigned char* plaintext = "{\"remote_web_user\":\"[ ｛ ”checkpass”： ”Y”， ”uname”： ”John Doe”， ”ucost”： ”12345” ｝ ]\",\"client_user_ip\":\"0.0.0.1\",\"db_user\":\"sa\",\"app_url\":\"/SqlAction/ExecuteSqlAsync\"}";
+    unsigned int plaintextLen = strlen(plaintext);
+    unsigned int cipherSpaceLength = 0;
+    unsigned char* inferredEncryptedDataString = APUDataEncrypt((unsigned char*)(plaintext), plaintextLen, &cipherSpaceLength);
+    
+    // Decrypting approach
+    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength);
+    assert_string_equal(plaintext, inferredDecryptedDataString);
+
+    if (inferredEncryptedDataString != NULL) {
+        free(inferredEncryptedDataString);
+    }
+
+    if (inferredDecryptedDataString != NULL) {
+        free(inferredDecryptedDataString);
     }
 }
 
@@ -578,10 +664,10 @@ void Test_ParseJsonComment_encryptCaseProcess1(void** state) {
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
@@ -626,10 +712,10 @@ void Test_ParseJsonComment_encryptCaseProcess2(void** state) {
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
     parseEncryptedSqlStmt((unsigned char*)sqlStmt, strlen(sqlStmt),
-                 &inferredDemoUserId, &inferredDemoIp,
-                 &inferredDbUser, (unsigned char*)START_END_SYMBOL,
-                 (unsigned char*)DELIMITER, isPlainText,
-                 isSQLCommentRemoved);
+                          &inferredDemoUserId, &inferredDemoIp,
+                          &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                          (unsigned char*)DELIMITER, isPlainText,
+                          isSQLCommentRemoved);
 
     assert_null(inferredDemoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
@@ -663,11 +749,10 @@ void Test_ParseJsonComment_encryptCaseProcess2(void** state) {
 static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescription,
                           char** sqlDataDescription, short isEncoded, short isEncrypted) {
     // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
-    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 10; // 33 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
-    (*sqlDataDescription) = (char*)calloc(resultLen + 1 , sizeof(char));
+    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 10;  // 33 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
+    (*sqlDataDescription) = (char*)calloc(resultLen + 1, sizeof(char));
     resultLen = snprintf((*sqlDataDescription), resultLen, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}\0", demoUserId, demoIp, demoDbUser);
     (*sqlDataDescription)[resultLen + 1] = '\0';
-    
 
     // If encoded is necessary, ...
     if (isEncoded == 1) {
@@ -677,10 +762,11 @@ static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char
         free((*sqlDataDescription));  // Removing the past data
         (*sqlDataDescription) = NULL;
         (*sqlDataDescription) = inferredEncodedDataString;
-    }else if(isEncrypted == 1){
+    } else if (isEncrypted == 1) {
         // Encryption process
+        unsigned int cipherSpaceLength = 0;  // To obtain the length of the encryption
         int sqlStmtLength = (int)strlen((*sqlDataDescription));
-        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescription), sqlStmtLength);
+        char* inferredEncryptedDataString = (char*)APUDataEncrypt((unsigned char*)(*sqlDataDescription), sqlStmtLength, &cipherSpaceLength);
         free((*sqlDataDescription));  // Removing the past data
         (*sqlDataDescription) = NULL;
         (*sqlDataDescription) = inferredEncryptedDataString;

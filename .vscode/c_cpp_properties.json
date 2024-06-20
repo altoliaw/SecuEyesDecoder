@@ -3,7 +3,9 @@
 	  {
 		"name": "Win32",
 		"intelliSenseMode": "windows-msvc-x64",
-		"includePath": ["C:/msys64/mingw64/include"],
+		"includePath": ["${workspaceFolder}/**",
+						"C:/msys64/usr/include"
+		],
 		"defines":[
 			"_WIN32"
 		]
