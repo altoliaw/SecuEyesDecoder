@@ -10,7 +10,8 @@ void Test_Encrypt_DecryptProcess1(void** State) {
     char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength, &cipherSpaceLength);
 
     // Decoding process
-    char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString));
+    unsigned int plainSpaceLength = 0;
+    char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString), &plainSpaceLength);
     assert_string_equal(inferredDecodedDataString, dataString);
 
     // Verifying if each character is equal to the one from the other decoded result
@@ -38,7 +39,8 @@ void Test_Encrypt_DecryptProcess2(void** State) {
     char* inferredEncodedDataString = (char*) APUDataEncrypt(dataString, dataStringLength, &cipherSpaceLength);
     
     // Decoding process
-    char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString));
+    unsigned int plainSpaceLength = 0;
+    char* inferredDecodedDataString = (char*) APUDataDecrypt(inferredEncodedDataString, strlen(inferredEncodedDataString), &plainSpaceLength);
     assert_string_equal(inferredDecodedDataString, dataString);
 
     // Verifying if each character is equal to the one from the other decoded result

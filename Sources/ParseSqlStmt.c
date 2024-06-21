@@ -64,7 +64,7 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
  * @param cipherTextLength [unsigned int] The length of the ciphertext.
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
-unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength) {
+unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength, unsigned int* plainSpaceLength) {
     // Calculating the length of the ciphertext in 32-bit blocks; generally, the
     // length of the ciphertext is the multiple of 32 bits (4 bytes)
     uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2);
@@ -93,6 +93,16 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
 
         // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
         plainText[i] = plainText[i] ^ ENCRYPTION_KEY;
+    }
+
+    // Trimming the '\0' from the right-hand side of "plainText"
+    for (int i = ((cipherTextLengthInUInt32) << 2) - 1; i >=0; i--) {
+        if(((unsigned char*)plainText)[i] == '\0') {
+            continue;
+        }
+        // The non-'\0' character
+        *plainSpaceLength = i + 1;
+        break;
     }
 
     // Releasing the memory allocated for the ciphertext
@@ -521,6 +531,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
     encodedText[(end - start + 1)] = '\0';
 
     unsigned char* plainText = NULL;
+    unsigned int plainTextLength = 0;
     // When the input belongs to a plain text, the decoded process is unnecessary. For unnecessary determination of the memory deallocation,
     // here the "plaintext" will be allocated memory manually and copied from the contents from the variable, encodedText.
     if (isPlainText >= 1) {
@@ -528,7 +539,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
         memcpy(plainText, encodedText, (end - start + 1));
         plainText[(end - start + 1)] = '\0';
     } else {  // When the contents belong to the encoded text, the allocated memory will be returned.
-        plainText = APUDataDecrypt(encodedText, (end - start + 1));
+        plainText = APUDataDecrypt(encodedText, (end - start + 1), &plainTextLength);
     }
     if (plainText == NULL) {
         free(encodedText);

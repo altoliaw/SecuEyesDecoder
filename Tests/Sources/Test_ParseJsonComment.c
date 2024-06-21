@@ -627,7 +627,8 @@ void Test_ParseJsonComment_customCaseProcess2(void** state) {
     unsigned char* inferredEncryptedDataString = APUDataEncrypt((unsigned char*)(plaintext), plaintextLen, &cipherSpaceLength);
     
     // Decrypting approach
-    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength);
+    unsigned int plainSpaceLength = 0;
+    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength, &plainSpaceLength);
     assert_string_equal(plaintext, inferredDecryptedDataString);
 
     if (inferredEncryptedDataString != NULL) {
@@ -652,7 +653,8 @@ void Test_ParseJsonComment_customCaseProcess3(void** state) {
     unsigned char* inferredEncryptedDataString = APUDataEncrypt((unsigned char*)(plaintext), plaintextLen, &cipherSpaceLength);
     
     // Decrypting approach
-    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength);
+    unsigned int plainSpaceLength = 0;
+    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength, &plainSpaceLength);
     assert_string_equal(plaintext, inferredDecryptedDataString);
 
     if (inferredEncryptedDataString != NULL) {

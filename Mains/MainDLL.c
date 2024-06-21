@@ -21,14 +21,12 @@ int main() {
     fprintf(stderr, "%s \t %d\n", plainText, (int)strlen((char*)plainText));
 
     unsigned char cipherText[2000];
-    unsigned int cipherSpaceLength = 0;
-    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText, &cipherSpaceLength);
+    unsigned int cipherTextLen = ___encryptSEDecoder((unsigned char*)plainText, (unsigned int)length, cipherText);
     fprintf(stderr, "%s \t %d\n", cipherText, cipherTextLen);
 
     // Decrypting the string
     unsigned char plainTextPrediction[2000];
-    unsigned int plainSpaceLength = 0;
-    unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction, &plainSpaceLength);
+    unsigned int plainTextLen = ___decryptSEDecoder((unsigned char*)cipherText, cipherTextLen, plainTextPrediction);
     fprintf(stderr, "%s \t %d\n", plainTextPrediction, plainTextLen);
 
     return 0;
