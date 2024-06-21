@@ -110,6 +110,8 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
     // Allocating memory for the "recoveredEncryptedDataString" and casting "recoveredEncryptedDataString" to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
     memcpy((char*)cipherTextAsUInt32, (const char*)recoveredEncryptedDataString, cipherTextLength);
+    // Releasing the dynamic memory allocation
+    free (recoveredEncryptedDataString);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
@@ -133,6 +135,7 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
     }
 
     // Trimming the '\0' from the right-hand side of "plainText"
+    *plainSpaceLength = ((cipherTextLengthInUInt32) << 2) - 1; // Initialization
     for (int i = ((cipherTextLengthInUInt32) << 2) - 1; i >= 0; i--) {
         if (((unsigned char*)plainText)[i] == '\0') {
             continue;
