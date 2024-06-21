@@ -606,6 +606,33 @@ void Test_ParseJsonComment_customCaseProcess2(void** state) {
 }
 
 /**
+ * A custom plain text for verifying the encryption
+ *
+ * @param state void** None
+ */
+void Test_ParseJsonComment_customCaseProcess3(void** state) {
+    // Generation of the factors of the testing data
+    unsigned char* plaintext = "Hello world!1";
+    unsigned int plaintextLen = strlen(plaintext);
+    unsigned int cipherSpaceLength = 0;
+    unsigned char* inferredEncryptedDataString = APUDataEncrypt((unsigned char*)(plaintext), plaintextLen, &cipherSpaceLength);
+
+    // Decrypting approach
+    unsigned int plainSpaceLength = 0;
+    unsigned char* inferredDecryptedDataString = APUDataDecrypt(inferredEncryptedDataString, cipherSpaceLength, &plainSpaceLength);
+    assert_string_equal(plaintext, inferredDecryptedDataString);
+    assert_int_equal(plaintextLen, plainSpaceLength);
+
+    if (inferredEncryptedDataString != NULL) {
+        free(inferredEncryptedDataString);
+    }
+
+    if (inferredDecryptedDataString != NULL) {
+        free(inferredDecryptedDataString);
+    }
+}
+
+/**
  * Verifying if the comments can be parsed by the delimiter (encoded text); in the comments, the factors are not empty strings
  *
  * @param state void** None

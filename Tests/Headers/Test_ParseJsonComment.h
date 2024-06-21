@@ -30,5 +30,6 @@ void Test_ParseJsonComment_normalCaseProcess10(void**);
 void Test_ParseJsonComment_normalCaseProcess11(void**);
 void Test_ParseJsonComment_customCaseProcess1(void**);
 void Test_ParseJsonComment_customCaseProcess2(void**);
+void Test_ParseJsonComment_customCaseProcess3(void**);
 void Test_ParseJsonComment_encryptCaseProcess1(void**);
 void Test_ParseJsonComment_encryptCaseProcess2(void**);
