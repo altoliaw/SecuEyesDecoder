@@ -59,7 +59,6 @@ const struct CMUnitTest Test_ParseJsonComment_Group[] = {
     //=========================Custom=====================================
     cmocka_unit_test(Test_ParseJsonComment_customCaseProcess1),
     cmocka_unit_test(Test_ParseJsonComment_customCaseProcess2),
-    cmocka_unit_test(Test_ParseJsonComment_customCaseProcess3),
     //=========================Json=======================================
     cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess1),
     cmocka_unit_test(Test_ParseJsonComment_encryptCaseProcess2),

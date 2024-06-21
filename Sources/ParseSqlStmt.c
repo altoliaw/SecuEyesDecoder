@@ -17,14 +17,14 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
     // Calculating the length of the plaintext in 32-bit blocks, rounding up
     // equivalent to (plainTextLength / 4) + 1
     uint32_t plainTextLengthInUInt32 = (plainTextLength >> 2) + 1;
-    
+
     // Allocating memory for the plaintext and casting the plaintext to a 32-bit unsigned integer pointer for manipulation
     uint32_t* plainTextAsUInt32 = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
     memcpy((char*)plainTextAsUInt32, (const char*)plainText, plainTextLength);
 
     // Allocating memory for the encrypted data, if memory allocation fails, return NULL
     uint32_t* cipherText = (uint32_t*)calloc(plainTextLengthInUInt32 + 1, sizeof(uint32_t));
-    
+
     if (cipherText == NULL) {
         return NULL;
     }
@@ -34,7 +34,7 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
     // if the last 5 bits are zero, the amount of the rotations will be meaningless
     // equivalent to (ENCRYPTION_KEY OR 0b00101) % 32
     uint8_t shiftAmount = (ENCRYPTION_KEY | 0b00101) & 0b11111;
-    
+
     // Implementing each 32-bit block of the plaintext
     for (uint32_t i = 0; i < plainTextLengthInUInt32; i++) {
         // The block is implemented by the XOR with the encryption key and the partial shifted plaintext
@@ -46,12 +46,24 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 
     // If the original length of the plaintext is a multiple of 4, the new length is equal to the original one;
     // otherwise, the new length is equal to the sum of the original length and 4.
-    *cipherSpaceLength = (plainTextLength % 4 == 0) ? plainTextLength : plainTextLength + 4 ;
+    *cipherSpaceLength = (plainTextLength % 4 == 0) ? plainTextLength : plainTextLength + 4;
 
     // Releasing the memory allocated for the plaintext
     free(plainTextAsUInt32);
 
-    return (unsigned char*)cipherText;
+    // Converting each cipher character as a pair hex number
+    unsigned char* encryptedDataStringInHex = calloc(((*cipherSpaceLength) * 2 + 1), sizeof(unsigned char));
+    int length = 0;
+    for (size_t i = 0, length = 0; i < (*cipherSpaceLength); i++) {
+        length += sprintf(encryptedDataStringInHex + length, "%02X", ((unsigned char*)cipherText)[i]);
+    }
+    encryptedDataStringInHex[(1 * (*cipherSpaceLength)) * 2] = '\0';
+    // Releasing the memory allocated dynamically in the encrypted phase
+    free(cipherText);
+    // Updating the length
+    (*cipherSpaceLength) *= 2;
+
+    return encryptedDataStringInHex;
 }
 
 /**
@@ -65,14 +77,39 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
  * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
  */
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength, unsigned int* plainSpaceLength) {
-    // Calculating the length of the ciphertext in 32-bit blocks; generally, the
-    // length of the ciphertext is the multiple of 32 bits (4 bytes)
+    // Recovering the encrypted string modelled as the hex number string format to the encrypted result modelled in the hex numbers
+    // to the original encrypted string
+    unsigned char* recoveredEncryptedDataString = calloc((cipherTextLength / 2) + 1, sizeof(unsigned char));
+    // Decrypting data
+    // Recovery to the byte
+    for (int i = 0, highLevel = 0, lowLevel = 0; i < (int)strlen((char*)cipherText); i++) {
+        lowLevel = 0;
+        // ASCII notation and the meanings: 48 (0) to 57 (9); 65 (A) to 70 (F)
+        if (cipherText[i] >= '0' && cipherText[i] <= '9') {
+            lowLevel = (int)(cipherText[i] - '0');
+        } else if (cipherText[i] >= 'A' && cipherText[i] <= 'F') {
+            lowLevel = (int)(cipherText[i] - 'A' + 10);
+        }
+        // When obtaining the two characters, ...
+        if (i % 2 == 1) {
+            highLevel = highLevel | lowLevel;
+            recoveredEncryptedDataString[i / 2] = (unsigned char)highLevel;
+        } else {
+            highLevel = 0;
+            highLevel = lowLevel << 4;
+        }
+    }
+    recoveredEncryptedDataString[(cipherTextLength / 2)] = '\0';
+    // Updating the length of the original encrypted string
+    cipherTextLength /= 2;
+
+    // Calculating the length of "recoveredEncryptedDataString" in 32-bit blocks; generally, the
+    // length of "recoveredEncryptedDataString" is the multiple of 32 bits (4 bytes)
     uint32_t cipherTextLengthInUInt32 = (cipherTextLength >> 2);
 
-    // Allocating memory for the ciphertext and casting the ciphertext to a 32-bit unsigned integer pointer for manipulation
+    // Allocating memory for the "recoveredEncryptedDataString" and casting "recoveredEncryptedDataString" to a 32-bit unsigned integer pointer for manipulation
     uint32_t* cipherTextAsUInt32 = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
-    // strncpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
-    memcpy((char*)cipherTextAsUInt32, (const char*)cipherText, cipherTextLength);
+    memcpy((char*)cipherTextAsUInt32, (const char*)recoveredEncryptedDataString, cipherTextLength);
 
     // Allocating memory for the decrypted data, if memory allocation fails, return NULL
     uint32_t* plainText = (uint32_t*)calloc(cipherTextLengthInUInt32 + 1, sizeof(uint32_t));
@@ -96,8 +133,8 @@ unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int ciph
     }
 
     // Trimming the '\0' from the right-hand side of "plainText"
-    for (int i = ((cipherTextLengthInUInt32) << 2) - 1; i >=0; i--) {
-        if(((unsigned char*)plainText)[i] == '\0') {
+    for (int i = ((cipherTextLengthInUInt32) << 2) - 1; i >= 0; i--) {
+        if (((unsigned char*)plainText)[i] == '\0') {
             continue;
         }
         // The non-'\0' character
