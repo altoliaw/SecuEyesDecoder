@@ -53,9 +53,8 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
 
     // Converting each cipher character as a pair hex number
     unsigned char* encryptedDataStringInHex = calloc(((*cipherSpaceLength) * 2 + 1), sizeof(unsigned char));
-    int length = 0;
     for (size_t i = 0, length = 0; i < (*cipherSpaceLength); i++) {
-        length += sprintf(encryptedDataStringInHex + length, "%02X", ((unsigned char*)cipherText)[i]);
+        length += sprintf(((char*)encryptedDataStringInHex) + length, "%02X", ((unsigned char*)cipherText)[i]);
     }
     encryptedDataStringInHex[(1 * (*cipherSpaceLength)) * 2] = '\0';
     // Releasing the memory allocated dynamically in the encrypted phase
