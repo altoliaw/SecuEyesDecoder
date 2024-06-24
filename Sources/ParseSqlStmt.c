@@ -45,8 +45,8 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
     }
 
     // If the original length of the plaintext is a multiple of 4, the new length is equal to the original one;
-    // otherwise, the new length is equal to the sum of the original length and 4.
-    *cipherSpaceLength = (plainTextLength % 4 == 0) ? plainTextLength : plainTextLength + 4;
+    // otherwise, the new length is equal to the result from plainTextLengthInUInt32 * 4.
+    *cipherSpaceLength = (plainTextLength % 4 == 0) ? plainTextLength : (unsigned int)plainTextLengthInUInt32 * 4;
 
     // Releasing the memory allocated for the plaintext
     free(plainTextAsUInt32);
