@@ -19,5 +19,6 @@ int main(){
     isFault |= cmocka_run_group_tests(Test_ParseComment_Group, NULL, NULL);
     isFault |= cmocka_run_group_tests(Test_ParseJsonComment_Group, NULL, NULL);
     isFault |= cmocka_run_group_tests(Test_DLLVerification_Group, NULL, NULL);
+    isFault |= cmocka_run_group_tests(Test_ParseAbbreviationJsonComment_Group, NULL, NULL);
     return isFault;
 }

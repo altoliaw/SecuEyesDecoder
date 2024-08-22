@@ -10,6 +10,7 @@
         "builddll.h": "c",
         "cstdint": "c",
         "type_traits": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "test_parseabbreviationjsoncomment.h": "c"
     }
 }
