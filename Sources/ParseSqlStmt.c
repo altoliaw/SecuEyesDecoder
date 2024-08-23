@@ -71,9 +71,10 @@ unsigned char* APUDataEncrypt(const unsigned char* plainText, unsigned int plain
  * the decryption process is involved in performing a bitwise rotation in the opposite direction, and XOR process in the block;
  * the rotation amount is determined by the encryption key
  *
- * @param cipherText [const unsigned char*] The ciphertext to be decrypted; the value contains a redundant string.
- * @param cipherTextLength [unsigned int] The length of the ciphertext.
- * @return A pointer to the decrypted data, or NULL if memory allocation failed. The caller is responsible for freeing this memory.
+ * @param cipherText [const unsigned char*] The ciphertext to be decrypted; the value contains a redundant string
+ * @param cipherTextLength [unsigned int] The length of the ciphertext
+ * @param plainSpaceLength [unsigned int*] The length of the plaintext
+ * @return A pointer to the decrypted data, or NULL if memory allocation failed; the caller is responsible for freeing this memory
  */
 unsigned char* APUDataDecrypt(const unsigned char* cipherText, unsigned int cipherTextLength, unsigned int* plainSpaceLength) {
     // Recovering the encrypted string modelled as the hex number string format to the encrypted result modelled in the hex numbers

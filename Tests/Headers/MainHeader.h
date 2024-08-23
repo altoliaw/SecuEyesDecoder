@@ -68,9 +68,22 @@ const struct CMUnitTest Test_ParseJsonComment_Group[] = {
 #include "./Test_ParseAbbreviationJsonComment.h"
 const struct CMUnitTest Test_ParseAbbreviationJsonComment_Group[] = {
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess1),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess2),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess3),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess4),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess5),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_normalCaseProcess6),
+    //=========================Encryption=================================
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_encryptCaseProcess1),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_encryptCaseProcess2),
+    //=========================Special====================================
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess1),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess2),
+
 };
 
 #include "./Test_BuildDLL.h"
 const struct CMUnitTest Test_DLLVerification_Group[] = {
-    cmocka_unit_test(Test_Base64_dllVerificationProcess),
+    cmocka_unit_test(Test_Base64_dllVerificationProcess1),
+    cmocka_unit_test(Test_Base64_dllVerificationProcess2),
 };

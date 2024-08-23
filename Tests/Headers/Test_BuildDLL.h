@@ -13,4 +13,5 @@
 
 #include "../../Headers/ParseSqlStmt.h"
 
-void Test_Base64_dllVerificationProcess(void**);
+void Test_Base64_dllVerificationProcess1(void**);
+void Test_Base64_dllVerificationProcess2(void**);
