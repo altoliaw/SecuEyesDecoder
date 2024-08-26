@@ -395,25 +395,43 @@ void Test_ParseAbbreviationJsonComment_encryptCaseProcess2(void** state) {
     }
 }
 
+
 /**
  * Verifying if the ciphertext can be parsed as the one which Leo expects
  *
  * @param state void** None
  */
 void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void** state) {
-    // Generation of the factors of the testing data
-    unsigned char* plainText = NULL;
-    unsigned char* encodedText = "FEF195B2F9D5031BD65A94B2D6D4AE38D655ADB878FF94B278F7859D565F828FD658ACB8D65AA9B856DFAFB8CE43AE2F";
-    unsigned int plainTextLength = 0;
-    unsigned char* correctText= "A:admin,B:127.0.0.1,C:myadmin@192.168.125.196";
+    char* sqlStmt = "/* mysql-connector-j-8.0.31 (Revision: 0c86fc148d567b62266c2302bdad0f1e7a7e4eba) */SELECT  @@session.auto_increment_increment AS auto_increment_increment,";
 
-    plainText = APUDataDecrypt(encodedText, strlen((unsigned char*) encodedText), &plainTextLength);
-    correctText= (unsigned char*)"A:admin,B:127.0.0.1,C:myadmin@192.168.125.196";
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
 
-    fprintf(stderr, "%d\n", strlen((unsigned char*) encodedText));
-    fprintf(stderr, "%s\n", plainText);
-    assert_string_equal(correctText, plainText);
-    free(plainText);
+    short isPlainText = 0;
+    short isSQLCommentRemoved = 0;
+
+    parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
+                             &inferredDemoUserId, &inferredDemoIp,
+                             &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)DELIMITER, isPlainText,
+                             isSQLCommentRemoved);
+
+    assert_null(inferredDemoUserId);
+    assert_null(inferredDemoIp);
+    assert_null(inferredDbUser);
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
 }
 
 /**
@@ -422,17 +440,44 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void** state) {
  * @param state void** None
  */
 void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
-    // Generation of the factors of the testing data
-    unsigned char* cipherText = NULL;
-    unsigned char* plainText = "A:admin,B:127.0.0.1,C:myadmin@192.168.125.196";
-    unsigned int cipherTextLength = 0;
+    char* sqlStmt = "/*#^FEF185B2F9D5031B565F84B2D658ACB85659A9B85759AD38FF5EAFB9FEF10393F9E3031BD75B0E19D2DFAC37^#*/ select count(*)  from tb_blog_tag@#~!0a#@@    where is_deleted=0";
 
-    cipherText = APUDataEncrypt(plainText, strlen((char*) plainText), &cipherTextLength);
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+    short isPlainText = 0;
+    short isSQLCommentRemoved = 0;
+
+    parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
+                             &inferredDemoUserId, &inferredDemoIp,
+                             &inferredDbUser, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)DELIMITER, isPlainText,
+                             isSQLCommentRemoved);
+
+    assert_string_equal(inferredDemoUserId, (unsigned char*)"admin");    
+    assert_string_equal(inferredDemoIp, (unsigned char*)"192.168.150.254");
+    assert_string_equal(inferredDbUser, (unsigned char*)"myadmin@vm203088");
+
+    // assert_null(inferredDemoUserId);
+    // assert_null(inferredDemoIp);
+    // assert_null(inferredDbUser);
+    // fprintf(stderr, "%s\n", inferredDemoUserId);
+    // fprintf(stderr, "%s\n", inferredDemoIp);
+    // fprintf(stderr, "%s\n", inferredDbUser);
 
 
-    fprintf(stderr, "%s\n", cipherText);
-    // assert_string_equal(correctText, plainText);
-    free(cipherText);
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
 }
 
 /**

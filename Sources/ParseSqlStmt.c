@@ -777,9 +777,14 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
         }
     }
 
+    if (start == end){
+        // There is no encryption string in the sql statement
+        return 0;
+    }
+
     // Allocating the size, the number two consists of two parts, one part is for length and the other is for '\0'
     unsigned char* encodedText = NULL;
-    encodedText = (unsigned char*)malloc(sizeof(unsigned char) * (end - start + 2));
+    encodedText = (unsigned char*)calloc(sizeof(unsigned char), (end - start + 2));
     if (encodedText == NULL) {
         return -1;
     }

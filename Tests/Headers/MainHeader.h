@@ -79,7 +79,6 @@ const struct CMUnitTest Test_ParseAbbreviationJsonComment_Group[] = {
     //=========================Special====================================
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess1),
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess2),
-
 };
 
 #include "./Test_BuildDLL.h"
