@@ -691,6 +691,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
     return 0;
 }
 
+
 /**
  * Obtaining the "first" comment from the SQL statements; to use the function, there exist 2 tips which users shall follow;
  * first of all, users shall pass unsigned char pointers, "userId", "ip" and "dbUser", and those three pointers shall be initialized in NULL values as the arguments;
@@ -698,9 +699,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
  *
  * @param sqlStmt unsigned char* SQL statement; "sqlStmt" will be re-assigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
- * @param userId unsigned char** The user id information; users shall free the memory manually
- * @param ip unsigned char** The user ip; users shall free the memory manually
- * @param dbUser unsigned char** The database user name; users shall free the memory manually
+ * @param aopos_map TODO: add doc; users shall free the memory manually
  * @param startEndSymbol unsigned char* The starting symbol of the encoded text
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
  * @param isPlainText short The flag for determining if the variable, "sqlStmt", belongs to an encoded text (0) or an plain text (1)
@@ -709,9 +708,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
  */
 int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
                              unsigned int sqlStmtLen,
-                             unsigned char** userId,
-                             unsigned char** ip,
-                             unsigned char** dbUser,
+                             ArrayOfPointerOfString_t* aopos_map,
                              unsigned char* startEndSymbol,
                              unsigned char* delimiter,
                              short isPlainText,
@@ -820,6 +817,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
 
     // Exploring the variables, "ap_client_user", "ap_client_host", and "db user" in order.
     short hittingNumber = 0;
+    char theKeyBeforeColon;
     for (; endPivot < plainTextLength; endPivot++) {
         if (isSearchedColon == 0x0) {  // Discovering the starting position of a variable's value
             if (plainText[endPivot] != (unsigned char)':') {
@@ -828,6 +826,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
 
             // Hitting the':'
             startPivot = endPivot;
+            theKeyBeforeColon = plainText[endPivot-1];
             isSearchedColon = 0x1;  // Changing the flag for next character, ','
         } else {                     // Discovering the starting position of a variable's value
             if (plainText[endPivot] != (unsigned char)',') {
@@ -835,36 +834,32 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
             }
 
             // Hitting the ','
-            switch (hittingNumber) {
-                case 0:                                // Obtaining the first variable's value
-                    if (startPivot + 1 != endPivot) {  // This implies the value does not belong to null.
-                        // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
-                        *userId = calloc(sizeof(unsigned char), (endPivot - startPivot));  // + 1 unit for '\0'
-                        memcpy(*userId, (plainText + startPivot + 1), (endPivot - startPivot - 1));
-                        (*userId)[(endPivot - startPivot - 1)] = '\0';
-                    }
-                    break;
-                case 1:                                // Obtaining the first variable's value
-                    if (startPivot + 1 != endPivot) {  // This implies the value does not belong to null.
-                        // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
-                        *ip = calloc(sizeof(unsigned char), (endPivot - startPivot));  // + 1 unit for '\0'
-                        memcpy(*ip, (plainText + startPivot + 1), (endPivot - startPivot - 1));
-                        (*ip)[(endPivot - startPivot - 1)] = '\0';
-                    }
-                    break;
+            unsigned char ** returnVariable;
+            if (returnVariable = aopos_get_ptr(aopos_map, theKeyBeforeColon)) {
+                // if the key is not in the map
+                if (startPivot + 1 != endPivot) {  // This implies the value does not belong to null.
+                    // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
+                    *returnVariable = calloc(sizeof(unsigned char), (endPivot - startPivot));  // + 1 unit for '\0'
+                    memcpy(*returnVariable, (plainText + startPivot + 1), (endPivot - startPivot - 1));
+                    (*returnVariable)[(endPivot - startPivot - 1)] = '\0';
+                }
             }
             isSearchedColon = 0x0;  // Changing the flag for next character, ':'
             hittingNumber++;
         }
     }
     // Putting the last value into the last variable
-    if (startPivot + 1 != endPivot) {
-        // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
-        *dbUser = calloc(sizeof(unsigned char), (endPivot - startPivot));  // + 1 unit for '\0'
-        memcpy(*dbUser, (plainText + startPivot + 1), (endPivot - startPivot - 1));
-        (*dbUser)[(endPivot - startPivot - 1)] = '\0';
+    unsigned char ** returnVariable;
+    if (returnVariable = aopos_get_ptr(aopos_map, theKeyBeforeColon)) {
+        // if the key is not in the map
+        if (startPivot + 1 != endPivot) {
+            // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
+            *returnVariable = calloc(sizeof(unsigned char), (endPivot - startPivot));  // + 1 unit for '\0'
+            memcpy(*returnVariable, (plainText + startPivot + 1), (endPivot - startPivot - 1));
+            (*returnVariable)[(endPivot - startPivot - 1)] = '\0';
+        }
     }
-
+    
     // Removing the first SQL comment
     if (isSQLStmtProcess == 1 && isSQLCommentRemoved == 1) {
         int removedFirstCommentStart = (int)start - (2 + (int)strlen((char*)startEndSymbol)) - 1;           // To the previous char

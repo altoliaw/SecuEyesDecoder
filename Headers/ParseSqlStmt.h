@@ -14,6 +14,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "ArrayOfPointerOfString.h"
+
 #define START_END_SYMBOL "#^" // The symmetric tag for the comment section, the size shall be equal to two
 #define DELIMITER "," // The delimiter in the comment section
 #define ENCRYPTION_KEY 0x879C5F6A // The encryption key (32 bits) which the user defines
@@ -25,4 +27,4 @@ unsigned char* base64Decode(unsigned char*, unsigned int);
 unsigned int getBase64Index(unsigned char);
 int parseSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
 int parseEncryptedSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
-int parseSqlStmtInJsonFormat(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
+int parseSqlStmtInJsonFormat(unsigned char*, unsigned int, ArrayOfPointerOfString_t*, unsigned char*, unsigned char*, short, short);
