@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 #include "ArrayOfPointerOfString.h"
 
@@ -27,4 +28,4 @@ unsigned char* base64Decode(unsigned char*, unsigned int);
 unsigned int getBase64Index(unsigned char);
 int parseSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
 int parseEncryptedSqlStmt(unsigned char*, unsigned int, unsigned char**, unsigned char**, unsigned char**, unsigned char*, unsigned char*, short, short);
-int parseSqlStmtInJsonFormat(unsigned char*, unsigned int, ArrayOfPointerOfString_t*, unsigned char*, unsigned char*, short, short);
+int parseSqlStmtInJsonFormat(unsigned char*, unsigned int, unsigned char*, unsigned char*, short, short, size_t, ...);

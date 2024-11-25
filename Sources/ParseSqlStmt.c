@@ -699,7 +699,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
  *
  * @param sqlStmt unsigned char* SQL statement; "sqlStmt" will be re-assigned by taking out the special marker
  * @param sqlStmtLen unsigned int The length of the SQL statement
- * @param aopos_map TODO: add doc; users shall free the memory manually
+ * @param aoposMap TODO: add doc; users shall free the memory manually
  * @param startEndSymbol unsigned char* The starting symbol of the encoded text
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
  * @param isPlainText short The flag for determining if the variable, "sqlStmt", belongs to an encoded text (0) or an plain text (1)
@@ -708,11 +708,23 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
  */
 int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
                              unsigned int sqlStmtLen,
-                             ArrayOfPointerOfString_t* aopos_map,
                              unsigned char* startEndSymbol,
                              unsigned char* delimiter,
                              short isPlainText,
-                             short isSQLCommentRemoved) {
+                             short isSQLCommentRemoved,
+                             size_t len, ...) {
+    arrayOfPointerOfString aoposMap;
+    aoposInit(&aoposMap);
+
+    va_list args;
+    va_start(args, len);
+    for (int i = 0; i < len; ++i) {
+        char key =  va_arg(args, int);
+        unsigned char** ptr =  va_arg(args, unsigned char**);
+        aoposSet(&aoposMap, key, ptr);
+    }
+    va_end(args);
+
     if (sqlStmt == NULL || *sqlStmt == '\0') {
         return -1;
     }
@@ -835,7 +847,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
 
             // Hitting the ','
             unsigned char ** returnVariable;
-            if (returnVariable = aopos_get_ptr(aopos_map, theKeyBeforeColon)) {
+            if (returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon)) {
                 // if the key is not in the map
                 if (startPivot + 1 != endPivot) {  // This implies the value does not belong to null.
                     // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
@@ -850,7 +862,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
     }
     // Putting the last value into the last variable
     unsigned char ** returnVariable;
-    if (returnVariable = aopos_get_ptr(aopos_map, theKeyBeforeColon)) {
+    if (returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon)) {
         // if the key is not in the map
         if (startPivot + 1 != endPivot) {
             // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
