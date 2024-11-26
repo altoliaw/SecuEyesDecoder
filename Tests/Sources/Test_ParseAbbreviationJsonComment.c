@@ -24,27 +24,22 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess1(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
-
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -80,29 +75,23 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess2(void** state) {
     unsigned char* inferredDemoUserId = NULL;
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
-    
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_null(inferredDemoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
-
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -138,29 +127,24 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess3(void** state) {
     unsigned char* inferredDemoUserId = NULL;
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
-    
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_null(inferredDemoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -197,28 +181,24 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess4(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
     assert_null(inferredDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -255,28 +235,24 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess5(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_null(inferredDemoUserId);
     assert_null(inferredDemoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -313,28 +289,24 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess6(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 1;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_null(inferredDemoUserId);
     assert_null(inferredDemoIp);
     assert_null(inferredDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -371,29 +343,24 @@ void Test_ParseAbbreviationJsonComment_encryptCaseProcess1(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
-
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
     return;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_string_equal(inferredDemoUserId, demoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -430,28 +397,24 @@ void Test_ParseAbbreviationJsonComment_encryptCaseProcess2(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
 
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_null(inferredDemoUserId);
     assert_string_equal(inferredDemoIp, demoIp);
     assert_string_equal(inferredDbUser, demoDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -481,28 +444,23 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
-
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_null(inferredDemoUserId);
     assert_null(inferredDemoIp);
     assert_null(inferredDbUser);
 
 
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
@@ -528,19 +486,17 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
     unsigned char* inferredDemoIp = NULL;
     unsigned char* inferredDbUser = NULL;
 
-    ArrayOfPointerOfString_t map;
-    aopos_init(&map);
-    aopos_set(&map, 'a', &inferredDemoUserId);
-    aopos_set(&map, 'b', &inferredDemoIp);
-    aopos_set(&map, 'c', &inferredDbUser);
-
     short isPlainText = 0;
     short isSQLCommentRemoved = 0;
 
     parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
-                             &map, (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)START_END_SYMBOL,
                              (unsigned char*)DELIMITER, isPlainText,
-                             isSQLCommentRemoved);
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
 
     assert_string_equal(inferredDemoUserId, (unsigned char*)"admin");    
     assert_string_equal(inferredDemoIp, (unsigned char*)"192.168.150.254");
@@ -554,10 +510,6 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
     // fprintf(stderr, "%s\n", inferredDbUser);
 
 
-
-    if (map != NULL) {
-        aopos_free(&map);
-    }
     if (inferredDemoUserId != NULL) {
         free(inferredDemoUserId);
     }
