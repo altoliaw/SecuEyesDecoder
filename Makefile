@@ -114,5 +114,10 @@ ${Prdir}/Mains/Main.o:	${Headers}/ParseSqlStmt.h ${Prdir}/Mains/Main.c
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Prdir}/Mains/Main.c -c ${Fsg} -o ${Prdir}/Mains/Main.o
 
 # ParseSqlStmt
-${Sources}/ParseSqlStmt.o:	${Headers}/ParseSqlStmt.h ${Sources}/ParseSqlStmt.c
+${Sources}/ParseSqlStmt.o:	${Headers}/ParseSqlStmt.h ${Headers}/ArrayOfPointerOfString.h ${Sources}/ParseSqlStmt.c
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Sources}/ParseSqlStmt.c -c ${Fsg} -o ${Sources}/ParseSqlStmt.o
+
+	
+# ArrayOfPointerOfString
+${Sources}/ArrayOfPointerOfString.o: ${Sources}/ArrayOfPointerOfString.c ${Headers}/ArrayOfPointerOfString.h
+	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} $< -c ${Fsg} -o $@
