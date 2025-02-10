@@ -786,6 +786,11 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
         }
     }
 
+    // When there is no corresponded specified marked pattern, the functions position of the start and end shall be equal.
+    if (startFlag == 0 || (startFlag == 1 && isSQLStmtProcess == 0)) {
+        start = end;
+    }
+
     if (start == end){
         // There is no encryption string in the sql statement
         return 0;
