@@ -18,7 +18,7 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess1(void** state) {
     // Data generator
     dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
-    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
     unsigned char* inferredDemoUserId = NULL;
     unsigned char* inferredDemoIp = NULL;
@@ -535,7 +535,7 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
 static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescription,
                           char** sqlDataDescription, short isEncoded, short isEncrypted) {
     // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
-    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 10;  // 33 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
+    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 10 + 1;  // 10 : `a:, b:, c:`, 1 for '\0'
     (*sqlDataDescription) = (char*)calloc(resultLen + 1, sizeof(char));
     resultLen = snprintf((*sqlDataDescription), resultLen, "a:%s, b:%s, c:%s\0", demoUserId, demoIp, demoDbUser);
     (*sqlDataDescription)[resultLen + 1] = '\0';

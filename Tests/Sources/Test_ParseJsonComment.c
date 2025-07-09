@@ -742,7 +742,7 @@ void Test_ParseJsonComment_encryptCaseProcess2(void** state) {
 static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char* sqlDescription,
                           char** sqlDataDescription, short isEncoded, short isEncrypted) {
     // Calculating the length of the final result without START_END_SYMBOL and the comment notation, "/*"
-    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 10;  // 33 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
+    int resultLen = strlen(demoUserId) + strlen(demoIp) + strlen(demoDbUser) + 35 + 1;  // 35 : {"userId":"", "ip":"", "dbUser":""}, 1 for '\0'
     (*sqlDataDescription) = (char*)calloc(resultLen + 1, sizeof(char));
     resultLen = snprintf((*sqlDataDescription), resultLen, "{\"userId\":\"%s\", \"ip\":\"%s\", \"dbUser\":\"%s\"}\0", demoUserId, demoIp, demoDbUser);
     (*sqlDataDescription)[resultLen + 1] = '\0';

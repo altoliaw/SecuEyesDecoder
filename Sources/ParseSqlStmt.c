@@ -704,6 +704,7 @@ int parseEncryptedSqlStmt(unsigned char* sqlStmt,
  * @param delimiter unsigned char* The delimiter for obtaining the values of userId and ip
  * @param isPlainText short The flag for determining if the variable, "sqlStmt", belongs to an encoded text (0) or an plain text (1)
  * @param isSQLCommentRemoved short Checking if the comments in SQL statement shall be removed; 0: no action, 1: removing comments from the SQL comment
+ * @param len size_t Number of pairs for the arguments defined in the JSON format
  * @return int The error code; 0 means success, and -1 implies failure
  */
 int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
