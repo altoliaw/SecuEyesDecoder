@@ -1,6 +1,7 @@
 #include "../Headers/Test_ParseAbbreviationJsonComment.h"
 
 static void dataGenerator(char*, char*, char*, char*, char**, short, short);
+static void statementPrint(char*, int);
 
 /**
  * Verifying if the comments can be parsed by the delimiter (plain text)
@@ -18,7 +19,7 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess1(void** state) {
     // Data generator
     dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 0);
 
-    fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
     unsigned char* inferredDemoUserId = NULL;
     unsigned char* inferredDemoIp = NULL;
@@ -521,6 +522,15 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
     }
 }
 
+void Test_ParseAbbreviationJsonComment_specialCaseProcess3(void** state) {
+    char* sqlStmt = "/*#^FEF185B2F9D5031B565F84B2D658ACB85659A9B85759AD38FF5EAFB9FEF10393F9E3031BD75B0E19D2DFAC37^#*/ select count(*)  from tb_blog_tag@#~!0a#@@    where is_deleted=0";
+    FileProcess fileObject;
+    
+    FileProcess_Construct(&fileObject);
+    fileObject.pf_executeFile(&fileObject, STDERR_FILENO, "../../Outputs/sql.txt", &statementPrint, sqlStmt);
+    FileProcess_Destruct(&fileObject);
+}
+
 /**
  * The data generator; in the function, the testing data will be generated
  *
@@ -582,4 +592,15 @@ static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char
             commentMark[strlen(commentMark) - 1 - i];
     }
     memcpy((*sqlDataDescription) + allMarksLength + sqlStmtLength, sqlDescription, remaindedSqlLength);
+
+    // Writing the SQL statement to a file for debugging purposes
+    FileProcess fileObject;   
+    FileProcess_Construct(&fileObject);
+    fileObject.pf_executeFile(&fileObject, STDERR_FILENO, "../../Outputs/sql.txt", &statementPrint, (*sqlDataDescription));
+    FileProcess_Destruct(&fileObject);
+}
+
+static void statementPrint(char* string, int currentDescriptor) {
+    write(currentDescriptor, string, strlen(string));
+    write(currentDescriptor, "\n", 1);
 }

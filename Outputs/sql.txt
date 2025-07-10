@@ -1,0 +1,9 @@
+/*#^a:test@yahoo.com.tw, b:200.221.99.3, c:localhost^#*/Select * from test
+/*#^a:, b:200.221.99.3, c:localhost^#*/Select * from test
+/*#^a:test@yahoo.com.tw, b:, c:localhost^#*/Select * from test
+/*#^a:test@yahoo.com.tw, b:200.221.99.3, c:^#*/Select * from test
+/*#^a:, b:, c:localhost^#*/Select * from test
+/*#^a:, b:, c:^#*/Select * from test
+/*#^6FF985B2FAF40399DEF2863957582837595BA236D853A235F4F7843274FA0196F7C38796^#*/Select * from test
+/*#^D8D38532D65A84B2D7D4AE38D4D5AD38D379251E7755019BFCFA0F96CEC38C2F^#*/Select * from test
+/*#^FEF185B2F9D5031B565F84B2D658ACB85659A9B85759AD38FF5EAFB9FEF10393F9E3031BD75B0E19D2DFAC37^#*/ select count(*)  from tb_blog_tag@#~!0a#@@    where is_deleted=0

@@ -14,6 +14,7 @@
 #include <cmocka.h>
 
 #include "../../Headers/ParseSqlStmt.h"
+#include "../../Headers/FileProcess.h"
 
 void Test_ParseAbbreviationJsonComment_normalCaseProcess1(void**);
 void Test_ParseAbbreviationJsonComment_normalCaseProcess2(void**);
@@ -27,3 +28,4 @@ void Test_ParseAbbreviationJsonComment_encryptCaseProcess2(void**);
 
 void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void**);
 void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void**);
+void Test_ParseAbbreviationJsonComment_specialCaseProcess3(void**);
