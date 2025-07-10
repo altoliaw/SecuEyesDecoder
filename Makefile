@@ -42,6 +42,7 @@ cmakeClean:
 	@clear
 	@rm -rf ${Prdir}/build/*
 	@rm -rf ${Prdir}/build/*/*
+	@rm -rf ${Prdir}/Outputs/*.txt
 
 .Phony: run
 run:
