@@ -11,6 +11,7 @@
         "cstdint": "c",
         "type_traits": "c",
         "xutility": "c",
-        "test_parseabbreviationjsoncomment.h": "c"
+        "test_parseabbreviationjsoncomment.h": "c",
+        "fileprocess.h": "c"
     }
 }

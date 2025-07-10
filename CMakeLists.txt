@@ -19,6 +19,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(Tests)
 add_subdirectory(Sources)
 
+add_custom_target(make_output_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/Outputs
+)
 
 # add the files into the library
 # add_library(Mains
