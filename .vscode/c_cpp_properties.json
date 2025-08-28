@@ -4,7 +4,8 @@
 		"name": "Win32",
 		"intelliSenseMode": "windows-msvc-x64",
 		"includePath": ["${workspaceFolder}/**",
-						"C:/msys64/usr/include"
+						"C:/msys64/usr/include",
+						"C:/msys64/mingw64/include",
 		],
 		"defines":[
 			"_WIN32"

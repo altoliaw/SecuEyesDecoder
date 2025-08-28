@@ -76,6 +76,7 @@ const struct CMUnitTest Test_ParseAbbreviationJsonComment_Group[] = {
     //=========================Encryption=================================
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_encryptCaseProcess1),
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_encryptCaseProcess2),
+    cmocka_unit_test(Test_ParseAbbreviationJsonComment_encryptCaseProcess3),
     //=========================Special====================================
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess1),
     cmocka_unit_test(Test_ParseAbbreviationJsonComment_specialCaseProcess2),

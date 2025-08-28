@@ -835,7 +835,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
 
     // Exploring the variables, "ap_client_user", "ap_client_host", and "db user" in order.
     short hittingNumber = 0;
-    char theKeyBeforeColon;
+    char theKeyBeforeColon = '\0';
     for (; endPivot < plainTextLength; endPivot++) {
         if (isSearchedColon == 0x0) {  // Discovering the starting position of a variable's value
             if (plainText[endPivot] != (unsigned char)':') {
@@ -853,7 +853,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
 
             // Hitting the ','
             unsigned char ** returnVariable;
-            if (returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon)) {
+            if ((returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon))) {
                 // if the key is not in the map
                 if (startPivot + 1 != endPivot) {  // This implies the value does not belong to null.
                     // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1
@@ -868,7 +868,7 @@ int parseSqlStmtInJsonFormat(unsigned char* sqlStmt,
     }
     // Putting the last value into the last variable
     unsigned char ** returnVariable;
-    if (returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon)) {
+    if ((returnVariable = aoposGetPtr(&aoposMap, theKeyBeforeColon))) {
         // if the key is not in the map
         if (startPivot + 1 != endPivot) {
             // Length is equal to "(endPivot - 1) - (startPivot + 1) + 1" = endPivot - startPivot -1

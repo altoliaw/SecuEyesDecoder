@@ -25,6 +25,7 @@ void Test_ParseAbbreviationJsonComment_normalCaseProcess6(void**);
 
 void Test_ParseAbbreviationJsonComment_encryptCaseProcess1(void**);
 void Test_ParseAbbreviationJsonComment_encryptCaseProcess2(void**);
+void Test_ParseAbbreviationJsonComment_encryptCaseProcess3(void**);
 
 void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void**);
 void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void**);
