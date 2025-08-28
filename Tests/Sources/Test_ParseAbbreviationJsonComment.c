@@ -430,6 +430,60 @@ void Test_ParseAbbreviationJsonComment_encryptCaseProcess2(void** state) {
     }
 }
 
+/**
+ * Verifying if the comments can be parsed by the delimiter (plain text)
+ *
+ * @param state void** None
+ */
+void Test_ParseAbbreviationJsonComment_encryptCaseProcess3(void** state) {
+    // Generation of the factors of the testing data
+    char* demoUserId = "vincent";
+    char* demoIp = "192.168.128.6";
+    char* demoDbUser = "informix";
+    char* demoSql = "Select * from test";
+    char* sqlStmt = NULL;
+
+    // Data generator
+    dataGenerator(demoUserId, demoIp, demoDbUser, demoSql, &sqlStmt, 0, 1);
+
+    fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
+    // Parser verifications
+    unsigned char* inferredDemoUserId = NULL;
+    unsigned char* inferredDemoIp = NULL;
+    unsigned char* inferredDbUser = NULL;
+
+
+    short isPlainText = 0;
+    short isSQLCommentRemoved = 0;
+
+    parseSqlStmtInJsonFormat((unsigned char*)sqlStmt, strlen(sqlStmt),
+                             (unsigned char*)START_END_SYMBOL,
+                             (unsigned char*)DELIMITER, isPlainText,
+                             isSQLCommentRemoved,
+                             3,
+                             'a', &inferredDemoUserId,
+                             'b', &inferredDemoIp,
+                             'c', &inferredDbUser);
+
+    assert_string_equal(inferredDemoUserId, demoUserId);
+    assert_string_equal(inferredDemoIp, demoIp);
+    assert_string_equal(inferredDbUser, demoDbUser);
+
+
+    if (inferredDemoUserId != NULL) {
+        free(inferredDemoUserId);
+    }
+    if (inferredDemoIp != NULL) {
+        free(inferredDemoIp);
+    }
+    if (inferredDbUser != NULL) {
+        free(inferredDbUser);
+    }
+    if (sqlStmt != NULL) {
+        free(sqlStmt);
+    }
+}
+
 
 /**
  * Verifying if the ciphertext can be parsed as the one which Leo expects
@@ -479,7 +533,7 @@ void Test_ParseAbbreviationJsonComment_specialCaseProcess1(void** state) {
  * @param state void** None
  */
 void Test_ParseAbbreviationJsonComment_specialCaseProcess2(void** state) {
-    char* sqlStmt = "/*#^FEF185B2F9D5031B565F84B2D658ACB85659A9B85759AD38FF5EAFB9FEF10393F9E3031BD75B0E19D2DFAC37^#*/ select count(*)  from tb_blog_tag@#~!0a#@@    where is_deleted=0";
+    unsigned char* sqlStmt = "/*#^FEF185B2F9D5031B565F84B2D658ACB85659A9B85759AD38FF5EAFB9FEF10393F9E3031BD75B0E19D2DFAC37^#*/ select count(*)  from tb_blog_tag@#~!0a#@@    where is_deleted=0";
 
     // fprintf(stderr, "[%s] [%d]\n", sqlStmt, strlen(sqlStmt));
     // Parser verifications
@@ -549,7 +603,8 @@ static void dataGenerator(char* demoUserId, char* demoIp, char* demoDbUser, char
     (*sqlDataDescription) = (char*)calloc(resultLen + 1, sizeof(char));
     resultLen = snprintf((*sqlDataDescription), resultLen, "a:%s, b:%s, c:%s\0", demoUserId, demoIp, demoDbUser);
     (*sqlDataDescription)[resultLen + 1] = '\0';
-
+    fprintf(stderr, "[%s] [%d]\n", (*sqlDataDescription), resultLen);
+    
     // If encoded is necessary, ...
     if (isEncoded == 1) {
         // Encoding process

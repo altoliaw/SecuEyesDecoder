@@ -57,6 +57,7 @@ archiveDLL: ${Prdir}/${PjN}
 	@gcc -shared -o ./Outputs/DLL/jsonDecoder.dll \
 	${Sources}/BuildDLL/BuildDLL.o \
 	${Sources}/ParseSqlStmt.o \
+	${Sources}/ArrayOfPointerOfString.o \
 	git_version.o \
 	-L./
 
@@ -65,6 +66,7 @@ archiveDLL: ${Prdir}/${PjN}
 	@ar rcs ./Outputs/DOT_A/libjsonDecoder.a \
 	${Sources}/BuildDLL/BuildDLL.o \
 	${Sources}/ParseSqlStmt.o \
+	${Sources}/ArrayOfPointerOfString.o \
 	git_version.o 
 
 
@@ -80,17 +82,20 @@ PreRquest:
 ##================================================================
 # Creating a output objects for DLL
 ${Prdir}/${PjN}BuildDLL: 	${Sources}/BuildDLL/BuildDLL.o \
-							${Sources}/ParseSqlStmt.o
+							${Sources}/ParseSqlStmt.o \
+							${Sources}/ArrayOfPointerOfString.o
 
 
 # Creating a output objects for DLL to verify the version
 ${Prdir}/${PjN}compiliedVersion: 	${Prdir}/Mains/MainDLL.o \
 									${Sources}/BuildDLL/BuildDLL.o \
-									${Sources}/ParseSqlStmt.o
+									${Sources}/ParseSqlStmt.o \
+									${Sources}/ArrayOfPointerOfString.o
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN}_compiliedVersion \
 		${Prdir}/Mains/MainDLL.o \
 		${Sources}/BuildDLL/BuildDLL.o \
 		${Sources}/ParseSqlStmt.o \
+		${Sources}/ArrayOfPointerOfString.o \
 		${Prdir}/git_version.o
 		
 
@@ -105,10 +110,12 @@ ${Sources}/BuildDLL/BuildDLL.o:	${Headers}/BuildDLL/BuildDLL.h ${Headers}/ParseS
 ##================================================================
 # Creating a output objects for the C framework
 ${Prdir}/${PjN}: 	${Prdir}/Mains/Main.o \
-					${Sources}/ParseSqlStmt.o
+					${Sources}/ParseSqlStmt.o \
+					${Sources}/ArrayOfPointerOfString.o
 	${Cmp} ${Stdlib} ${Cmpopt} ${Detinfo} ${Wall} ${Fsg} -o ${Prdir}/${PjN} \
 		${Prdir}/Mains/Main.o \
-		${Sources}/ParseSqlStmt.o
+		${Sources}/ParseSqlStmt.o \
+		${Sources}/ArrayOfPointerOfString.o
 
 # Main
 ${Prdir}/Mains/Main.o:	${Headers}/ParseSqlStmt.h ${Prdir}/Mains/Main.c
